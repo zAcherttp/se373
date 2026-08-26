@@ -3,3 +3,8 @@ node_modules/
 dist/
 *.log
 .zoo/
+
+# Generated declaration output for the vendored framework. Rebuild with
+# `npx tsc -b tsconfig.vendor.json`.
+vendor/*/lib/
+*.tsbuildinfo

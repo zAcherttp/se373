@@ -1,0 +1,32 @@
+{
+  "name": "@se373/cordis-plugin-include",
+  "description": "Include files in cordis configurations",
+  "version": "1.0.6",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zAchrttp/se373.git",
+    "directory": "vendor/include"
+  },
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "author": "Shigma <shigma10826@gmail.com>",
+  "license": "MIT",
+  "peerDependencies": {
+    "@se373/cordis-plugin-loader": "workspace:^",
+    "@se373/cordis": "workspace:^"
+  },
+  "dependencies": {
+    "@se373/cosmokit": "workspace:^",
+    "js-yaml": "^4.1.0"
+  },
+  "private": true
+}

@@ -1,0 +1,24 @@
+{
+  "name": "@se373/cosmokit",
+  "description": "A collection of common utilities",
+  "version": "1.8.2",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zAchrttp/se373.git",
+    "directory": "vendor/cosmokit"
+  },
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "author": "Shigma <shigma10826@gmail.com>",
+  "license": "MIT",
+  "private": true
+}

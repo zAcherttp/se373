@@ -1,0 +1,33 @@
+{
+  "name": "@se373/cordis-plugin-logger-console",
+  "description": "Console logger exporter for cordis",
+  "version": "1.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zAchrttp/se373.git",
+    "directory": "vendor/logger-console"
+  },
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "lib/types/shared.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/shared.d.ts",
+      "node": "./src/index.ts",
+      "default": "./src/browser.ts"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "author": "Shigma <shigma10826@gmail.com>",
+  "license": "MIT",
+  "peerDependencies": {
+    "@se373/cordis": "workspace:^"
+  },
+  "dependencies": {
+    "@se373/cosmokit": "workspace:^",
+    "@se373/schemastery": "workspace:^",
+    "supports-color": "^9.4.0"
+  },
+  "private": true
+}
