@@ -1,0 +1,17 @@
+{
+  // Solution file for the vendored framework layer. Emits declarations only,
+  // into each package's lib/types, which tsconfig.base.json's `paths` reads.
+  // Run after `pnpm install` and after any vendor sync.
+  "files": [],
+  "references": [
+    { "path": "./vendor/cosmokit" },
+    { "path": "./vendor/schemastery" },
+    { "path": "./vendor/cordis" },
+    { "path": "./vendor/loader" },
+    { "path": "./vendor/include" },
+    { "path": "./vendor/group" },
+    { "path": "./vendor/timer" },
+    { "path": "./vendor/hmr" },
+    { "path": "./vendor/logger-console" }
+  ]
+}

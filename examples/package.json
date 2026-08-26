@@ -1,0 +1,15 @@
+{
+  "name": "@se373/examples",
+  "description": "Dependency-resolution root for runnable example trees",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "//": "A workspace member for DEPENDENCY RESOLUTION only, not a build target. Every plugin named in any examples/*/cordis.yml must be declared here, so a boot with baseUrl inside a leaf resolves it by walking up to examples/node_modules.",
+  "dependencies": {
+    "@se373/cordis-plugin-timer": "workspace:*",
+    "@se373/invariants": "workspace:*",
+    "@se373/hello": "workspace:*",
+    "@se373/cordis-plugin-include": "workspace:*",
+    "@se373/cordis-plugin-group": "workspace:*"
+  }
+}

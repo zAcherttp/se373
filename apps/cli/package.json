@@ -1,0 +1,19 @@
+{
+  "name": "@se373/cli",
+  "description": "Boots a plugin tree from a cordis.yml and owns the `se373` bin",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "bin": { "se373": "./src/bin.ts" },
+  "license": "MIT",
+  "dependencies": {
+    "@se373/cordis": "workspace:^",
+    "@se373/cordis-plugin-loader": "workspace:^",
+    "@se373/cordis-plugin-include": "workspace:^",
+    "@se373/cordis-plugin-group": "workspace:^",
+    "@se373/cordis-plugin-timer": "workspace:^",
+    "@se373/cordis-plugin-logger-console": "workspace:^",
+    "@se373/invariants": "workspace:^",
+    "@se373/hello": "workspace:^"
+  }
+}

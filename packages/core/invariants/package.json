@@ -1,0 +1,22 @@
+{
+  "name": "@se373/invariants",
+  "description": "Registry of package-owned runtime invariant checks (I9)",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./package.json": "./package.json"
+  },
+  "license": "MIT",
+  "peerDependencies": {
+    "@se373/cordis": "workspace:^",
+    "@se373/schemastery": "workspace:^"
+  },
+  "devDependencies": {
+    "@se373/cordis": "workspace:^",
+    "@se373/schemastery": "workspace:^"
+  }
+}

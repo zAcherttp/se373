@@ -1,0 +1,12 @@
+{
+  // Vendored code is upstream's, checked upstream. Relaxations mirror dsh's
+  // vendor tsconfigs; do not tighten them to match our packages.
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
+    "composite": true,
+    "incremental": true
+  }
+}

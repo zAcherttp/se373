@@ -1,0 +1,20 @@
+packages:
+  - vendor/*
+  - packages/*/*
+  - apps/*
+  # Runnable example trees join as ONE member: examples/package.json declares
+  # the union of every leaf's cordis.yml plugins, so booting a leaf resolves
+  # them by walking up to examples/node_modules. Resolution only, not a build
+  # target.
+  - examples
+
+# Vendored framework packages keep their upstream semver ranges; local builds
+# must resolve those names to this workspace's pinned sources.
+linkWorkspacePackages: true
+
+# pnpm blocks dependencies shipping install scripts until reviewed here.
+# Deny by default; every entry below is an explicit review.
+allowBuilds:
+  # hmr imports only esbuild's `BuildFailure` TYPE (vendor/hmr/src/error.ts).
+  # No runtime use, so its native binary download is dead weight.
+  esbuild: false

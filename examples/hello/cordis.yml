@@ -1,0 +1,26 @@
+# Phase-1 tree. Every line here is a config row, not code — swapping a stage
+# later must stay an edit to this file (I3).
+
+# NOTE: no logger row. The console exporter is mounted by the CLI on the root
+# context, because a tree-owned exporter cannot observe its own tree's mount
+# race or its unload. Per-package levels (SS11.2) move back into a config row
+# once there is a settings plane to carry them.
+
+# Timers as a service, so plugins never reach for a bare setInterval.
+- id: timer
+  name: '@se373/cordis-plugin-timer'
+
+# Continuous package-owned runtime checks.
+- id: invariants
+  name: '@se373/invariants'
+
+# The proof plugin: publishes ctx.hello, ticks, and must unwind on unload.
+- id: hello
+  name: '@se373/hello'
+  config:
+    greeting: se373
+    tickMs: 1000
+
+# Its runtime invariant companion, mounted as its own row so it is selectable.
+- id: hello-invariant
+  name: '@se373/hello/invariant'
