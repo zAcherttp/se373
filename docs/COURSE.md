@@ -9,6 +9,10 @@ Học kỳ 1, 2026–2027 · sáng Thứ 4 hàng tuần · prerequisite IT002.
 > areas and the project brief; it does not give milestone dates, a grading
 > breakdown, required artifacts, or team size. Those are still unknown — see
 > [Still missing](#still-missing).
+>
+> ⚠️ **It does say students work in groups** (`sinh viên sẽ làm việc theo nhóm`).
+> This project is being built solo. That is an assumption to confirm in week 1,
+> not a decision already taken.
 
 ## The thesis of the course
 
@@ -41,9 +45,9 @@ Taught across the semester, and the checklist our system is judged against.
 
 ## The final project
 
-Project-Based Learning. Teams build one complete Agentic AI system over the
-semester, capable of working on a real problem. The announcement names six
-example shapes:
+Project-Based Learning. Students work **in groups** to build one complete
+Agentic AI system over the semester, capable of working on a real problem. The
+announcement names six example shapes:
 
 | | |
 |---|---|
@@ -53,6 +57,9 @@ example shapes:
 
 We are not submitting one of these. We are submitting the system that emits
 them — each becomes a demonstration, not the deliverable.
+
+Solo, the demonstration budget is small. Two archetypes that work end-to-end
+prove the builder; six that half-work prove nothing and cost six times as much.
 
 ---
 
@@ -114,6 +121,7 @@ Not in the announcement. Get these and this file gets a second half.
 - [ ] Milestone dates — checkpoints, demo day, final submission
 - [ ] Grading breakdown and weights
 - [ ] Required artifacts — report, slides, live demo, source handover?
+- [ ] **Whether solo is permitted at all** — the announcement says groups. This is the first thing to ask, because a no reshapes everything below it.
 - [ ] Team size and any individual-contribution requirement
 - [ ] Week-by-week topic schedule (would let `docs/FEATURE-LOG.md` map phases to weeks)
 - [ ] Whether any specific framework or model is mandated

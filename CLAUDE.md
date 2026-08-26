@@ -2,7 +2,9 @@
 
 ## What this is
 
-A meta-agent that **builds agents**. Course project for SE373 (Kỹ thuật xây dựng hệ thống Agentic AI, UIT, Semester 1 2026-27, Wednesday mornings). Team, project-based, graded on a complete Agentic AI system.
+A meta-agent that **builds agents**. Course project for SE373 (Kỹ thuật xây dựng hệ thống Agentic AI, UIT, Semester 1 2026-27, Wednesday mornings). Project-based, graded on a complete Agentic AI system.
+
+**Worked solo** — one person plus Claude. ⚠️ The course announcement says students work **in groups** (`làm việc theo nhóm`), so solo is an assumption, not a permission. Confirm it in week 1; if groups are mandatory, the scope below is the thing to cut, not the schedule.
 
 The course's own thesis is **Agent = Model + Harness** — the Harness is what makes an agent a system rather than a chatbot. It names six archetypes (Coding, Code Review, Requirement Analysis, Internal Knowledge, Multi-Agent Workflow, MCP Assistant). **We are not submitting one of them — we are submitting the thing that emits them.** Not a harness that does A; a harness for which A is a subsystem it can build, inspect, improve, and export.
 
@@ -12,7 +14,7 @@ The eight topic areas we are judged against, and how our phases cover them, are 
 
 ## Approach
 
-Built **from scratch on Cordis**, porting DeepSeek Harness piece by piece in working phases — deliberately, so the team understands the system rather than inheriting it. Cordis itself is a dependency and is never ported.
+Built **on Cordis**, taking DeepSeek Harness as the vendored baseline and adding the two planes it lacks. Every phase ends with something that runs, and every vendored package gets documented rather than rewritten — that is how understanding is bought back without paying for a rewrite.
 
 Every phase ends with something that **runs**. Slice vertically, never ship a layer with nothing above it.
 
@@ -102,14 +104,14 @@ formality.
 2. ~~Name the project~~ — settled: `@se373/*`.
 3. ~~Write `docs/PORTING.md`~~ — done.
 4. **Get the milestone dates and grading breakdown.** The announcement in `docs/COURSE.md` has neither, so the phase plan carries no deadline pressure and "are we on track" is unanswerable.
-5. Write a block-authoring guide so teammates can add catalog blocks without reading the whole architecture doc.
+5. ~~Write a block-authoring guide for teammates~~ — no teammates. The audience is the model authoring blocks at phase 6d, so this becomes the `graph/node` and block-manifest contract, not onboarding prose.
 6. ~~Start phase 1~~ — shipped, tagged `phase-1`.
 
 ## Risks being tracked
 
-- **Phase 4 (web plane) is the risk spike.** Largest chunk of upstream, easiest to underestimate. If the semester slips, it slips there.
+- **Phase 4 (web plane) is the risk spike, and solo makes it worse.** 18 of 40 upstream client packages, and no one to parallelise with. If the semester slips, it slips there. Plan the demo so it survives phase 4 landing late — the headless path (phases 2–3) plus the MCP export (phase 7) is a complete story with no browser in it.
 - Model-authored UI is a demo cliff — keep a deterministic fallback for anything shown live.
-- Prefer 3 archetypes that work reliably over 6 that are flaky.
+- **Solo changes the scope calculus, not the schedule.** Prefer 2 archetypes that work reliably over 6 that are flaky, and cut breadth before cutting depth — the thesis is the builder, and one archetype it genuinely emits proves it better than six half-built ones.
 - dsh is a developer preview with an unstable API; Cordis advertises the same.
 
 ## Working with me on this
