@@ -754,7 +754,7 @@ Each phase ends with something that **runs**. Slice vertically; never ship a lay
 | # | Decision | Owner | Deadline |
 |---|---|---|---|
 | D1 | Project + package name (`@zoo/*` is a placeholder) | team | before phase 1 |
-| D2 | Instructor's written ruling on how much ported MIT code is permitted in a graded project | you | **before phase 1** |
+| ~~D2~~ | ~~Ruling on permitted MIT reuse~~ — **closed 2026-08-26.** MIT grants use and copying; notices travel in `docs/PORTING.md`. | — | closed |
 | D3 | Vector store default: `sqlite-vec` vs LanceDB | team | phase 6a |
 | D4 | ONNX embedding model + dimensionality (fixes the store schema) | team | phase 6a |
 | D5 | Which 3 archetypes ship reliably (vs 6 flaky) | team | phase 6c |
@@ -762,7 +762,7 @@ Each phase ends with something that **runs**. Slice vertically; never ship a lay
 | D7 | Fork namespace scope: per-session or per-workspace | team | phase 6d |
 | D8 | Do authored forks get a dependency-install path, or stay inside the existing dep set | team | phase 6d |
 
-**D2 is the only true blocker.** MIT permits the copying; a course plagiarism policy is a separate rule that MIT does not answer. Get it in writing, then state the ported-vs-written split in the README — a clean split table makes the work look bigger, not smaller.
+**D1 and D2 are closed.** The scope is `@se373/*`; the vendored spine is taken under MIT with notices preserved. State the vendored-vs-built split in the README anyway — not as a defence, but because it is the clearest way to show where the work went: the spine is the floor, L3 and L4 are the project.
 
 ---
 

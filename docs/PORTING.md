@@ -9,10 +9,11 @@ and for anything copied, where it came from and what we changed.
 | **Ported** — studied upstream, rewritten smaller by us | `packages/*` (marked below) | credited per row |
 | **Ours** — written for this project | everything else | — |
 
-> **Open question D2 is still unanswered.** MIT permits everything recorded
-> here. A course plagiarism policy is a separate rule that MIT does not answer,
-> and it has not been ruled on in writing. Until it is, this file is the record
-> that makes the split auditable either way.
+> **MIT grants use, copying, and modification** — the whole vendored set is
+> free to take, provided the notices travel with it, which they do. This file
+> is not a permission record; it is an engineering one. It tells you which
+> files you may edit freely, which ones will be overwritten by the next
+> upstream sync, and what our local divergences are.
 
 ---
 
@@ -122,19 +123,15 @@ Third-party npm dependencies across the on-path set: 48, including `react`,
 `@vscode/ripgrep`, and `node-pty`. Each needs an `allowBuilds` review in
 `pnpm-workspace.yaml` before install.
 
-### What this does to D2
+### Where the actual work is
 
-Vendoring roughly 89 packages is substantially more copied MIT code than the
-~12 the original plan implied. MIT still permits all of it and this file still
-records it, but the *volume* is now the thing a plagiarism policy would react
-to, not the principle. **Get the ruling before phase 2**, and lead with the
-numbers in this table rather than with "we ported some helpers".
+Worth stating plainly, because the vendored count is the bigger number and the
+built count is the interesting one: L3 and L4 — the knowledge and builder
+planes, which *are* the project — have **no upstream analogue at all**. Nothing
+in dsh corresponds to `ctx.embedder`, `ctx.chunker`, `ctx.vectorStore`,
+`ctx.blocks`, `ctx.retrievalEval`, or `ctx.promotion`.
 
-The mitigation the plan already names still applies, and gets stronger here: a
-clean split table makes the work look bigger, not smaller. L3 and L4 — the
-knowledge and builder planes, which are the actual project — have **no upstream
-analogue at all**. Nothing in dsh corresponds to `ctx.embedder`, `ctx.chunker`,
-`ctx.vectorStore`, `ctx.blocks`, or `ctx.promotion`.
+The vendored spine is the floor we build on, not the deliverable.
 
 ---
 

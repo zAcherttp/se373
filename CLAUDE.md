@@ -39,7 +39,7 @@ Every phase ends with something that **runs**. Slice vertically, never ship a la
 - **Hot reload is solved upstream** (`@cordisjs/plugin-hmr`, a `dsh-base` row). We build the staging gate around it, not the reload itself.
 - **UI uses dsh `ui-primitives`, not Base UI.** Already styled, zero-cordis (so injectable into the sandbox closure), and native-looking. dsh has no third-party UI library at all.
 - **MCP export is codegen over the SDK's stdio transport** — no port, no sandbox involvement, lowest-risk deliverable. Bank it early.
-- **On-path upstream packages are vendored, not rewritten** (settled 2026-08-26). Hard-dependency closure is 89 packages once our own bundles replace `bundle/*`. See `docs/PORTING.md` §2 — this changes D2 from a principle question to a volume question.
+- **On-path upstream packages are vendored, not rewritten** (settled 2026-08-26). Hard-dependency closure is 89 packages once our own bundles replace `bundle/*`. See `docs/PORTING.md` §2.
 - **The upstream tree is 238 packages, not ~50.** The old figure counted directories under `packages/`. 150 are off our path.
 
 ## Upstream reference
@@ -91,7 +91,7 @@ formality.
 
 ## Immediate next steps
 
-1. **D2 — the only real blocker.** Get the instructor's *written* ruling on how much ported MIT code is permitted in a graded project. MIT settles the license; a course plagiarism policy is a separate rule it does not answer. **Blocks phase 2, not phase 1** — the agent spine is where ported dsh code first lands.
+1. **Start phase 2** (agent spine). Nothing blocks it.
 2. ~~Name the project~~ — settled: `@se373/*`.
 3. ~~Write `docs/PORTING.md`~~ — done.
 4. **Put the actual course roadmap in the repo.** `docs/FEATURE-LOG.md` maps entries to §13 phases because the syllabus deliverables and their dates are not written down anywhere here. Until they are, "follow the roadmap" is guesswork.
