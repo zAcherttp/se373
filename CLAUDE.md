@@ -4,7 +4,9 @@
 
 A meta-agent that **builds agents**. Course project for SE373 (Kỹ thuật xây dựng hệ thống Agentic AI, UIT, Semester 1 2026-27, Wednesday mornings). Team, project-based, graded on a complete Agentic AI system.
 
-The course names six archetypes (Coding, Code Review, Requirement Analysis, Internal Knowledge, Multi-Agent Workflow, MCP Assistant). **We are not submitting one of them — we are submitting the thing that emits them.** Not a harness that does A; a harness for which A is a subsystem it can build, inspect, improve, and export.
+The course's own thesis is **Agent = Model + Harness** — the Harness is what makes an agent a system rather than a chatbot. It names six archetypes (Coding, Code Review, Requirement Analysis, Internal Knowledge, Multi-Agent Workflow, MCP Assistant). **We are not submitting one of them — we are submitting the thing that emits them.** Not a harness that does A; a harness for which A is a subsystem it can build, inspect, improve, and export.
+
+The eight topic areas we are judged against, and how our phases cover them, are in `docs/COURSE.md`. **Three gaps are open there** — Memory/Context Management, Agent Skills, and Security.
 
 **The full technical plan is [docs/agentic-builder-architecture.md](docs/agentic-builder-architecture.md).** Read it before proposing architecture changes. Also published at https://claude.ai/code/artifact/c5820d42-f5d3-44e4-a7ef-38860cbba49f
 
@@ -94,9 +96,10 @@ formality.
 1. **Start phase 2** (agent spine). Nothing blocks it.
 2. ~~Name the project~~ — settled: `@se373/*`.
 3. ~~Write `docs/PORTING.md`~~ — done.
-4. **Put the actual course roadmap in the repo.** `docs/FEATURE-LOG.md` maps entries to §13 phases because the syllabus deliverables and their dates are not written down anywhere here. Until they are, "follow the roadmap" is guesswork.
-5. Write a block-authoring guide so teammates can add catalog blocks without reading the whole architecture doc.
-6. ~~Start phase 1~~ — shipped, tagged `phase-1`.
+4. **Close the three coverage gaps** against SE373's eight topic areas — see `docs/COURSE.md`. Memory/Context Management is the real one; Agent Skills and Security are cheap now that vendoring is the rule.
+5. **Get the milestone dates and grading breakdown.** The announcement in `docs/COURSE.md` has neither, so the phase plan carries no deadline pressure and "are we on track" is unanswerable.
+6. Write a block-authoring guide so teammates can add catalog blocks without reading the whole architecture doc.
+7. ~~Start phase 1~~ — shipped, tagged `phase-1`.
 
 ## Risks being tracked
 

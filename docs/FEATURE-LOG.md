@@ -10,8 +10,9 @@ Three jobs, and it is the only file that does all three:
 
 1. **What actually shipped**, as opposed to what is planned. The architecture
    doc describes an intended system; this describes the built one.
-2. **Roadmap alignment.** Each entry names the course deliverable it serves, so
-   a phase that drifts away from the syllabus is visible before the demo.
+2. **Roadmap alignment.** Each entry names the SE373 topic area it serves (the
+   eight in [COURSE.md](COURSE.md)), so a phase that covers no topic is visible
+   before the demo rather than after it.
 3. **Rewind.** Every entry carries a git tag. To show a feature the way it was
    when it worked, check out the tag.
 
@@ -30,7 +31,7 @@ Copy this block. Keep it short — the commit message carries detail.
 
 **Date** · **Commit** `<sha>` · **Tag** `<tag>`
 
-**Roadmap** — <course deliverable / pillar this serves, or "infrastructure">
+**Roadmap** — <SE373 topic area(s) from COURSE.md, or "infrastructure">
 **Phase** — <§13 phase number and name>
 
 **Demonstrable**
@@ -59,8 +60,9 @@ Copy this block. Keep it short — the commit message carries detail.
 
 **2026-08-26** · **Commit** `eebab0b` · **Tag** `phase-1`
 
-**Roadmap** — Infrastructure. Serves no course deliverable directly; every
-later one stands on it.
+**Roadmap** — Infrastructure, plus the first third of topic 8
+(*Observability*): the logger channel and the invariants registry are both
+standing. Serves no other topic directly; every later one stands on it.
 **Phase** — §13 phase 1, "Cordis boot".
 
 **Demonstrable**
