@@ -39,6 +39,8 @@ Every phase ends with something that **runs**. Slice vertically, never ship a la
 - **Hot reload is solved upstream** (`@cordisjs/plugin-hmr`, a `dsh-base` row). We build the staging gate around it, not the reload itself.
 - **UI uses dsh `ui-primitives`, not Base UI.** Already styled, zero-cordis (so injectable into the sandbox closure), and native-looking. dsh has no third-party UI library at all.
 - **MCP export is codegen over the SDK's stdio transport** — no port, no sandbox involvement, lowest-risk deliverable. Bank it early.
+- **On-path upstream packages are vendored, not rewritten** (settled 2026-08-26). Hard-dependency closure is 89 packages once our own bundles replace `bundle/*`. See `docs/PORTING.md` §2 — this changes D2 from a principle question to a volume question.
+- **The upstream tree is 238 packages, not ~50.** The old figure counted directories under `packages/`. 150 are off our path.
 
 ## Upstream reference
 
@@ -48,13 +50,20 @@ Every phase ends with something that **runs**. Slice vertically, never ship a la
 
 ## Working rules
 
-### Do not rewrite what already exists
+### Vendor and document; do not rewrite
 
-Prefer taking a package over reimplementing it. When something upstream already
-does the job, vendor it and **document it** — what it does, what it depends on,
-and the shape of the data in and out. A rewrite is justified only when the
-upstream surface is much larger than our need, and the entry in
-`docs/PORTING.md` has to say why.
+When something upstream already does the job, **vendor it and document it** —
+what it does, what it depends on, and the shape of the data in and out. This
+applies to the whole on-path set, not just to `vendor/`. A rewrite needs a
+reason recorded in `docs/PORTING.md`; so far there is exactly one
+(`@se373/invariants`).
+
+**Write our own bundles.** `bundle/base`, `bundle/headless`, and
+`bundle/web-app` are profile manifests that declare every row in a profile as a
+dependency, so vendoring them drags in 84 packages we do not want — typert,
+compaction, goal, workflow, spill, and the whole client tail. Vendoring
+everything else gives a hard-dependency closure of 89 packages instead of 173.
+The bundle is a row list; we write ours.
 
 Documentation lives with the code: every package gets a `README.md` covering
 

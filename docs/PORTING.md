@@ -101,7 +101,44 @@ Keep this log exhaustive.
 
 ---
 
-## 2. Ported packages
+## 2. Planned vendoring scope
+
+Settled 2026-08-26: on-path upstream packages are **vendored and documented**,
+not rewritten. What that actually costs, measured against the dsh tree at
+`47f94385`:
+
+| Seed set | Hard-dependency closure | Notes |
+|---|---|---|
+| 77 on-path packages | **173** (73% of upstream) | pulls in `typert`, `compaction`, `goal`, `workflow`, `spill`, `code-runtime`, `skill`, `session-query` — all on the skip list |
+| 77 minus `bundle/*` | **89** | +15 beyond the seeds, all small seams |
+
+The three `bundle/*` packages are the entire difference. They are profile
+manifests whose job is to declare every row in a profile as a dependency, so
+vendoring one drags its whole profile in. **We write our own bundles** — a
+bundle is a row list, and ours names only our rows.
+
+Third-party npm dependencies across the on-path set: 48, including `react`,
+`react-dom`, `zod`, `chokidar`, `shiki`, `ws`, `@modelcontextprotocol/sdk`,
+`@vscode/ripgrep`, and `node-pty`. Each needs an `allowBuilds` review in
+`pnpm-workspace.yaml` before install.
+
+### What this does to D2
+
+Vendoring roughly 89 packages is substantially more copied MIT code than the
+~12 the original plan implied. MIT still permits all of it and this file still
+records it, but the *volume* is now the thing a plagiarism policy would react
+to, not the principle. **Get the ruling before phase 2**, and lead with the
+numbers in this table rather than with "we ported some helpers".
+
+The mitigation the plan already names still applies, and gets stronger here: a
+clean split table makes the work look bigger, not smaller. L3 and L4 — the
+knowledge and builder planes, which are the actual project — have **no upstream
+analogue at all**. Nothing in dsh corresponds to `ctx.embedder`, `ctx.chunker`,
+`ctx.vectorStore`, `ctx.blocks`, or `ctx.promotion`.
+
+---
+
+## 3. Ported packages
 
 Studied upstream, then written smaller. Neither file is a copy; the contract is
 what carries over.
@@ -110,12 +147,15 @@ what carries over.
 |---|---|---|---|
 | `packages/core/invariants` | `packages/runtime-diagnostics/invariants` | `register(packageName, installer)` returning a disposer; `InvariantError` with `code: 'INVARIANT'` + `packageName`; regex allow/deny selection; child-fiber execution with reservation released on failure | i18n README pipeline; the `PendingInvariantRegistration` thenable shape; `package_allowlist` / `package_blocklist` naming (ours is `allow` / `deny`) |
 
+This table should stay short. Under the vendoring rule it grows only by
+exception.
+
 ---
 
-## 3. Ours
+## 4. Ours
 
 Everything under `apps/`, `examples/`, `docs/`, the workspace and tsconfig
-layer, and every `packages/*` not listed in §2.
+layer, our own bundles, and every `packages/*` not listed in §3.
 
 ---
 
@@ -128,3 +168,7 @@ layer, and every `packages/*` not listed in §2.
 - The vendored set is pinned to a dsh working tree at `47f94385`, which is
   *older* than the `b150a55` the architecture doc was written against. Expect
   small drift between doc and code.
+- The §2 closure numbers are computed from declared manifest dependencies. A
+  package may import less than it declares (dsh's own `hmr` declared less than
+  it imports, which is how we caught that), so 89 is an upper bound on what
+  must actually come along.
