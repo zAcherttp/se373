@@ -82,6 +82,17 @@ Every row is a decision. `docs/PORTING.md` tracks per-file provenance; MIT notic
 
 ### 3.3 Skip entirely
 
+> **Superseded 2026-08-26.** This list was written when the plan assumed we
+> would port ~12 packages by hand, so every extra package was a cost. Under
+> vendoring the calculus inverts: we take dsh's own `bundle/base`, which is
+> upstream's answer to "what a working harness needs" and covers four SE373
+> topic areas this list was discarding (memory/compaction, skills, workflow,
+> security/sandbox). 187 of 227 packages are taken; the 40 exclusions all need
+> external infrastructure. Anything vendored but unwanted is a `disabled: true`
+> row. See `docs/PORTING.md` §2. The list below is kept as the record of what
+> was decided before that measurement.
+
+
 `compaction/*`, `spill/*`, `lsp/*`, `acp/*`, `e2b/*`, `terminal/*` (PTY), `code-runtime/*`, `typert/*`, `session-projection*`, `client/ui-trajectory`, `hooks/*`, i18n, and 5 of the 6 `subagent-*` backends (keep `subagent-spawn-in-process`).
 
 > ~50 upstream packages. Roughly 12 are on our path.

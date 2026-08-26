@@ -6,7 +6,7 @@ A meta-agent that **builds agents**. Course project for SE373 (Kỹ thuật xây
 
 The course's own thesis is **Agent = Model + Harness** — the Harness is what makes an agent a system rather than a chatbot. It names six archetypes (Coding, Code Review, Requirement Analysis, Internal Knowledge, Multi-Agent Workflow, MCP Assistant). **We are not submitting one of them — we are submitting the thing that emits them.** Not a harness that does A; a harness for which A is a subsystem it can build, inspect, improve, and export.
 
-The eight topic areas we are judged against, and how our phases cover them, are in `docs/COURSE.md`. **Three gaps are open there** — Memory/Context Management, Agent Skills, and Security.
+The eight topic areas we are judged against, and how our phases cover them, are in `docs/COURSE.md`. All eight are covered — taking dsh's baseline bundle is what covers them; that is the reason to build on dsh rather than beside it.
 
 **The full technical plan is [docs/agentic-builder-architecture.md](docs/agentic-builder-architecture.md).** Read it before proposing architecture changes. Also published at https://claude.ai/code/artifact/c5820d42-f5d3-44e4-a7ef-38860cbba49f
 
@@ -41,7 +41,7 @@ Every phase ends with something that **runs**. Slice vertically, never ship a la
 - **Hot reload is solved upstream** (`@cordisjs/plugin-hmr`, a `dsh-base` row). We build the staging gate around it, not the reload itself.
 - **UI uses dsh `ui-primitives`, not Base UI.** Already styled, zero-cordis (so injectable into the sandbox closure), and native-looking. dsh has no third-party UI library at all.
 - **MCP export is codegen over the SDK's stdio transport** — no port, no sandbox involvement, lowest-risk deliverable. Bank it early.
-- **On-path upstream packages are vendored, not rewritten** (settled 2026-08-26). Hard-dependency closure is 89 packages once our own bundles replace `bundle/*`. See `docs/PORTING.md` §2.
+- **dsh's baseline is our baseline.** On-path upstream packages are vendored, not rewritten, and the selector is dsh's own bundles rather than a hand-picked list: 187 of 227 taken. `docs/PORTING.md` §2.
 - **The upstream tree is 238 packages, not ~50.** The old figure counted directories under `packages/`. 150 are off our path.
 
 ## Upstream reference
@@ -60,12 +60,15 @@ applies to the whole on-path set, not just to `vendor/`. A rewrite needs a
 reason recorded in `docs/PORTING.md`; so far there is exactly one
 (`@se373/invariants`).
 
-**Write our own bundles.** `bundle/base`, `bundle/headless`, and
-`bundle/web-app` are profile manifests that declare every row in a profile as a
-dependency, so vendoring them drags in 84 packages we do not want — typert,
-compaction, goal, workflow, spill, and the whole client tail. Vendoring
-everything else gives a hard-dependency closure of 89 packages instead of 173.
-The bundle is a row list; we write ours.
+**Take dsh's bundles.** `bundle/base` is upstream's own answer to "what does a
+working harness need" — which is precisely what SE373 calls the Harness.
+Curating our own subset re-decides, worse, a question already answered.
+`base + headless + web-app` plus 13 unreachable extras is 187 of 227 packages.
+
+**Anything we do not want running is a `disabled: true` row, not an exclusion.**
+That is invariant I3: one line, reversible when a demo needs it. The 40
+genuinely excluded packages all need external infrastructure or another
+vendor's protocol — e2b, ACP, LSP, PTY, third-party search keys.
 
 Documentation lives with the code: every package gets a `README.md` covering
 
@@ -96,10 +99,9 @@ formality.
 1. **Start phase 2** (agent spine). Nothing blocks it.
 2. ~~Name the project~~ — settled: `@se373/*`.
 3. ~~Write `docs/PORTING.md`~~ — done.
-4. **Close the three coverage gaps** against SE373's eight topic areas — see `docs/COURSE.md`. Memory/Context Management is the real one; Agent Skills and Security are cheap now that vendoring is the rule.
-5. **Get the milestone dates and grading breakdown.** The announcement in `docs/COURSE.md` has neither, so the phase plan carries no deadline pressure and "are we on track" is unanswerable.
-6. Write a block-authoring guide so teammates can add catalog blocks without reading the whole architecture doc.
-7. ~~Start phase 1~~ — shipped, tagged `phase-1`.
+4. **Get the milestone dates and grading breakdown.** The announcement in `docs/COURSE.md` has neither, so the phase plan carries no deadline pressure and "are we on track" is unanswerable.
+5. Write a block-authoring guide so teammates can add catalog blocks without reading the whole architecture doc.
+6. ~~Start phase 1~~ — shipped, tagged `phase-1`.
 
 ## Risks being tracked
 

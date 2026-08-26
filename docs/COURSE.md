@@ -64,51 +64,46 @@ of the architecture plan, and how confident that answer is.
 | # | Topic | Our answer | Phase | Status |
 |---|---|---|---|---|
 | 1 | AI Agent | `ctx.agent`, `ctx.agentLoop`, `ctx.agentPresets` | 2, 5 | ✅ planned |
-| 1 | **Agent Skills** | — | — | ⚠️ **gap** |
+| 1 | **Agent Skills** | `skill` + `skill-filesystem` + `tool-skill` (4/4 in base) | 3 | ✅ vendored |
 | 2 | Tool Use / Function Calling | `ctx.tools` + guard pipeline, `tool-fs`, `tool-bash` | 3 | ✅ planned |
 | 3 | RAG | the whole L3 knowledge plane — six swappable seams | 6a, 6b | ✅ **our strongest** |
-| 4 | **Memory / Context Management** | retrieval only | — | ⚠️ **gap** |
-| 5 | Workflow Orchestration | pipelines as named versioned values; archetypes as outputs | 6b, 6c | 🔶 partial |
+| 4 | **Memory / Context Management** | `compaction/*` 4/4, `spill/*` 3/3, `context/*`, session persistence — plus L3 retrieval | 2, 3 | ✅ vendored |
+| 5 | Workflow Orchestration | `workflow/*` 4/4 (engine + worker thread), plus our pipelines as named versioned values | 3, 6c | ✅ vendored |
 | 6 | Multi-Agent Systems | `ctx.subagents`, spawn-in-process, isolate realms | 5, 8 | ✅ planned |
 | 7 | MCP | `mcp-client` in, codegen'd stdio server out — the loop closes | 7 | ✅ **our strongest** |
 | 8 | Verification | seam conformance suites + retrieval eval + A/B | 6d, 8 | ✅ **our strongest** |
 | 8 | Observability | four channels: logger, session log, invariants, telemetry | 1 (partly shipped), 2 | ✅ planned |
-| 8 | **Security** | sandbox seam, wired at mount | 6d | 🔶 thin, and late |
+| 8 | **Security** | `sandbox/*` 4/4 — seam, local backends, policy resolver | 3 | ✅ vendored |
 
-### The three gaps
+### How the gaps closed
 
-**Memory and Context Management is the real one.** The course names it as a
-topic in its own right, and our plan answers it only with retrieval. Every
-upstream package that does conversation memory — `compaction/*`, `context/*`,
-`spill/*` — is on our skip list. Retrieval over a corpus and memory over a
-conversation are different problems: one is "what do we know", the other is
-"what happened, and what still fits in the window". A grader looking for topic 4
-would not find it.
+An earlier version of this table showed three gaps — Memory/Context Management,
+Agent Skills, and Security. They were artefacts of a hand-picked skip list
+written when the plan assumed we would port ~12 packages by hand.
 
-*Cheapest fix:* `compaction/*` is four upstream packages and vendoring is now
-the rule. It is not a rewrite; it is a decision to stop skipping it.
+Taking `bundle/base` closes all three, because dsh's baseline bundle *is* a
+complete harness in exactly the sense SE373 means:
 
-**Agent Skills is named in topic 1 and we skip `skill/*` entirely** (four
-packages). Our catalog blocks are a *builder-side* concept — things the meta-agent
-composes — not skills a generated agent loads at runtime. Those are not the same
-thing, and the course names the second.
+| Gap | Inside `base + headless` |
+|---|---|
+| Memory / Context | `compaction/*` 4/4, `spill/*` 3/3, `context/*` 3/6, `session-persistence` |
+| Agent Skills | `skill/*` 4/4 |
+| Security | `sandbox/*` 4/4 |
 
-*Cheapest fix:* same shape. Four packages, already written.
+**This is the argument for building on dsh rather than beside it.** The course
+grades a Harness; dsh already ships one; our contribution is the two planes
+above it that no harness has.
 
-**Security is thin and lands last.** It is one third of topic 8 and currently
-arrives at phase 6d, behind the riskiest work. The architecture doc is explicit
-that plan mode is *not* a security control and that sandbox mode must be wired
-independently — so right now nothing in the plan carries this before phase 6d.
+### Where we are strong, and where we are merely covered
 
-*Cheapest fix:* pull `sandbox/*` forward to phase 3, when tools first execute.
-That is also when it starts mattering.
+Covered is not the same as demonstrated. Topics 1–6 and 8-observability are
+covered *because we vendored a working implementation* — real, but not ours.
 
-### What the gaps do not change
-
-Topics 3, 7, and 8-verification are where this project is unusually strong — a
-swappable RAG pipeline, a bidirectional MCP path, and a system that verifies
-code it wrote itself against contracts it cannot edit. Those are the
-demonstrations to build the presentation around.
+Topics 3 (RAG), 7 (MCP), and 8-verification are different: a swappable
+retrieval pipeline whose every stage is a config row, a bidirectional MCP path
+where a generated server re-registers into the chat that built it, and a system
+that verifies code it wrote itself against contracts it cannot edit. **None of
+those exist upstream.** Build the presentation around them.
 
 ---
 
@@ -130,6 +125,6 @@ and "are we on track" is unanswerable.
 
 - The coverage table is our reading of an announcement, not a marking scheme.
   Revisit it the moment a real rubric appears.
-- Topic 5 (Workflow Orchestration) is marked partial on a judgement call: we
-  build pipelines and multi-agent composition but no general workflow engine.
-  If the course means a durable orchestration runtime, this is a fourth gap.
+- "Vendored" in the coverage table means the implementation exists in our tree
+  and is expected to work; it does not mean we have run it. Each row becomes a
+  claim only when a `docs/FEATURE-LOG.md` entry demonstrates it.

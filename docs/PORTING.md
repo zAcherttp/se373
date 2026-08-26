@@ -102,36 +102,70 @@ Keep this log exhaustive.
 
 ---
 
-## 2. Planned vendoring scope
+## 2. Vendoring scope — dsh's baseline is the baseline
 
-Settled 2026-08-26: on-path upstream packages are **vendored and documented**,
-not rewritten. What that actually costs, measured against the dsh tree at
-`47f94385`:
+Settled 2026-08-26, revised the same day after measuring it.
 
-| Seed set | Hard-dependency closure | Notes |
+**We take dsh's own bundles.** `bundle/base` is dsh's answer to "what does a
+working harness need", and that answer is the thing SE373 calls the Harness.
+Curating our own subset means re-deciding, worse, a question upstream already
+answered.
+
+| Take | Closure | When |
 |---|---|---|
-| 77 on-path packages | **173** (73% of upstream) | pulls in `typert`, `compaction`, `goal`, `workflow`, `spill`, `code-runtime`, `skill`, `session-query` — all on the skip list |
-| 77 minus `bundle/*` | **89** | +15 beyond the seeds, all small seams |
+| `bundle/base` | 123 | the harness itself |
+| `+ bundle/headless` | 126 | phase 2–3 — terminal chat |
+| `+ bundle/web-app` | 174 | phase 4 — the web plane |
+| `+ 13 named extras` | **187** | see below |
 
-The three `bundle/*` packages are the entire difference. They are profile
-manifests whose job is to declare every row in a profile as a dependency, so
-vendoring one drags its whole profile in. **We write our own bundles** — a
-bundle is a row list, and ours names only our rows.
+**187 of 227 taken; 40 excluded.**
 
-Third-party npm dependencies across the on-path set: 48, including `react`,
-`react-dom`, `zod`, `chokidar`, `shiki`, `ws`, `@modelcontextprotocol/sdk`,
-`@vscode/ripgrep`, and `node-pty`. Each needs an `allowBuilds` review in
-`pnpm-workspace.yaml` before install.
+### The extras
+
+Thirteen packages the bundles cannot reach, because they are pulled by the
+frontend build or by an entrypoint rather than by a plugin row:
+`mcp-client`, `sdk/client`, `sdk/protocol`, `client/ui-slots`,
+`client/ui-primitives`, `client/web`, `extensions/tool-cordis`,
+`interaction/tool-ask-user`, `storage-sqlite`, `core/agent-tool-presentation`,
+`preset/persona`, `web/web-fetch-http`, `session-persistence-sqlite`.
+
+### The exclusions
+
+Forty packages, and every one is excluded for the same reason: it needs
+**external infrastructure or another vendor's protocol**, not because we judged
+it unnecessary.
+
+| Excluded | Why |
+|---|---|
+| `e2b/*`, `code-runtime-python` | remote sandbox service |
+| `acp/*`, `subagent-{acp,claude-code,codex,dsh-sdk}`, `hooks-{claude-code,codex}` | other vendors' agent protocols |
+| `lsp/*` | language-server infrastructure |
+| `terminal/*`, `tool-*-persistent` | PTY (`node-pty` native build) |
+| `web-search-{exa,perplexity}` | third-party search API keys |
+| `test-support/*`, `examples/*`, `experimental/*` | upstream's own dev infrastructure |
+| `typert/generator`, `sdk/server`, `schedule`, `tool-session-query`, `time-context`, `tmux-context`, `session-title-all-prompts-llm` | no consumer in our tree |
+
+### Anything else we do not want is a disabled row, not an exclusion
+
+This is the part worth internalising. A vendored package that we do not want
+running is **`disabled: true` in a config row** — invariant I3, one line, and
+reversible when a demo needs it. Vendoring is not endorsement, and excluding at
+vendor time throws away optionality for no gain.
+
+### Third-party npm dependencies
+
+48 across the taken set, including `react`, `react-dom`, `zod`, `chokidar`,
+`shiki`, `ws`, `@modelcontextprotocol/sdk`, `@vscode/ripgrep`, `sharp`, and the
+OpenTelemetry exporters. Each needs an `allowBuilds` review in
+`pnpm-workspace.yaml` before install. Dropping `node-pty` is most of why the
+PTY packages are excluded.
 
 ### Where the actual work is
 
-Worth stating plainly, because the vendored count is the bigger number and the
-built count is the interesting one: L3 and L4 — the knowledge and builder
-planes, which *are* the project — have **no upstream analogue at all**. Nothing
-in dsh corresponds to `ctx.embedder`, `ctx.chunker`, `ctx.vectorStore`,
-`ctx.blocks`, `ctx.retrievalEval`, or `ctx.promotion`.
-
-The vendored spine is the floor we build on, not the deliverable.
+The vendored spine is the floor, not the deliverable. L3 and L4 — the knowledge
+and builder planes, which *are* the project — have **no upstream analogue at
+all**. Nothing in dsh corresponds to `ctx.embedder`, `ctx.chunker`,
+`ctx.vectorStore`, `ctx.blocks`, `ctx.retrievalEval`, or `ctx.promotion`.
 
 ---
 
