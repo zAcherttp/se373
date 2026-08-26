@@ -41,6 +41,8 @@ Every phase ends with something that **runs**. Slice vertically, never ship a la
 - **Hot reload is solved upstream** (`@cordisjs/plugin-hmr`, a `dsh-base` row). We build the staging gate around it, not the reload itself.
 - **UI uses dsh `ui-primitives`, not Base UI.** Already styled, zero-cordis (so injectable into the sandbox closure), and native-looking. dsh has no third-party UI library at all.
 - **MCP export is codegen over the SDK's stdio transport** — no port, no sandbox involvement, lowest-risk deliverable. Bank it early.
+- **dsh has no app log.** Its Logger channel never leaves the terminal. Ours is two Cordis exporters — a ring buffer over the wire and a run-keyed JSONL sink — reusing `session-persistence-jsonl`'s durability primitives but not its seam. `docs/design/runtime-observability.md`.
+- **The runtime graph is one projection with many renderers.** `ctx.runtimeGraph` is a core service; the terminal inspector, the board, the model tool, and §7.3's pipeline graph are all consumers of it. That is what makes I5 true by construction.
 - **dsh's baseline is our baseline.** On-path upstream packages are vendored, not rewritten, and the selector is dsh's own bundles rather than a hand-picked list: 187 of 227 taken. `docs/PORTING.md` §2.
 - **The upstream tree is 238 packages, not ~50.** The old figure counted directories under `packages/`. 150 are off our path.
 
