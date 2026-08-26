@@ -14,6 +14,38 @@ This pairs with seam conformance suites rather than duplicating them:
 | Conformance suite | once, before mount | a provider that does not satisfy its seam contract |
 | Invariant companion | continuously, at runtime | a provider that satisfies the contract but drifts in operation |
 
+## Depends on
+
+| Package | Why |
+|---|---|
+| `@se373/cordis` | `Service`, `Context`, and `ctx.effect` for the reversible registration |
+| `@se373/schemastery` | the config schema and its defaults |
+
+Nothing else. Every package that contributes a check depends on *this*, not the
+other way round, so the registry never grows a dependency on its contributors.
+
+## In / out
+
+| Boundary | Shape |
+|---|---|
+| config | `{ enabled?: boolean = true, allow?: string[] = [], deny?: string[] = [] }` |
+| `allow` / `deny` | JavaScript regex **sources**, matched against the full package name; `allow` first, then `deny` |
+| publishes | `ctx.invariants: InvariantRegistry` |
+| `register(packageName, installer)` | → `() => void` disposer |
+| `installer` | `(ctx: Context, fail: InvariantFailure) => void \| Promise<void>`, optionally carrying `.inject` |
+| `fail(message)` | → `never`; throws `InvariantError` |
+| `InvariantError` | `{ code: 'INVARIANT', packageName: string, message: string }` |
+
+`code` is the contract; `message` is for humans. A model repairing its own block
+reads the code.
+
+**The installer runs in a child fiber the registry owns**, not in the caller's
+context. Services it touches must be declared on the installer itself via
+`.inject` — wrapping the caller in `ctx.inject` does not reach it.
+
+A package name is reserved even when filtering disables its checks, so a
+duplicate registration is still an error. Disposal releases the reservation.
+
 ## Usage
 
 ```ts

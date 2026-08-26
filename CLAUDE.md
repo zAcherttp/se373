@@ -44,15 +44,50 @@ Every phase ends with something that **runs**. Slice vertically, never ship a la
 
 - Local clone: `../deepseek-harness` — currently at `47f94385` (Aug 13). **The plan was written against `b150a55` (v0.1.1-rc.2, Aug 21).** Update the clone or expect small drift.
 - License: MIT. Copied files keep the upstream notice; `docs/PORTING.md` records per-file provenance.
-- Cordis: `cordiverse/cordis`, used unmodified.
+- Cordis: **source-vendored under `vendor/`**, rescoped to `@se373/*`. Taken from dsh's patched copy, not npm — the npm packages carry the same version numbers with different content, minus the fiber-disposal and HMR fixes that I6 and phase 6d rest on. `docs/PORTING.md` has the detail.
+
+## Working rules
+
+### Do not rewrite what already exists
+
+Prefer taking a package over reimplementing it. When something upstream already
+does the job, vendor it and **document it** — what it does, what it depends on,
+and the shape of the data in and out. A rewrite is justified only when the
+upstream surface is much larger than our need, and the entry in
+`docs/PORTING.md` has to say why.
+
+Documentation lives with the code: every package gets a `README.md` covering
+
+| Section | Content |
+|---|---|
+| What it does | one paragraph, in terms of the problem, not the implementation |
+| Depends on | services injected, packages imported, and why each is needed |
+| In / out | the data shapes crossing the boundary — config in, service surface out, events emitted |
+| Known Limitations and Deferred Work | required; an omitted section reads as a completeness claim |
+
+### Maintain the feature log
+
+`docs/FEATURE-LOG.md` is **append-only**. Never edit or delete an entry; if
+something turns out wrong, append a new entry saying so.
+
+Every time a phase ends with something that runs:
+
+1. Tag it — `git tag -a phase-N -m "..."`. The tag is the rewind point.
+2. Append an entry using the format at the top of that file.
+3. The entry's `Demonstrable` command must actually run at that tag.
+
+This is what makes `git checkout phase-2` show phase 2 working. A phase that
+ends with nothing runnable gets no tag and no entry — that is the check, not a
+formality.
 
 ## Immediate next steps
 
-1. **D2 — the only real blocker.** Get the instructor's *written* ruling on how much ported MIT code is permitted in a graded project. MIT settles the license; a course plagiarism policy is a separate rule it does not answer.
-2. Name the project — `@zoo/*` is a placeholder and appears in every manifest.
-3. Write `docs/PORTING.md` (per-file provenance table).
-4. Write a block-authoring guide so teammates can add catalog blocks without reading the whole architecture doc.
-5. Start phase 1 (Cordis boot).
+1. **D2 — the only real blocker.** Get the instructor's *written* ruling on how much ported MIT code is permitted in a graded project. MIT settles the license; a course plagiarism policy is a separate rule it does not answer. **Blocks phase 2, not phase 1** — the agent spine is where ported dsh code first lands.
+2. ~~Name the project~~ — settled: `@se373/*`.
+3. ~~Write `docs/PORTING.md`~~ — done.
+4. **Put the actual course roadmap in the repo.** `docs/FEATURE-LOG.md` maps entries to §13 phases because the syllabus deliverables and their dates are not written down anywhere here. Until they are, "follow the roadmap" is guesswork.
+5. Write a block-authoring guide so teammates can add catalog blocks without reading the whole architecture doc.
+6. ~~Start phase 1~~ — shipped, tagged `phase-1`.
 
 ## Risks being tracked
 
