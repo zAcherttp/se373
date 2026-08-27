@@ -100,3 +100,66 @@ No LLM, no session log, no tools, no UI — nothing above L0. `@se373/hello` is
 a demo and gets deleted when a real service takes that ground. The console
 exporter is mounted by the CLI rather than configured as a row, so per-package
 log levels (§11.2) are not yet a config edit.
+
+---
+
+## phase-2 — One task in, one answer out
+
+**2026-08-27** · **Commit** `2591197` · **Tag** `phase-2`
+
+**Roadmap** — Topic 4 (*Memory & Context*): the append-only session log and the
+assembled system prompt. Topic 8 (*Observability*) gains its second third: every
+vendored package's `./invariant` companion now registers against the registry
+phase 1 stood up. Topic 2 (*Tool Use*) has its runtime mounted but no tools in
+it — that is phase 3.
+**Phase** — §13 phase 2, "Agent spine".
+
+**Demonstrable**
+
+The harness takes a task, runs a real turn — session log, system prompt,
+streaming provider, retry policy — prints the assistant's answer, and exits.
+
+```bash
+export DEEPSEEK_API_KEY=...
+pnpm install && npx tsc -b tsconfig.vendor.json
+pnpm se373 examples/chat/cordis.yml "what is 2 + 2"
+```
+
+Without a key, the same shipping config runs against a local mock provider:
+
+```bash
+pnpm test        # apps/cli/tests/spine.spec.ts boots examples/chat/cordis.yml
+```
+
+That spec is the honest gate. It boots the config that ships rather than a row
+list assembled in the test, so the only thing it fakes is the provider on the
+far side of the wire.
+
+**Packages**
+
+31 vendored from dsh; the load-bearing ones:
+
+| Package | What it does |
+|---|---|
+| `@se373/session` | The append-only event log a turn is written to |
+| `@se373/llm` | The provider seam; `llm-deepseek` and `llm-retry` sit behind it |
+| `@se373/agent` + `@se373/agent-loop` | Agent handles and the one driver that runs a turn |
+| `@se373/system-prompt` | Assembles persona, sections, and tool schemas |
+| `@se373/tools` | The tool runtime — mounted, empty until phase 3 |
+| `@se373/headless` | dsh's one-shot runner: create an agent, follow up, print, exit |
+| `@se373/settings-file` + `@se373/credentials-local` | Where the API key comes from |
+| `scripts/vendor-dsh.mjs` | Ours. Walks the closure, rescopes, re-applies divergences |
+
+**Not yet**
+
+- **No tools.** `ctx.tools` is mounted and empty, so the agent can answer but
+  cannot act. That is phase 3, and it is what makes the harness useful.
+- **One shot, not a chat.** The runner answers once and exits; there is no
+  conversation, no resume, and no UI. Phase 4 owns the chat box.
+- **28 of `base + headless`'s 126 packages.** Everything the other 98 provide —
+  sandbox, skills, compaction, subagents, goals, jobs — is absent, not disabled.
+- **`~/.se373`, not `~/.dsh`.** A local modification to `home-paths` keeps our
+  sessions and credentials out of a co-installed dsh, so an existing dsh key is
+  not picked up; export `DEEPSEEK_API_KEY` or write our own credential store.
+- **Upstream tests are not vendored.** These 31 packages are exercised by two
+  specs of ours, not by dsh's suite.
