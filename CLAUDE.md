@@ -46,6 +46,9 @@ Every phase ends with something that **runs**. Slice vertically, never ship a la
 - **dsh has no app log.** Its Logger channel never leaves the terminal. Ours is two Cordis exporters — a ring buffer over the wire and a run-keyed JSONL sink — reusing `session-persistence-jsonl`'s durability primitives but not its seam. `docs/design/runtime-observability.md`.
 - **The runtime graph is one projection with many renderers.** `ctx.runtimeGraph` is a core service; the terminal inspector, the board, the model tool, and §7.3's pipeline graph are all consumers of it. That is what makes I5 true by construction.
 - **dsh's baseline is our baseline.** On-path upstream packages are vendored, not rewritten, and the selector is dsh's own bundles rather than a hand-picked list: 187 of 227 taken. `docs/PORTING.md` §2.
+- **Vendoring is a script, not a chore.** `scripts/vendor-dsh.mjs` walks the closure from a seed, rescopes, repoints manifests at source, regenerates tsconfigs, and re-applies our divergences from one `LOCAL_MODS` table. Widening the vendored set is a seed-list edit. `docs/PORTING.md` §3.
+- **Our user-data root is `~/.se373`, never `~/.dsh`.** A logged local modification to `home-paths`. The `dshHomePath` *key* keeps upstream's name so dsh patch YAML transplants verbatim; only the value is ours.
+- **We do not port.** The one port we wrote (`invariants`) was retired at the first opportunity for the vendored original — it was faithful and still dropped a load-bearing thenable. `docs/PORTING.md` §4.
 - **The upstream tree is 238 packages, not ~50.** The old figure counted directories under `packages/`. 150 are off our path.
 
 ## Upstream reference
@@ -100,12 +103,16 @@ formality.
 
 ## Immediate next steps
 
-1. **Start phase 2** (agent spine). Nothing blocks it.
+1. **Start phase 3** (tools). Nothing blocks it: `ctx.tools` is mounted and
+   empty, and widening the vendored set is a seed-list edit to
+   `scripts/vendor-dsh.mjs`.
 2. ~~Name the project~~ — settled: `@se373/*`.
 3. ~~Write `docs/PORTING.md`~~ — done.
 4. **Get the milestone dates and grading breakdown.** The announcement in `docs/COURSE.md` has neither, so the phase plan carries no deadline pressure and "are we on track" is unanswerable.
 5. ~~Write a block-authoring guide for teammates~~ — no teammates. The audience is the model authoring blocks at phase 6d, so this becomes the `graph/node` and block-manifest contract, not onboarding prose.
 6. ~~Start phase 1~~ — shipped, tagged `phase-1`.
+7. ~~Start phase 2~~ — shipped, tagged `phase-2`. 31 packages vendored; the
+   harness answers a task headlessly.
 
 ## Risks being tracked
 

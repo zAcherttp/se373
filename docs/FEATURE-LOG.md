@@ -163,3 +163,26 @@ far side of the wire.
   not picked up; export `DEEPSEEK_API_KEY` or write our own credential store.
 - **Upstream tests are not vendored.** These 31 packages are exercised by two
   specs of ours, not by dsh's suite.
+
+---
+
+## correction — phase-1's commit sha is dead
+
+**2026-08-27**
+
+The phase-1 entry above names commit `eebab0b`. That object does not exist. On
+2026-08-26 the whole history was rewritten twice — once to fix the author name,
+once to shorten the commit messages — and `git filter-branch --tag-name-filter
+cat` moved the `phase-1` tag onto the rewritten commit without touching the sha
+written into this file.
+
+The tag is correct and is what matters for rewinding:
+
+```bash
+git checkout phase-1     # ee84251, the same tree eebab0b had
+```
+
+Per this file's own rule the entry above stays as written. The lesson is
+narrower than "do not rewrite history": **a tag survives a rewrite and a
+recorded sha does not**, so the tag is the rewind point and the sha is a
+convenience that can go stale.
