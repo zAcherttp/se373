@@ -24,6 +24,14 @@
     "url": "git+https://github.com/zAcherttp/se373.git",
     "directory": "vendor/dsh/llm/llm-deepseek"
   },
+  "se373": {
+    "upstream": {
+      "repo": "deepseek-ai/deepseek-harness",
+      "rev": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e",
+      "path": "packages/llm/llm-deepseek",
+      "name": "@deepseek-ai/dsh-llm-deepseek"
+    }
+  },
   "dependencies": {
     "eventsource-parser": "^3.1.0",
     "@se373/schemastery": "workspace:^"

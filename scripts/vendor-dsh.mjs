@@ -15,6 +15,7 @@
  * `agent-loop`, `llm-deepseek`, `headless`.
  */
 
+import { execFileSync } from 'node:child_process'
 import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join, relative, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -227,6 +228,24 @@ function copySources(from, to, renames) {
   }
 }
 
+/**
+ * The upstream commit this run copies from, recorded into every package it
+ * writes.
+ *
+ * A single pin in prose does not survive selective migration, and it did not
+ * survive being written down: `docs/PORTING.md` claimed `47f94385` for a tree
+ * that was byte-identical to `b150a551`. Per-package provenance makes the
+ * question answerable from the tree instead of from a document.
+ * @returns the upstream HEAD, marked dirty when its working tree is not clean.
+ */
+function upstreamRev() {
+  const git = (...args) => execFileSync('git', ['-C', UPSTREAM, ...args], { encoding: 'utf8' }).trim()
+  const rev = git('rev-parse', 'HEAD')
+  return git('status', '--porcelain') === '' ? rev : `${rev}-dirty`
+}
+
+const REV = upstreamRev()
+
 const all = scanUpstream()
 
 /**
@@ -280,6 +299,7 @@ for (const name of closure) {
   }
 }
 
+console.log(`upstream: ${REV}`)
 console.log(`closure: ${closure.size} packages (${toVendor.length} to vendor, ${closure.size - toVendor.length} already framework)`)
 console.log(`third-party: ${[...thirdParty].sort().join(', ') || 'none'}`)
 if (listOnly) {
@@ -329,6 +349,14 @@ for (const name of toVendor) {
     repository: { type: 'git', url: 'git+https://github.com/zAcherttp/se373.git', directory: `vendor/dsh/${dir}` },
   }
   if (manifest.dsh) out.dsh = manifest.dsh
+  out.se373 = {
+    upstream: {
+      repo: 'deepseek-ai/deepseek-harness',
+      rev: REV,
+      path: entry.from ?? `packages/${dir}`,
+      name,
+    },
+  }
   // `optionalDependencies` are dropped wholesale. The only one in the taken set
   // is Landlock's per-architecture Linux prebuilds, which are `workspace:*`
   // members of a native build tree we do not vendor; pnpm rejects an

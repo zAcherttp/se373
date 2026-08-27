@@ -24,6 +24,14 @@
     "url": "git+https://github.com/zAcherttp/se373.git",
     "directory": "vendor/dsh/sandbox/sandbox-policy"
   },
+  "se373": {
+    "upstream": {
+      "repo": "deepseek-ai/deepseek-harness",
+      "rev": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e",
+      "path": "packages/sandbox/sandbox-policy",
+      "name": "@deepseek-ai/dsh-sandbox-policy"
+    }
+  },
   "dependencies": {
     "@se373/schemastery": "workspace:^"
   },

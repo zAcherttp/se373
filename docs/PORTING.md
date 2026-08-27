@@ -19,8 +19,8 @@ and for anything copied, where it came from and what we changed.
 
 ## 1. Vendored framework (`vendor/`)
 
-Copied from the **DeepSeek Harness** working tree at `47f94385`, which had in
-turn vendored them from Cordis upstream. So there are **two** layers of prior
+Copied from the **DeepSeek Harness** working tree at `b150a551` (v0.1.1-rc.2),
+which had in turn vendored them from Cordis upstream. So there are **two** layers of prior
 work here, and both are MIT:
 
 - **Cordis and its plugins** — © Shigma and contributors, `cordiverse/cordis`
@@ -28,6 +28,14 @@ work here, and both are MIT:
 
 | Directory | Our name | Upstream name | Version | Upstream source |
 |---|---|---|---|---|
+> **Corrected 2026-08-27.** This section previously recorded `47f94385`. The
+> clone is at `b150a551` with a clean tree, and all 31 vendored framework source
+> files are byte-identical to it once the rescope is applied — so the tree never
+> came from `47f94385`, and the "expect drift between doc and code" caveat this
+> file used to carry was describing a problem that did not exist. The per-package
+> provenance in §3 is the fix: the rev now lives in the tree, where it can be
+> checked, rather than in prose, where it cannot.
+
 | `cordis/` | `@se373/cordis` | `cordis` | 4.0.0-rc.7 | cordiverse/cordis `packages/core` @ `56b3d4f7` |
 | `cosmokit/` | `@se373/cosmokit` | `cosmokit` | 1.8.1 | deepseek-harness/cosmokit @ `16f6fc05` |
 | `schemastery/` | `@se373/schemastery` | `schemastery` | 3.18.0 | deepseek-harness/schemastery @ `e67cee00` |
@@ -208,8 +216,36 @@ The three-way split of this repository reads off the tree:
 | `tsconfig.json` regenerated from the manifest's workspace dependencies | upstream's references are relative to *their* depth, and a hand-edited path is a silent build break |
 | workspace `devDependencies` outside the closure are dropped | upstream devDeps carry test-only packages; we do not copy `tests/`, so pnpm would fail to link them. Each drop is reported |
 | `README.md` and `cordis.patch.yml` copied beside `src/` | this is the per-package documentation the working rules require — upstream already wrote it |
+| an `se373.upstream` block written into every manifest | see below |
 
 `README.i18n.yaml`, `README.zh.md`, `lib/`, and `tests/` are not copied.
+
+### Provenance lives in the tree, not in this file
+
+Every vendored manifest — harness and framework alike — carries:
+
+```jsonc
+"se373": {
+  "upstream": {
+    "repo": "deepseek-ai/deepseek-harness",
+    "rev": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e",
+    "path": "packages/llm/llm-deepseek",
+    "name": "@deepseek-ai/dsh-llm-deepseek"
+  }
+}
+```
+
+The script stamps it on every write and marks the rev `-dirty` when the upstream
+working tree is not clean. This exists because a single pin in prose does not
+survive selective migration — and, as the correction in §1 records, did not even
+survive being written down once.
+
+**The sync policy this supports** (settled 2026-08-27): we neither freeze nor
+track. When something upstream looks worth having, update the clone, read the
+breaking changes, re-run the script for the affected seeds, and read the diff.
+Re-vendoring regenerates every package it touches and hard-fails on any stale
+`LOCAL_MODS` entry, so drift surfaces as a diff and divergence surfaces as a
+crash. Per-package revs are what make *partial* migration expressible.
 
 ### Local modifications
 
@@ -301,8 +337,20 @@ tsconfig layer, our own bundles, and every `packages/*` not listed in §4.
 
 - **59 of the 187 in-scope packages are vendored** (phases 2 and 3: the chat
   closure, the tool and sandbox closure, the mock LLM server, and the Landlock
-  seam). Phases 4–5 pull the rest; `scripts/vendor-dsh.mjs` is the mechanism,
-  so widening is a seed-list edit rather than new work.
+  seam). `scripts/vendor-dsh.mjs` is the mechanism, so widening is a seed-list
+  edit rather than new work.
+- **Phase 4 takes `bundle/web-app` whole: 78 more packages, 59 → 137.** Measured
+  2026-08-27. Two smaller tiers were considered and rejected — a page with no
+  host RPC (3 new packages) and the `/api` transport without dsh's UI (27) — on
+  the grounds that dsh's chat view is 14,904 lines we would otherwise
+  reimplement, and that typert arrives with the transport whether we use it or
+  not. `docs/design/builder-plane.md` and §13 of the architecture doc carry the
+  reasoning.
+- **The browser cannot run from source.** `client-modules` resolves
+  `exports["./client"]` and `readFileSync`s the result to hash it; a missing
+  `lib/client.js` is a fatal activation error, not a degradation. Phase 4 adds a
+  second TypeScript program, `tsdown` per client package, a Vite build, and a
+  watcher. The host spine keeps running under `tsx`; the browser half cannot.
 - **The Landlock backend is inert.** See "Out-of-tree upstream packages" above.
   On macOS this costs nothing; on Linux it silently narrows which sandbox
   backends can be selected, and nothing in the tree says so at runtime.
@@ -313,9 +361,9 @@ tsconfig layer, our own bundles, and every `packages/*` not listed in §4.
 - **Upstream `tests/` are not copied**, so a vendored package is exercised only
   by whatever we write against it. Today that is the invariants registry and
   the phase-2 spine spec.
-- The vendored set is pinned to a dsh working tree at `47f94385`, which is
-  *older* than the `b150a55` the architecture doc was written against. Expect
-  small drift between doc and code.
+- ~~The vendored set is pinned to a dsh working tree at `47f94385`~~ —
+  **corrected 2026-08-27.** It is `b150a551`, the same rev the architecture doc
+  was written against, so there is no doc-vs-code drift. See §1.
 - The §2 closure numbers are computed from declared manifest dependencies. A
   package may import less than it declares (dsh's own `hmr` declared less than
   it imports, which is how we caught that), so 187 is an upper bound on what

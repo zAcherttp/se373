@@ -34,6 +34,14 @@
       "patch": "./cordis.patch.yml"
     }
   },
+  "se373": {
+    "upstream": {
+      "repo": "deepseek-ai/deepseek-harness",
+      "rev": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e",
+      "path": "packages/bundle/headless",
+      "name": "@deepseek-ai/dsh-headless"
+    }
+  },
   "dependencies": {
     "@se373/cmdline": "workspace:^",
     "@se373/code-runtime-worker-thread": "workspace:^",

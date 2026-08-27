@@ -28,6 +28,14 @@
     "url": "git+https://github.com/zAcherttp/se373.git",
     "directory": "vendor/dsh/session/session-projection"
   },
+  "se373": {
+    "upstream": {
+      "repo": "deepseek-ai/deepseek-harness",
+      "rev": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e",
+      "path": "packages/session/session-projection",
+      "name": "@deepseek-ai/dsh-session-projection"
+    }
+  },
   "dependencies": {
     "zod": "^4.4.3"
   },

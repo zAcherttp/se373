@@ -29,5 +29,13 @@
     "@se373/schemastery": "workspace:^",
     "supports-color": "^9.4.0"
   },
-  "private": true
+  "private": true,
+  "se373": {
+    "upstream": {
+      "repo": "deepseek-ai/deepseek-harness",
+      "rev": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e",
+      "path": "vendor/logger-console",
+      "name": "@deepseek-ai/cordis-plugin-logger-console"
+    }
+  }
 }

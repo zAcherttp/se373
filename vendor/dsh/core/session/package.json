@@ -32,6 +32,14 @@
     "url": "git+https://github.com/zAcherttp/se373.git",
     "directory": "vendor/dsh/core/session"
   },
+  "se373": {
+    "upstream": {
+      "repo": "deepseek-ai/deepseek-harness",
+      "rev": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e",
+      "path": "packages/core/session",
+      "name": "@deepseek-ai/dsh-session"
+    }
+  },
   "peerDependencies": {
     "@se373/brand": "workspace:^",
     "@se373/invariants": "workspace:^",

@@ -20,5 +20,13 @@
   },
   "author": "Shigma <shigma10826@gmail.com>",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "se373": {
+    "upstream": {
+      "repo": "deepseek-ai/deepseek-harness",
+      "rev": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e",
+      "path": "vendor/cosmokit",
+      "name": "@deepseek-ai/cosmokit"
+    }
+  }
 }

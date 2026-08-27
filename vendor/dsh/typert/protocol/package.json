@@ -28,6 +28,14 @@
     "url": "git+https://github.com/zAcherttp/se373.git",
     "directory": "vendor/dsh/typert/protocol"
   },
+  "se373": {
+    "upstream": {
+      "repo": "deepseek-ai/deepseek-harness",
+      "rev": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e",
+      "path": "packages/typert/protocol",
+      "name": "@deepseek-ai/dsh-typert-protocol"
+    }
+  },
   "peerDependencies": {
     "@se373/invariants": "workspace:^",
     "@se373/cordis": "workspace:^"

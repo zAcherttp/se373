@@ -24,6 +24,14 @@
     "url": "git+https://github.com/zAcherttp/se373.git",
     "directory": "vendor/dsh/fs/tool-fs-search"
   },
+  "se373": {
+    "upstream": {
+      "repo": "deepseek-ai/deepseek-harness",
+      "rev": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e",
+      "path": "packages/fs/tool-fs-search",
+      "name": "@deepseek-ai/dsh-tool-fs-search"
+    }
+  },
   "dependencies": {
     "@vscode/ripgrep": "^1.18.0",
     "@se373/schemastery": "workspace:^"

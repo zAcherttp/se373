@@ -745,18 +745,24 @@ Each phase ends with something that **runs**. Slice vertically; never ship a lay
 | 1 | Cordis boot | CLI boots a plugin tree and prints | loader, fiber, effect, disposal, config rows |
 | 2 | Agent spine | **headless chat in terminal** | `ctx.sessions`, `ctx.llm`, minimal turn loop |
 | 3 | Tools | **it can do work** | `ctx.tools`, guard pipeline, `fs` + `bash` |
-| 4 | Web plane | **your chat box** | web server, slot registry, `ui-primitives`, conversation view |
+| **3.5** | **Runtime graph** | **the agent can inspect its own runtime** | `ctx.runtimeGraph`, the `graph_inspect` tool, the JSONL app-log sink, `mcp-client` as a disabled row |
+| 4 | Web plane | **your chat box, and the board beside it** | the build pipeline, dsh's shell and chat roster, our board plugin, a push transport for the graph |
 | 5 | Multi-agent | **subagents run** | `ctx.agentPresets`, `subagent-spawn-in-process` |
-| 6a | **Embedding seam** | vectors exist | `ctx.embedder` + ONNX local |
+| 6a | **Embedding seam** | vectors exist | `ctx.embedder` + ONNX local, `sqlite-vec` at 384 dims |
 | 6b | Knowledge plane | **knowledge agent answers** | remaining L3 seams, ingest events |
-| 6c | Builder plane | **tile → working agent** | `ctx.blocks`, `ctx.builder`, graph view |
-| 6d | **Authoring** | **agent forks a block and it hot-swaps in** | `plan-mode` gate, fork namespace, conformance suites, staging→HMR |
+| 6c | Builder plane | **recipe → working agent** | `ctx.blocks` as a repository, `ctx.builder`, the cookbook |
+| 6d | **Authoring** | **agent forks a block and it hot-swaps in** | fork namespace, gated install, conformance suites, staging→HMR |
 | 7 | Export | **installable plugin + MCP server** | `ctx.promotion`, MCP codegen |
 | 8 | Eval / A/B | **compare view** | `ctx.retrievalEval`, isolate realms |
 
-**Risk spike: phase 4.** The web plane is the largest chunk of upstream and the easiest to underestimate. If the semester slips, it slips there.
+**Risk spike: phase 4.** 78 new packages *plus* a second TypeScript program, `tsdown` per client package, a Vite build, and a watcher. The `tsx`-from-source posture does not survive contact with the browser: `client-modules` reads `lib/client.js` off disk and fails loud when it is absent. Budget the build as a workstream, not a footnote.
 
-**Sequencing note:** 6a gates 6b gates 6c. Do not reorder. Bank phase 7's MCP path early if the demo date is tight — it is codegen, the lowest-risk deliverable.
+**Sequencing notes.**
+
+- **3.5 comes before 4.** `ctx.runtimeGraph` is ours, has no upstream analogue, needs no build, and can be debugged against a live 59-package tree today. Landing it first means phase 4's board is rendering rather than semantics. Its first consumer is the `graph_inspect` tool, not a view — that satisfies the vertical-slice rule without waiting for a browser.
+- **6a gates 6b gates 6c.** Do not reorder.
+- **6d is not the cut candidate.** Authoring is the claim, not the flourish; see `docs/design/builder-plane.md` §4. Staging composition ahead of authoring is demo choreography, not build order.
+- **`mcp-client` lands at 3.5, not 7.** It costs one package and it is the bottom rung of the evolution ladder — the only rung that cannot fail on camera.
 
 ---
 
@@ -766,12 +772,16 @@ Each phase ends with something that **runs**. Slice vertically; never ship a lay
 |---|---|---|---|
 | D1 | Project + package name (`@zoo/*` is a placeholder) | team | before phase 1 |
 | ~~D2~~ | ~~Ruling on permitted MIT reuse~~ — **closed 2026-08-26.** MIT grants use and copying; notices travel in `docs/PORTING.md`. | — | closed |
-| D3 | Vector store default: `sqlite-vec` vs LanceDB | team | phase 6a |
-| D4 | ONNX embedding model + dimensionality (fixes the store schema) | team | phase 6a |
-| D5 | Which 3 archetypes ship reliably (vs 6 flaky) | team | phase 6c |
-| D6 | Golden question set — 20 Q/A pairs over our own docs | team | phase 8 |
-| D7 | Fork namespace scope: per-session or per-workspace | team | phase 6d |
-| D8 | Do authored forks get a dependency-install path, or stay inside the existing dep set | team | phase 6d |
+| ~~D3~~ | ~~Vector store default~~ — **closed 2026-08-27: `sqlite-vec`**, through `node:sqlite`'s `DatabaseSync` + `allowExtension`. No native build; one generation is one file. | — | closed |
+| ~~D4~~ | ~~ONNX embedding model + dimensionality~~ — **closed 2026-08-27: pin 384 dims, default multilingual.** The model becomes a config row; the index fingerprint catches a swap. | — | closed |
+| ~~D5~~ | ~~Which archetypes ship~~ — **closed 2026-08-27.** Six *recipes* ship; the vocabulary must span all six. Code Review is the fabricated-on-stage one, Internal Knowledge carries L3's coverage. | — | closed |
+| ~~D6~~ | ~~Golden question set~~ — **closed 2026-08-27:** our own docs, with a Vietnamese subset so the multilingual embedder is actually exercised. Authoring it belongs to phase 8. | — | closed |
+| ~~D7~~ | ~~Fork namespace scope~~ — **closed 2026-08-27: per-workspace.** Evolution is multi-session; per-session forks cannot be compared after a restart. | — | closed |
+| ~~D8~~ | ~~Dependency-install path for authored forks~~ — **closed 2026-08-27: yes, plan-gated, inside the fork's own lockfile.** The motivating case — forking `ctx.vectorStore` for Milvus and proving conformance — is the project's strongest demonstration. | — | closed |
+| D9 | Push transport for the runtime graph. `pluginInventory.list()` is poll-only upstream with no subscription path; a live board needs polling or a new forwarded-event contribution (ours, per the divergence policy). | — | phase 4 |
+| D10 | Whether the recorded demo needs a third-party MCP server for rung 1, or we ship a trivial one early. | — | phase 3.5 |
+
+**D1–D8 are closed.** D3–D8 closed together on 2026-08-27 in a 32-decision design interview; `docs/design/builder-plane.md` carries the reasoning and the two decisions it opened in their place.
 
 **D1 and D2 are closed.** The scope is `@se373/*`; the vendored spine is taken under MIT with notices preserved. State the vendored-vs-built split in the README anyway — not as a defence, but because it is the clearest way to show where the work went: the spine is the floor, L3 and L4 are the project.
 

@@ -24,6 +24,14 @@
     "url": "git+https://github.com/zAcherttp/se373.git",
     "directory": "vendor/dsh/code-runtime/code-runtime"
   },
+  "se373": {
+    "upstream": {
+      "repo": "deepseek-ai/deepseek-harness",
+      "rev": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e",
+      "path": "packages/code-runtime/code-runtime",
+      "name": "@deepseek-ai/dsh-code-runtime"
+    }
+  },
   "peerDependencies": {
     "@se373/invariants": "workspace:^",
     "@se373/cordis": "workspace:^"

@@ -48,13 +48,34 @@ Every phase ends with something that **runs**. Slice vertically, never ship a la
 - **dsh's baseline is our baseline.** On-path upstream packages are vendored, not rewritten, and the selector is dsh's own bundles rather than a hand-picked list: 187 of 227 taken. `docs/PORTING.md` §2.
 - **Vendoring is a script, not a chore.** `scripts/vendor-dsh.mjs` walks the closure from a seed, rescopes, repoints manifests at source, regenerates tsconfigs, and re-applies our divergences from one `LOCAL_MODS` table. Widening the vendored set is a seed-list edit. `docs/PORTING.md` §3.
 - **Our user-data root is `~/.se373`, never `~/.dsh`, and our child-process env prefix is `SE373_`, never `DSH_`.** Logged local modifications 6–8. The `dshHomePath` *key* keeps upstream's name so dsh patch YAML transplants verbatim; only the value is ours.
+### Settled 2026-08-27 — the design interview
+
+32 decisions, nine rounds. `docs/design/builder-plane.md` carries the reasoning;
+architecture doc §13 and §14 carry the consequences.
+
+- **The deliverable is chat → plan → fabricate**, recorded first with a live fabrication as the encore. Pace is ours; there is no external deadline, and phases are the reproducible checkpoints.
+- **`ctx.blocks` is a repository, not a catalog** — write path, versions, parentage, from day one. `origin: system | agent | user` is a *field* that gates policy (an agent-authored block mounts only after conformance), and the inspector's badge is a projection of it.
+- **One registry keyed by `kind`**: `agent | ui | pipeline | recipe`. A fabricated UI is a row list over UI blocks, never authored JSX — so "compare two pipelines" and "compare two agents" differ only in which blocks the rows name.
+- **A recipe is click-to-prefill**: prompt, model, thinking effort, and whatever else is configurable, shipped by us. Six ship as `origin: system` blocks, so forking one is the same gesture as forking anything else.
+- **Evolution produces generations, never mutations.** v2 builds alongside v1, passes its suite, flips. You cannot compare against a version you mutated away, and a failed evolution leaves v1 serving.
+- **Everything is plan-gated (I8), including evolution.** The plan is what the human approves; the suite is what the system verifies. Gating only destructive changes was rejected — it asks the model to classify its own blast radius.
+- **A fabricated agent is a live Cordis subtree** over a sandboxed `workspaceRoot`, via `agent-presets` and `subagent-spawn-in-process`. I5 then means it appears on the graph by itself; there is no "show the new agent" feature to write.
+- **The evolution ladder has three rungs**, and the bottom one must exist: add an MCP row (free), compose from a recipe (near-deterministic), fork a block with a gated install (the ambitious one). `mcp-client` lands at phase 3.5 for exactly this reason — one package.
+- **Forks are per-workspace and may install dependencies**, plan-gated, inside their own lockfile, in the order install → conformance → move in → HMR.
+- **6d is not the cut candidate.** Authoring is the claim. Staging composition ahead of it is demo choreography, not build order.
+- **Phase 4 takes `bundle/web-app` whole** — 78 packages, 59 → 137 — plus dsh's chat roster and our board as a row in their layout. Replacing the `root` slot is unproven ground upstream; do not. **The browser cannot run from source**: budget the build pipeline as a workstream.
+- **`ctx.runtimeGraph` comes before the web plane** (phase 3.5), with the `graph_inspect` tool as its first consumer rather than a view.
+- **Knowledge plane: `sqlite-vec` over `node:sqlite`, 384 dims, multilingual by default.** Pin the dimensionality, not the model — then the model is a config row and the fingerprint catches the swap.
+- **Sync policy: neither freeze nor track.** Update the clone when something looks worth having, read the breaking changes, re-run the vendoring script for the affected seeds, read the diff.
+- **Divergence policy:** small mechanical edits go in `LOCAL_MODS`; anything additive is our own package plugging into the vendored seam; never fork a vendored package into `packages/`.
+
 - **Testing is not a priority until the web plane.** The user's call. Two specs exist (the invariants registry, the phase-2 spine) and they stay; do not add more before phase 4.
 - **We do not port.** The one port we wrote (`invariants`) was retired at the first opportunity for the vendored original — it was faithful and still dropped a load-bearing thenable. `docs/PORTING.md` §4.
 - **The upstream tree is 238 packages, not ~50.** The old figure counted directories under `packages/`. 150 are off our path.
 
 ## Upstream reference
 
-- Local clone: `../deepseek-harness` — currently at `47f94385` (Aug 13). **The plan was written against `b150a55` (v0.1.1-rc.2, Aug 21).** Update the clone or expect small drift.
+- Local clone: `../deepseek-harness` — at `b150a551` (v0.1.1-rc.2), which is the rev the plan was written against. No drift. Provenance is stamped per package in `se373.upstream`, not tracked in prose; `docs/PORTING.md` §1 records why that changed.
 - License: MIT. Copied files keep the upstream notice; `docs/PORTING.md` records per-file provenance.
 - Cordis: **source-vendored under `vendor/`**, rescoped to `@se373/*`. Taken from dsh's patched copy, not npm — the npm packages carry the same version numbers with different content, minus the fiber-disposal and HMR fixes that I6 and phase 6d rest on. `docs/PORTING.md` has the detail.
 
@@ -104,24 +125,29 @@ formality.
 
 ## Immediate next steps
 
-1. **Start phase 4** (web plane) — the risk spike. 18 of 40 upstream client
-   packages, no one to parallelise with, and it is what turns approval's `ask`
-   from a hang into a prompt.
-2. ~~Name the project~~ — settled: `@se373/*`.
-3. ~~Write `docs/PORTING.md`~~ — done.
-4. **Get the milestone dates and grading breakdown.** The announcement in `docs/COURSE.md` has neither, so the phase plan carries no deadline pressure and "are we on track" is unanswerable.
-5. ~~Write a block-authoring guide for teammates~~ — no teammates. The audience is the model authoring blocks at phase 6d, so this becomes the `graph/node` and block-manifest contract, not onboarding prose.
-6. ~~Start phase 1~~ — shipped, tagged `phase-1`.
-7. ~~Start phase 2~~ — shipped, tagged `phase-2`. 31 packages vendored; the
+1. **Start phase 3.5** (runtime graph) — `ctx.runtimeGraph`, the `graph_inspect`
+   tool as its first consumer, the JSONL app-log sink beside it, and
+   `mcp-client` as a disabled row. All four are cheap, none needs a build, and
+   landing them first turns phase 4's board into rendering rather than
+   semantics.
+2. **Then phase 4** (web plane) — the risk spike. 78 new packages plus a build
+   workstream, and it is what turns approval's `ask` from a hang into a prompt.
+3. ~~Name the project~~ — settled: `@se373/*`.
+4. ~~Write `docs/PORTING.md`~~ — done.
+5. ~~Get the milestone dates~~ — **dropped 2026-08-27.** The user's call: phases are what we can go back to and reproduce, and otherwise we go at our own pace. Still worth confirming in week 1 whether solo is permitted.
+6. ~~Write a block-authoring guide for teammates~~ — no teammates. The audience is the model authoring blocks at phase 6d, so this becomes the `graph/node` and block-manifest contract, not onboarding prose.
+7. ~~Start phase 1~~ — shipped, tagged `phase-1`.
+8. ~~Start phase 2~~ — shipped, tagged `phase-2`. 31 packages vendored; the
    harness answers a task headlessly.
-8. ~~Start phase 3~~ — shipped, tagged `phase-3`. 59 vendored; it reads,
+9. ~~Start phase 3~~ — shipped, tagged `phase-3`. 59 vendored; it reads,
    searches, runs commands, and edits.
 
 ## Risks being tracked
 
-- **Phase 4 (web plane) is the risk spike, and solo makes it worse.** 18 of 40 upstream client packages, and no one to parallelise with. If the semester slips, it slips there. Plan the demo so it survives phase 4 landing late — the headless path (phases 2–3) plus the MCP export (phase 7) is a complete story with no browser in it.
+- **Phase 4 (web plane) is the risk spike, and solo makes it worse.** 78 new packages *and* a build pipeline — two TypeScript programs, `tsdown` per client package, Vite, a watcher — because `client-modules` reads `lib/client.js` off disk and there is no source path to the browser. If the semester slips, it slips there. The board is committed, so the old fallback (a terminal renderer) is off the table; what survives instead is that phase 3.5 lands the projection first, so a late phase 4 costs the *view*, not the data.
 - Model-authored UI is a demo cliff — keep a deterministic fallback for anything shown live.
-- **Solo changes the scope calculus, not the schedule.** Prefer 2 archetypes that work reliably over 6 that are flaky, and cut breadth before cutting depth — the thesis is the builder, and one archetype it genuinely emits proves it better than six half-built ones.
+- **Solo changes the scope calculus, not the schedule.** Six *recipes* ship and the block vocabulary must span all six, but only two archetypes get built out — the generality is the claim, the demos are evidence for it. Cut breadth before depth.
+- **D9 and D10 are the two things this design opened.** The runtime graph has no push transport upstream (`pluginInventory.list()` is poll-only), and rung 1 of the evolution ladder assumes a third-party MCP server exists to connect to.
 - dsh is a developer preview with an unstable API; Cordis advertises the same.
 
 ## Working with me on this

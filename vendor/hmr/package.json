@@ -28,7 +28,7 @@
     },
     "description": {
       "en": "Hot Module Replacement",
-      "zh": "模块热替换"
+      "zh": "\u6a21\u5757\u70ed\u66ff\u6362"
     }
   },
   "peerDependencies": {
@@ -51,5 +51,13 @@
     "@se373/cordis-plugin-loader": "workspace:^",
     "@se373/cordis-plugin-include": "workspace:^"
   },
-  "private": true
+  "private": true,
+  "se373": {
+    "upstream": {
+      "repo": "deepseek-ai/deepseek-harness",
+      "rev": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e",
+      "path": "vendor/hmr",
+      "name": "@deepseek-ai/cordis-plugin-hmr"
+    }
+  }
 }

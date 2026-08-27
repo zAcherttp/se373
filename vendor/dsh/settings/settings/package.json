@@ -28,6 +28,14 @@
     "url": "git+https://github.com/zAcherttp/se373.git",
     "directory": "vendor/dsh/settings/settings"
   },
+  "se373": {
+    "upstream": {
+      "repo": "deepseek-ai/deepseek-harness",
+      "rev": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e",
+      "path": "packages/settings/settings",
+      "name": "@deepseek-ai/dsh-settings"
+    }
+  },
   "peerDependencies": {
     "@se373/brand": "workspace:^",
     "@se373/invariants": "workspace:^",
