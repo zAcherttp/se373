@@ -186,3 +186,65 @@ Per this file's own rule the entry above stays as written. The lesson is
 narrower than "do not rewrite history": **a tag survives a rewrite and a
 recorded sha does not**, so the tag is the rewind point and the sha is a
 convenience that can go stale.
+
+---
+
+## phase-3 — It can do work
+
+**2026-08-27** · **Commit** `132cb4b` · **Tag** `phase-3`
+
+**Roadmap** — Topic 2 (*Tool Use*) in full: a tool registry, schema-validated
+arguments, a guarded execute pipeline, and results back into the session log.
+Topic 8 (*Verification & Security*) gains the sandbox and approval seams.
+**Phase** — §13 phase 3, "Tools".
+
+**Demonstrable**
+
+The agent reads files, searches, runs commands, and edits code.
+
+```bash
+export DEEPSEEK_API_KEY=...
+pnpm install && npx tsc -b tsconfig.vendor.json
+pnpm se373 examples/chat/cordis.yml "how many .ts files are under apps/?"
+```
+
+**This one needs a key** — unlike phase 2, there is no key-free path in the
+tree, because proving a tool ran means proving a *model* asked for it. What was
+verified before tagging, driving the mock provider to emit a `bash` call
+against the shipping config:
+
+```
+tool/call    bash  {"command":"echo TOOLS-RAN && ls apps/cli/src", ...}
+tool/result        "TOOLS-RAN\nbin.ts\nboot.ts\n"    isError: false
+```
+
+The first attempt is the more useful evidence: it came back
+`invalid arguments: missing required property "description"`. The registry was
+validating against the real registered schema, not passing bytes through.
+
+**Packages**
+
+28 more vendored, 59 total:
+
+| Package | What it does |
+|---|---|
+| `@se373/tool-bash` | Shell commands, through the sandbox |
+| `@se373/tool-fs` + `@se373/tool-fs-search` | Read and write; grep and glob via a packaged ripgrep |
+| `@se373/tool-str-replace-editor` | The edit tool |
+| `@se373/sandbox-local` + `@se373/sandbox-policy` | The file-effect boundary. Seatbelt on macOS, bwrap or Landlock on Linux |
+| `@se373/subprocess-local` | The only subprocess provider upstream ships; brings `node-pty` |
+| `@se373/permission-presets` + `@se373/user-approval` | read-only / workspace-write / danger-full-access, and who gets asked |
+| `@se373/spill-policy` | Keeps an oversized tool result out of the context window |
+
+**Not yet**
+
+- **Approval has no one to ask.** The default `workspace-write` preset means
+  `ask`, and a one-shot run has no UI to ask through, so a tool needing approval
+  hangs. `SE373_PERMISSION_MODE=danger-full-access` is the current escape.
+  Phase 4 is what makes `ask` real.
+- **Landlock is inert.** Its Linux prebuilds are `workspace:*` ranges into a
+  native tree we do not vendor. Fine on macOS; on Linux it narrows the available
+  sandbox backends and nothing says so at runtime.
+- **Still one shot.** No conversation, no resume, no todo list, no subagents,
+  no skills, no compaction — 59 of the 187 in-scope packages.
+- **No key-free demonstrable.** See above.
