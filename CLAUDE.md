@@ -47,7 +47,8 @@ Every phase ends with something that **runs**. Slice vertically, never ship a la
 - **The runtime graph is one projection with many renderers.** `ctx.runtimeGraph` is a core service; the terminal inspector, the board, the model tool, and §7.3's pipeline graph are all consumers of it. That is what makes I5 true by construction.
 - **dsh's baseline is our baseline.** On-path upstream packages are vendored, not rewritten, and the selector is dsh's own bundles rather than a hand-picked list: 187 of 227 taken. `docs/PORTING.md` §2.
 - **Vendoring is a script, not a chore.** `scripts/vendor-dsh.mjs` walks the closure from a seed, rescopes, repoints manifests at source, regenerates tsconfigs, and re-applies our divergences from one `LOCAL_MODS` table. Widening the vendored set is a seed-list edit. `docs/PORTING.md` §3.
-- **Our user-data root is `~/.se373`, never `~/.dsh`.** A logged local modification to `home-paths`. The `dshHomePath` *key* keeps upstream's name so dsh patch YAML transplants verbatim; only the value is ours.
+- **Our user-data root is `~/.se373`, never `~/.dsh`, and our child-process env prefix is `SE373_`, never `DSH_`.** Logged local modifications 6–8. The `dshHomePath` *key* keeps upstream's name so dsh patch YAML transplants verbatim; only the value is ours.
+- **Testing is not a priority until the web plane.** The user's call. Two specs exist (the invariants registry, the phase-2 spine) and they stay; do not add more before phase 4.
 - **We do not port.** The one port we wrote (`invariants`) was retired at the first opportunity for the vendored original — it was faithful and still dropped a load-bearing thenable. `docs/PORTING.md` §4.
 - **The upstream tree is 238 packages, not ~50.** The old figure counted directories under `packages/`. 150 are off our path.
 
@@ -103,9 +104,9 @@ formality.
 
 ## Immediate next steps
 
-1. **Start phase 3** (tools). Nothing blocks it: `ctx.tools` is mounted and
-   empty, and widening the vendored set is a seed-list edit to
-   `scripts/vendor-dsh.mjs`.
+1. **Start phase 4** (web plane) — the risk spike. 18 of 40 upstream client
+   packages, no one to parallelise with, and it is what turns approval's `ask`
+   from a hang into a prompt.
 2. ~~Name the project~~ — settled: `@se373/*`.
 3. ~~Write `docs/PORTING.md`~~ — done.
 4. **Get the milestone dates and grading breakdown.** The announcement in `docs/COURSE.md` has neither, so the phase plan carries no deadline pressure and "are we on track" is unanswerable.
@@ -113,6 +114,8 @@ formality.
 6. ~~Start phase 1~~ — shipped, tagged `phase-1`.
 7. ~~Start phase 2~~ — shipped, tagged `phase-2`. 31 packages vendored; the
    harness answers a task headlessly.
+8. ~~Start phase 3~~ — shipped, tagged `phase-3`. 59 vendored; it reads,
+   searches, runs commands, and edits.
 
 ## Risks being tracked
 
