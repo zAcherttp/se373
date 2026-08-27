@@ -1,0 +1,45 @@
+{
+  "extends": "../../../../tsconfig.vendor.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib/types"
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../../../../vendor/dsh/attachment/attachment"
+    },
+    {
+      "path": "../../../../vendor/dsh/credentials/credentials"
+    },
+    {
+      "path": "../../../../vendor/dsh/identity/anonymous-user-id"
+    },
+    {
+      "path": "../../../../vendor/dsh/llm/llm"
+    },
+    {
+      "path": "../../../../vendor/dsh/runtime-diagnostics/invariants"
+    },
+    {
+      "path": "../../../../vendor/dsh/settings/settings"
+    },
+    {
+      "path": "../../../../vendor/dsh/util/atomic-write"
+    },
+    {
+      "path": "../../../../vendor/dsh/util/brand"
+    },
+    {
+      "path": "../../../../vendor/dsh/util/home-paths"
+    },
+    {
+      "path": "../../../../vendor/dsh/util/launch-environment"
+    },
+    {
+      "path": "../../../../vendor/dsh/util/timeout"
+    }
+  ]
+}

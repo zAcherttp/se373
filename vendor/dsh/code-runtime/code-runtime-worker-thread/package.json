@@ -1,0 +1,47 @@
+{
+  "name": "@se373/code-runtime-worker-thread",
+  "description": "Worker-thread implementation of the DeepSeek Harness code-execution seam",
+  "version": "0.1.1-rc.2",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./src/invariant.ts"
+    },
+    "./worker": {
+      "types": "./lib/types/worker.d.ts",
+      "default": "./src/worker.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zAcherttp/se373.git",
+    "directory": "vendor/dsh/code-runtime/code-runtime-worker-thread"
+  },
+  "dependencies": {
+    "@se373/schemastery": "workspace:^"
+  },
+  "peerDependencies": {
+    "@se373/code-runtime": "workspace:^",
+    "@se373/invariants": "workspace:^",
+    "@se373/session": "workspace:^",
+    "@se373/timeout": "workspace:^",
+    "@se373/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@se373/code-runtime": "workspace:^",
+    "@se373/invariants": "workspace:^",
+    "@se373/session": "workspace:^",
+    "@se373/timeout": "workspace:^",
+    "@se373/cordis": "workspace:^"
+  }
+}

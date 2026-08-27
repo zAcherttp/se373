@@ -1,0 +1,93 @@
+# Phase-2 tree: the agent spine, one shot.
+#
+# Every row is dsh's own, with dsh's own id. This file is a narrowed transcript
+# of `bundle/base`'s and `bundle/headless`'s patch layers, restricted to the 30
+# packages phase 2 vendors. It is deliberately NOT a curated design: when phase
+# 3 widens the vendored set, rows come back by uncommenting, not by rethinking.
+#
+# Run:  pnpm se373 examples/chat/cordis.yml "what is 2 + 2"
+
+- id: timer
+  name: '@se373/cordis-plugin-timer'
+
+- id: invariants
+  name: '@se373/invariants'
+
+# --- seams -------------------------------------------------------------------
+
+- id: llm
+  name: '@se373/llm'
+
+- id: session
+  name: '@se373/session'
+
+- id: tools
+  name: '@se373/tools'
+
+- id: approval
+  name: '@se373/user-approval'
+
+# --- providers ---------------------------------------------------------------
+
+# User-settings document under $SE373_HOME (default ~/.se373), hot-reloaded.
+# An `llm-deepseek:` section here overrides the adapter row below at runtime.
+- id: settings
+  name: '@se373/settings-file'
+
+# Inherited environment over the managed $SE373_HOME/.credentials.yaml, with
+# project and user `.env` fallbacks. DEEPSEEK_API_KEY is the reference the
+# adapter resolves per request.
+- id: credentials
+  name: '@se373/credentials-local'
+
+- id: llm-deepseek
+  name: '@se373/llm-deepseek'
+  config:
+    # Unset in normal use, so the adapter falls back to $DEEPSEEK_BASE_URL and
+    # then the public API. The spine spec points it at a local mock server, which
+    # is what makes phase 2 demonstrable without an API key.
+    baseURL: !!js process.env.SE373_LLM_BASE_URL
+
+- id: llm-retry
+  name: '@se373/llm-retry'
+
+- id: session-persistence-jsonl
+  name: '@se373/session-persistence-jsonl'
+  config:
+    root: !!js dshHomePath('sessions')
+
+# --- the loop ----------------------------------------------------------------
+
+- id: system-prompt
+  name: '@se373/system-prompt'
+  config:
+    persona: >-
+      You are a coding agent powered by the {{model}} model. Your working directory is {{cwd}}.
+
+- id: agent
+  name: '@se373/agent'
+
+- id: agent-default-model
+  name: '@se373/agent-default-model'
+  config:
+    provider: deepseek-official
+    model: deepseek-v4-flash
+
+- id: agent-loop
+  name: '@se373/agent-loop'
+  config:
+    agents: []
+
+# --- the one-shot driver -----------------------------------------------------
+
+- id: code-runtime
+  name: '@se373/code-runtime-worker-thread'
+
+- id: headless-startup
+  name: '@se373/headless/startup'
+
+- id: headless-runner
+  name: '@se373/headless'
+  inject: [headlessStartup]
+  config:
+    task: !!js ctx.headlessStartup.task

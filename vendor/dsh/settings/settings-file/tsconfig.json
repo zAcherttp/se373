@@ -1,0 +1,24 @@
+{
+  "extends": "../../../../tsconfig.vendor.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib/types"
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../../../../vendor/dsh/runtime-diagnostics/invariants"
+    },
+    {
+      "path": "../../../../vendor/dsh/settings/settings"
+    },
+    {
+      "path": "../../../../vendor/dsh/util/atomic-write"
+    },
+    {
+      "path": "../../../../vendor/dsh/util/home-paths"
+    }
+  ]
+}

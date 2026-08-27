@@ -1,0 +1,59 @@
+{
+  "name": "@se373/llm-retry",
+  "description": "Provider-routed LLM request retry policy for the DeepSeek Harness",
+  "version": "0.1.1-rc.2",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./src/invariant.ts"
+    },
+    "./types": {
+      "types": "./lib/types/types.d.ts",
+      "default": "./src/types/types.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zAcherttp/se373.git",
+    "directory": "vendor/dsh/llm/llm-retry"
+  },
+  "dependencies": {
+    "@se373/schemastery": "workspace:^"
+  },
+  "peerDependencies": {
+    "@se373/brand": "workspace:^",
+    "@se373/agent": "workspace:^",
+    "@se373/invariants": "workspace:^",
+    "@se373/llm": "workspace:^",
+    "@se373/session": "workspace:^",
+    "@se373/timeout": "workspace:^",
+    "@se373/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@se373/brand": "workspace:^",
+    "@se373/cordis-plugin-include": "workspace:^",
+    "@se373/cordis-plugin-loader": "workspace:^",
+    "@se373/agent": "workspace:^",
+    "@se373/agent-loop": "workspace:^",
+    "@se373/invariants": "workspace:^",
+    "@se373/llm": "workspace:^",
+    "@se373/llm-deepseek": "workspace:^",
+    "@se373/llm-mock-server": "workspace:^",
+    "@se373/session": "workspace:^",
+    "@se373/session-persistence-jsonl": "workspace:^",
+    "@se373/system-prompt": "workspace:^",
+    "@se373/timeout": "workspace:^",
+    "@se373/tools": "workspace:^",
+    "@se373/cordis": "workspace:^"
+  }
+}

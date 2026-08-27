@@ -12,7 +12,7 @@ them** — a harness for which an archetype is a subsystem it can compose,
 inspect, A/B compare, and export as an installable plugin.
 
 > Course project for SE373 (Kỹ thuật xây dựng hệ thống Agentic AI, UIT,
-> Semester 1 2026–27). Pre-semester work; phase 1 of 8 is running.
+> Semester 1 2026–27). Pre-semester work; phase 2 of 8 is running.
 
 ---
 
@@ -21,8 +21,8 @@ inspect, A/B compare, and export as an installable plugin.
 | Phase | | |
 |---|---|---|
 | **1** | Cordis boot | ✅ shipped — [`phase-1`](../../releases/tag/phase-1) |
-| 2 | Agent spine → headless chat | next |
-| 3 | Tools → it can do work | |
+| **2** | Agent spine → headless chat | ✅ shipped — [`phase-2`](../../releases/tag/phase-2) |
+| 3 | Tools → it can do work | next |
 | 4 | Web plane → the chat box | ⚠️ risk spike |
 | 5 | Multi-agent | |
 | 6a–d | Embeddings → knowledge plane → builder plane → authoring | |
@@ -60,6 +60,16 @@ That last pair is the point. Phase 1's claim isn't that a plugin loads — it's
 that unloading it **unwinds**, which is invariant I6 and the thing everything
 above depends on.
 
+Then the agent spine, which answers a task and exits:
+
+```bash
+export DEEPSEEK_API_KEY=...
+pnpm se373 examples/chat/cordis.yml "what is 2 + 2"
+```
+
+No key to hand? The same config runs against a local mock provider under
+`pnpm test` — that spec is what makes phase 2 checkable on a fresh clone.
+
 ```bash
 pnpm test        # vitest
 pnpm typecheck   # tsc
@@ -81,6 +91,10 @@ vendored spine is the floor; those two planes are the project.
 that's the selector — 187 of 227 packages taken. The 40 exclusions all need
 external infrastructure (e2b, ACP, LSP, PTY, third-party search keys). Anything
 vendored but unwanted is `disabled: true` in a config row, not an exclusion.
+
+Taking them is a script, not a chore: `scripts/vendor-dsh.mjs` walks the
+dependency closure from a seed, rescopes, repoints manifests at source, and
+re-applies our logged divergences. 31 packages are in so far.
 
 ## Layers
 

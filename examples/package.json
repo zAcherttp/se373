@@ -10,6 +10,21 @@
     "@se373/invariants": "workspace:*",
     "@se373/hello": "workspace:*",
     "@se373/cordis-plugin-include": "workspace:*",
-    "@se373/cordis-plugin-group": "workspace:*"
+    "@se373/cordis-plugin-group": "workspace:*",
+    "@se373/llm": "workspace:*",
+    "@se373/session": "workspace:*",
+    "@se373/tools": "workspace:*",
+    "@se373/user-approval": "workspace:*",
+    "@se373/settings-file": "workspace:*",
+    "@se373/credentials-local": "workspace:*",
+    "@se373/llm-deepseek": "workspace:*",
+    "@se373/llm-retry": "workspace:*",
+    "@se373/session-persistence-jsonl": "workspace:*",
+    "@se373/system-prompt": "workspace:*",
+    "@se373/agent": "workspace:*",
+    "@se373/agent-default-model": "workspace:*",
+    "@se373/agent-loop": "workspace:*",
+    "@se373/code-runtime-worker-thread": "workspace:*",
+    "@se373/headless": "workspace:*"
   }
 }

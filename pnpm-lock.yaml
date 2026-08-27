@@ -31,10 +31,13 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^4.1.8
-        version: 4.1.11(@types/node@24.13.3)(vite@8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(tsx@4.23.12))
+        version: 4.1.11(@types/node@24.13.3)(vite@8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(tsx@4.23.12)(yaml@2.9.0))
 
   apps/cli:
     dependencies:
+      '@se373/cmdline':
+        specifier: workspace:*
+        version: link:../../vendor/dsh/boot/cmdline
       '@se373/cordis':
         specifier: workspace:^
         version: link:../../vendor/cordis
@@ -56,12 +59,34 @@ importers:
       '@se373/hello':
         specifier: workspace:^
         version: link:../../packages/demo/hello
+      '@se373/home-paths':
+        specifier: workspace:*
+        version: link:../../vendor/dsh/util/home-paths
       '@se373/invariants':
         specifier: workspace:^
-        version: link:../../packages/core/invariants
+        version: link:../../vendor/dsh/runtime-diagnostics/invariants
+    devDependencies:
+      '@se373/headless':
+        specifier: workspace:*
+        version: link:../../vendor/dsh/bundle/headless
+      '@se373/llm-mock-server':
+        specifier: workspace:*
+        version: link:../../vendor/dsh/test-support/llm-mock-server
 
   examples:
     dependencies:
+      '@se373/agent':
+        specifier: workspace:*
+        version: link:../vendor/dsh/core/agent
+      '@se373/agent-default-model':
+        specifier: workspace:*
+        version: link:../vendor/dsh/core/agent-default-model
+      '@se373/agent-loop':
+        specifier: workspace:*
+        version: link:../vendor/dsh/core/agent-loop
+      '@se373/code-runtime-worker-thread':
+        specifier: workspace:*
+        version: link:../vendor/dsh/code-runtime/code-runtime-worker-thread
       '@se373/cordis-plugin-group':
         specifier: workspace:*
         version: link:../vendor/group
@@ -71,21 +96,45 @@ importers:
       '@se373/cordis-plugin-timer':
         specifier: workspace:*
         version: link:../vendor/timer
+      '@se373/credentials-local':
+        specifier: workspace:*
+        version: link:../vendor/dsh/credentials/credentials-local
+      '@se373/headless':
+        specifier: workspace:*
+        version: link:../vendor/dsh/bundle/headless
       '@se373/hello':
         specifier: workspace:*
         version: link:../packages/demo/hello
       '@se373/invariants':
         specifier: workspace:*
-        version: link:../packages/core/invariants
-
-  packages/core/invariants:
-    devDependencies:
-      '@se373/cordis':
-        specifier: workspace:^
-        version: link:../../../vendor/cordis
-      '@se373/schemastery':
-        specifier: workspace:^
-        version: link:../../../vendor/schemastery
+        version: link:../vendor/dsh/runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:*
+        version: link:../vendor/dsh/llm/llm
+      '@se373/llm-deepseek':
+        specifier: workspace:*
+        version: link:../vendor/dsh/llm/llm-deepseek
+      '@se373/llm-retry':
+        specifier: workspace:*
+        version: link:../vendor/dsh/llm/llm-retry
+      '@se373/session':
+        specifier: workspace:*
+        version: link:../vendor/dsh/core/session
+      '@se373/session-persistence-jsonl':
+        specifier: workspace:*
+        version: link:../vendor/dsh/session/session-persistence-jsonl
+      '@se373/settings-file':
+        specifier: workspace:*
+        version: link:../vendor/dsh/settings/settings-file
+      '@se373/system-prompt':
+        specifier: workspace:*
+        version: link:../vendor/dsh/core/system-prompt
+      '@se373/tools':
+        specifier: workspace:*
+        version: link:../vendor/dsh/core/tools
+      '@se373/user-approval':
+        specifier: workspace:*
+        version: link:../vendor/dsh/interaction/user-approval
 
   packages/demo/hello:
     devDependencies:
@@ -94,7 +143,7 @@ importers:
         version: link:../../../vendor/cordis
       '@se373/invariants':
         specifier: workspace:^
-        version: link:../../core/invariants
+        version: link:../../../vendor/dsh/runtime-diagnostics/invariants
       '@se373/schemastery':
         specifier: workspace:^
         version: link:../../../vendor/schemastery
@@ -115,6 +164,641 @@ importers:
         version: 1.1.0
 
   vendor/cosmokit: {}
+
+  vendor/dsh/attachment/attachment:
+    devDependencies:
+      '@se373/brand':
+        specifier: workspace:^
+        version: link:../../util/brand
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+
+  vendor/dsh/boot/cmdline:
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/cordis-plugin-include':
+        specifier: workspace:^
+        version: link:../../../include
+      '@se373/cordis-plugin-loader':
+        specifier: workspace:^
+        version: link:../../../loader
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      commander:
+        specifier: ^15.0.0
+        version: 15.0.0
+
+  vendor/dsh/bundle/headless:
+    dependencies:
+      '@se373/cmdline':
+        specifier: workspace:^
+        version: link:../../boot/cmdline
+      '@se373/code-runtime-worker-thread':
+        specifier: workspace:^
+        version: link:../../code-runtime/code-runtime-worker-thread
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+      commander:
+        specifier: ^15.0.0
+        version: 15.0.0
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../../core/agent
+      '@se373/agent-default-model':
+        specifier: workspace:^
+        version: link:../../core/agent-default-model
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/cordis-plugin-loader':
+        specifier: workspace:^
+        version: link:../../../loader
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+
+  vendor/dsh/code-runtime/code-runtime:
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+
+  vendor/dsh/code-runtime/code-runtime-worker-thread:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/code-runtime':
+        specifier: workspace:^
+        version: link:../code-runtime
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@se373/timeout':
+        specifier: workspace:^
+        version: link:../../util/timeout
+
+  vendor/dsh/core/agent:
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/scope':
+        specifier: workspace:^
+        version: link:../scope
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../session
+      '@se373/system-prompt':
+        specifier: workspace:^
+        version: link:../system-prompt
+      '@se373/typert-protocol':
+        specifier: workspace:^
+        version: link:../../typert/protocol
+
+  vendor/dsh/core/agent-default-model:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../agent
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/settings':
+        specifier: workspace:^
+        version: link:../../settings/settings
+
+  vendor/dsh/core/agent-loop:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../agent
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/scope':
+        specifier: workspace:^
+        version: link:../scope
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../session
+      '@se373/session-persistence':
+        specifier: workspace:^
+        version: link:../../session/session-persistence
+      '@se373/session-persistence-jsonl':
+        specifier: workspace:^
+        version: link:../../session/session-persistence-jsonl
+      '@se373/settings':
+        specifier: workspace:^
+        version: link:../../settings/settings
+      '@se373/system-prompt':
+        specifier: workspace:^
+        version: link:../system-prompt
+      '@se373/tools':
+        specifier: workspace:^
+        version: link:../tools
+
+  vendor/dsh/core/scope:
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+
+  vendor/dsh/core/session:
+    devDependencies:
+      '@se373/brand':
+        specifier: workspace:^
+        version: link:../../util/brand
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/scope':
+        specifier: workspace:^
+        version: link:../scope
+      '@se373/typert-protocol':
+        specifier: workspace:^
+        version: link:../../typert/protocol
+
+  vendor/dsh/core/system-prompt:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/scope':
+        specifier: workspace:^
+        version: link:../scope
+
+  vendor/dsh/core/tools:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../agent
+      '@se373/code-runtime':
+        specifier: workspace:^
+        version: link:../../code-runtime/code-runtime
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/scope':
+        specifier: workspace:^
+        version: link:../scope
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../session
+      '@se373/system-prompt':
+        specifier: workspace:^
+        version: link:../system-prompt
+      '@se373/user-approval':
+        specifier: workspace:^
+        version: link:../../interaction/user-approval
+
+  vendor/dsh/credentials/credentials:
+    devDependencies:
+      '@se373/brand':
+        specifier: workspace:^
+        version: link:../../util/brand
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+
+  vendor/dsh/credentials/credentials-local:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+      chokidar:
+        specifier: ^4.0.3
+        version: 4.0.3
+      yaml:
+        specifier: ^2.9.0
+        version: 2.9.0
+    devDependencies:
+      '@se373/atomic-write':
+        specifier: workspace:^
+        version: link:../../util/atomic-write
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/credentials':
+        specifier: workspace:^
+        version: link:../credentials
+      '@se373/home-paths':
+        specifier: workspace:^
+        version: link:../../util/home-paths
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/launch-environment':
+        specifier: workspace:^
+        version: link:../../util/launch-environment
+
+  vendor/dsh/identity/anonymous-user-id:
+    devDependencies:
+      '@se373/brand':
+        specifier: workspace:^
+        version: link:../../util/brand
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/home-paths':
+        specifier: workspace:^
+        version: link:../../util/home-paths
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+
+  vendor/dsh/interaction/user-approval:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../../core/agent
+      '@se373/brand':
+        specifier: workspace:^
+        version: link:../../util/brand
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/scope':
+        specifier: workspace:^
+        version: link:../../core/scope
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@se373/system-prompt':
+        specifier: workspace:^
+        version: link:../../core/system-prompt
+
+  vendor/dsh/llm/llm:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/attachment':
+        specifier: workspace:^
+        version: link:../../attachment/attachment
+      '@se373/brand':
+        specifier: workspace:^
+        version: link:../../util/brand
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/timeout':
+        specifier: workspace:^
+        version: link:../../util/timeout
+
+  vendor/dsh/llm/llm-deepseek:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+      eventsource-parser:
+        specifier: ^3.1.0
+        version: 3.1.1
+    devDependencies:
+      '@se373/anonymous-user-id':
+        specifier: workspace:^
+        version: link:../../identity/anonymous-user-id
+      '@se373/atomic-write':
+        specifier: workspace:^
+        version: link:../../util/atomic-write
+      '@se373/attachment':
+        specifier: workspace:^
+        version: link:../../attachment/attachment
+      '@se373/brand':
+        specifier: workspace:^
+        version: link:../../util/brand
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/credentials':
+        specifier: workspace:^
+        version: link:../../credentials/credentials
+      '@se373/home-paths':
+        specifier: workspace:^
+        version: link:../../util/home-paths
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/launch-environment':
+        specifier: workspace:^
+        version: link:../../util/launch-environment
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../llm
+      '@se373/settings':
+        specifier: workspace:^
+        version: link:../../settings/settings
+      '@se373/timeout':
+        specifier: workspace:^
+        version: link:../../util/timeout
+
+  vendor/dsh/llm/llm-retry:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../../core/agent
+      '@se373/agent-loop':
+        specifier: workspace:^
+        version: link:../../core/agent-loop
+      '@se373/brand':
+        specifier: workspace:^
+        version: link:../../util/brand
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/cordis-plugin-include':
+        specifier: workspace:^
+        version: link:../../../include
+      '@se373/cordis-plugin-loader':
+        specifier: workspace:^
+        version: link:../../../loader
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../llm
+      '@se373/llm-deepseek':
+        specifier: workspace:^
+        version: link:../llm-deepseek
+      '@se373/llm-mock-server':
+        specifier: workspace:^
+        version: link:../../test-support/llm-mock-server
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@se373/session-persistence-jsonl':
+        specifier: workspace:^
+        version: link:../../session/session-persistence-jsonl
+      '@se373/system-prompt':
+        specifier: workspace:^
+        version: link:../../core/system-prompt
+      '@se373/timeout':
+        specifier: workspace:^
+        version: link:../../util/timeout
+      '@se373/tools':
+        specifier: workspace:^
+        version: link:../../core/tools
+
+  vendor/dsh/runtime-diagnostics/invariants:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+
+  vendor/dsh/session/session-persistence:
+    devDependencies:
+      '@se373/brand':
+        specifier: workspace:^
+        version: link:../../util/brand
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/scope':
+        specifier: workspace:^
+        version: link:../../core/scope
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@se373/timeout':
+        specifier: workspace:^
+        version: link:../../util/timeout
+
+  vendor/dsh/session/session-persistence-jsonl:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+      koffi:
+        specifier: ^3.1.0
+        version: 3.1.6
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@se373/session-persistence':
+        specifier: workspace:^
+        version: link:../session-persistence
+
+  vendor/dsh/settings/settings:
+    devDependencies:
+      '@se373/brand':
+        specifier: workspace:^
+        version: link:../../util/brand
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+
+  vendor/dsh/settings/settings-file:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+      chokidar:
+        specifier: ^4.0.3
+        version: 4.0.3
+      yaml:
+        specifier: ^2.9.0
+        version: 2.9.0
+    devDependencies:
+      '@se373/atomic-write':
+        specifier: workspace:^
+        version: link:../../util/atomic-write
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/home-paths':
+        specifier: workspace:^
+        version: link:../../util/home-paths
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/settings':
+        specifier: workspace:^
+        version: link:../settings
+
+  vendor/dsh/test-support/llm-mock-server:
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+
+  vendor/dsh/typert/protocol:
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+
+  vendor/dsh/util/atomic-write:
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+
+  vendor/dsh/util/brand:
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+
+  vendor/dsh/util/home-paths:
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+
+  vendor/dsh/util/launch-environment:
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+
+  vendor/dsh/util/timeout:
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
 
   vendor/group:
     dependencies:
@@ -393,6 +1077,81 @@ packages:
 
   '@jridgewell/sourcemap-codec@1.5.5':
     resolution: {integrity: sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og==}
+
+  '@koromix/koffi-darwin-arm64@3.1.6':
+    resolution: {integrity: sha512-8FHyXGCZN7/iQf4f7W5BRysmtdlAFvSx6FpmX4u6wmkZiX/2e9hIRdGLiZYlHGudlcA18UmXB/cMiyhJ7fJkzA==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@koromix/koffi-darwin-x64@3.1.6':
+    resolution: {integrity: sha512-uzx/jqFQuSHqgg1zaRidTBTCfj8Y9M0SDTO8HeoI9s9fJhiJ1mbB9TTwJO5c2hiMnuWg2m1byczC8BaIH6cG/w==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@koromix/koffi-freebsd-arm64@3.1.6':
+    resolution: {integrity: sha512-PjpTVrsCK5YTtixOw7VsseYXJOyoY6k0qBt+bf0T9h3wyV06y73rALsorFDDEoYpLUBZO7R6EIMs6CpUrEkNTQ==}
+    cpu: [arm64]
+    os: [freebsd]
+
+  '@koromix/koffi-freebsd-ia32@3.1.6':
+    resolution: {integrity: sha512-ETYwL820HtFwYoOVzgyvmFmzTHRo9DJtGYTxa5Nb7ajaa5ldCum0jbmUJ3PMECxFTLxD5Q6PYZ8Xbp101bGeSg==}
+    cpu: [ia32]
+    os: [freebsd]
+
+  '@koromix/koffi-freebsd-x64@3.1.6':
+    resolution: {integrity: sha512-BkqxkNXhAAT9toU2stvLwx1iKHPDx7h08NCICyBbjYEXkCAEr84igTkpE5V3XJ9xZZ2gKll7VvdhxorHtHUqZw==}
+    cpu: [x64]
+    os: [freebsd]
+
+  '@koromix/koffi-linux-arm64@3.1.6':
+    resolution: {integrity: sha512-cM4XPm9ljbCrcPgXjzFYjDNxDUvvuR7TCYaEoo1AKjwZT/vmWhu2xN3pomfbsHh6aVn80SFA3enufQnaETW1rQ==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@koromix/koffi-linux-ia32@3.1.6':
+    resolution: {integrity: sha512-l1SVTpO10iaQt8slbowJpzK4fbwQZ7ufj9tmCyAcIwWUpyAbPS83mJMctU72If6N9/gCS2wuRqwnYB2uPLLhLg==}
+    cpu: [ia32]
+    os: [linux]
+
+  '@koromix/koffi-linux-loong64@3.1.6':
+    resolution: {integrity: sha512-KpTJpMSbIdCVFU26ynt0xy4x15h+y6AwPJxj2+iVxJhCzJf4oisCPc0YH2VnutuLV2nVzSrFm7sL/WSOqPgkXw==}
+    cpu: [loong64]
+    os: [linux]
+
+  '@koromix/koffi-linux-riscv64@3.1.6':
+    resolution: {integrity: sha512-YdFNpsywnXiYOYQlDAatf7TJLnspbGXdmfwIZhf82kbKSflYUsq4tI6NmoUOzM89oIWDGpYqd4Hz3xL7tsyXsw==}
+    cpu: [riscv64]
+    os: [linux]
+
+  '@koromix/koffi-linux-x64@3.1.6':
+    resolution: {integrity: sha512-Xx5mpr9VcaMCXfvbqIiLIWIL9Iuu6F4r3iMXg7+zZCqYUFZPFwJgiDQBLxctHv2OYgIfAoaaHMW0GC1cJkHfbA==}
+    cpu: [x64]
+    os: [linux]
+
+  '@koromix/koffi-openbsd-ia32@3.1.6':
+    resolution: {integrity: sha512-39Np4QTxhTlTT6RRveIeP+TnbzrwuDJ0UMyHxEZ+oGtzmb9GqWhl9T1oyehG6v/O+c4BffafG2NwLkCZ7tDKWw==}
+    cpu: [ia32]
+    os: [openbsd]
+
+  '@koromix/koffi-openbsd-x64@3.1.6':
+    resolution: {integrity: sha512-3EynGn3ycQRqaMWGmUJ0tdtuQdStByqSy/tJ0ZGKWizbMGdFAE73YpgLsyd8BDvwnKWytVG/OLNb5nDHpfd9Dg==}
+    cpu: [x64]
+    os: [openbsd]
+
+  '@koromix/koffi-win32-arm64@3.1.6':
+    resolution: {integrity: sha512-27FdPPRtT4xbO9bsd2OZa95M5YQ7bcJ8QjCRO57UUMI21REfkDegjqKwqo/CFlugxXlJf5IYtG2rq4BEYIrvxg==}
+    cpu: [arm64]
+    os: [win32]
+
+  '@koromix/koffi-win32-ia32@3.1.6':
+    resolution: {integrity: sha512-5mVelLKVDup4eoxZOpCzCyMPxoctsg+Qe4J9O5BP4KbBEdqoOEqaNEBBRgNzXcdr2g+GGfmIUo+oVR1NvIdiJw==}
+    cpu: [ia32]
+    os: [win32]
+
+  '@koromix/koffi-win32-x64@3.1.6':
+    resolution: {integrity: sha512-lPKjAaHz0aoiZXT/wDVqH+joR5y3lCZj1s9Bk5qx/DGRq+0MK8Ib8VoqiBOrJ69NG5AsJSvn0tQDcSqfRgLmBQ==}
+    cpu: [x64]
+    os: [win32]
 
   '@oxc-project/types@0.146.0':
     resolution: {integrity: sha512-XC0QsnnhVe7sLIWmYmdPw7x5P0h4W8vUU3Nv1ySgWXtvCz8NizoAEpGXA0sOYoJQV2Rl13LgURAHQ5cI5ILCSA==}
@@ -686,6 +1445,10 @@ packages:
     resolution: {integrity: sha512-Qgzu8kfBvo+cA4962jnP1KkS6Dop5NS6g7R5LFYJr4b8Ub94PPQXUksCw9PvXoeXPRRddRNC5C1JQUR2SMGtnA==}
     engines: {node: '>= 14.16.0'}
 
+  commander@15.0.0:
+    resolution: {integrity: sha512-z67u4ZhzCL/Tydu1lJARtEZYWbWaN7oYLHbsuzocr6y4N6WZAagG3RQ4FW61V1/0+jImpj293XfrcYnd1qxtPg==}
+    engines: {node: '>=22.12.0'}
+
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
 
@@ -703,6 +1466,10 @@ packages:
 
   estree-walker@3.0.3:
     resolution: {integrity: sha512-7RUKfXgSMMkzt6ZuXmqapOurLGPPfgj6l9uRZ7lRGolvk0y2yocc35LdcxKC5PQZdn2DMqioAQ2NoWcrTKmm6g==}
+
+  eventsource-parser@3.1.1:
+    resolution: {integrity: sha512-EKN1vKAMcZ8MlYMpaNuxN6R9yakzH6uajHcHVTqWJzvu5pWw9DyhbP35HH8MVBQ+dZjAfDxk+A8NiR9KWaXiyQ==}
+    engines: {node: '>=18.0.0'}
 
   expect-type@1.4.0:
     resolution: {integrity: sha512-KfYbmpRm0VbLjEvVa9yGwCi9GI34xvi7A/HXYWQO65CSD2u3MczUJSuwXKFIxlGsgBQizV9q5J9NHj4VG0n+pA==}
@@ -728,6 +1495,9 @@ packages:
   js-yaml@4.3.1:
     resolution: {integrity: sha512-CY6crGq313MX8GkwvB7tzgp99vjQxY1++5y10/BKN/GUfHqWaOGQMNZkBvqSzsZKWk/ijwHlWzzkLulsGHhjWQ==}
     hasBin: true
+
+  koffi@3.1.6:
+    resolution: {integrity: sha512-ln60chEb3o7Du1ayjwl6BFiNN1wZK+3cTM2wWGiHLEzCY/FdTIN1ER5VWDwHq7J/j4tSnnrHaH5ABS1EO6+6ag==}
 
   lightningcss-android-arm64@1.33.0:
     resolution: {integrity: sha512-gEpRTalKdosp4Bb8qWtc2iOgE5SeIHlpS1up9bFq2wAyYhl1UdTObYiHe98zEM9SQvSoqQZ1IQD0JNpg3Ml5pg==}
@@ -1037,6 +1807,11 @@ packages:
     engines: {node: '>=8'}
     hasBin: true
 
+  yaml@2.9.0:
+    resolution: {integrity: sha512-2AvhNX3mb8zd6Zy7INTtSpl1F15HW6Wnqj0srWlkKLcpYl/gMIMJiyuGq2KeI2YFxUPjdlB+3Lc10seMLtL4cA==}
+    engines: {node: '>= 14.6'}
+    hasBin: true
+
 snapshots:
 
   '@babel/code-frame@7.29.7':
@@ -1126,6 +1901,51 @@ snapshots:
     optional: true
 
   '@jridgewell/sourcemap-codec@1.5.5': {}
+
+  '@koromix/koffi-darwin-arm64@3.1.6':
+    optional: true
+
+  '@koromix/koffi-darwin-x64@3.1.6':
+    optional: true
+
+  '@koromix/koffi-freebsd-arm64@3.1.6':
+    optional: true
+
+  '@koromix/koffi-freebsd-ia32@3.1.6':
+    optional: true
+
+  '@koromix/koffi-freebsd-x64@3.1.6':
+    optional: true
+
+  '@koromix/koffi-linux-arm64@3.1.6':
+    optional: true
+
+  '@koromix/koffi-linux-ia32@3.1.6':
+    optional: true
+
+  '@koromix/koffi-linux-loong64@3.1.6':
+    optional: true
+
+  '@koromix/koffi-linux-riscv64@3.1.6':
+    optional: true
+
+  '@koromix/koffi-linux-x64@3.1.6':
+    optional: true
+
+  '@koromix/koffi-openbsd-ia32@3.1.6':
+    optional: true
+
+  '@koromix/koffi-openbsd-x64@3.1.6':
+    optional: true
+
+  '@koromix/koffi-win32-arm64@3.1.6':
+    optional: true
+
+  '@koromix/koffi-win32-ia32@3.1.6':
+    optional: true
+
+  '@koromix/koffi-win32-x64@3.1.6':
+    optional: true
 
   '@oxc-project/types@0.146.0': {}
 
@@ -1263,13 +2083,13 @@ snapshots:
       chai: 6.2.2
       tinyrainbow: 3.1.1
 
-  '@vitest/mocker@4.1.11(vite@8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(tsx@4.23.12))':
+  '@vitest/mocker@4.1.11(vite@8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(tsx@4.23.12)(yaml@2.9.0))':
     dependencies:
       '@vitest/spy': 4.1.11
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      vite: 8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(tsx@4.23.12)
+      vite: 8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(tsx@4.23.12)(yaml@2.9.0)
 
   '@vitest/pretty-format@4.1.11':
     dependencies:
@@ -1304,6 +2124,8 @@ snapshots:
   chokidar@4.0.3:
     dependencies:
       readdirp: 4.1.2
+
+  commander@15.0.0: {}
 
   convert-source-map@2.0.0: {}
 
@@ -1344,6 +2166,8 @@ snapshots:
     dependencies:
       '@types/estree': 1.0.9
 
+  eventsource-parser@3.1.1: {}
+
   expect-type@1.4.0: {}
 
   fdir@6.5.0(picomatch@4.0.7):
@@ -1358,6 +2182,24 @@ snapshots:
   js-yaml@4.3.1:
     dependencies:
       argparse: 2.0.1
+
+  koffi@3.1.6:
+    optionalDependencies:
+      '@koromix/koffi-darwin-arm64': 3.1.6
+      '@koromix/koffi-darwin-x64': 3.1.6
+      '@koromix/koffi-freebsd-arm64': 3.1.6
+      '@koromix/koffi-freebsd-ia32': 3.1.6
+      '@koromix/koffi-freebsd-x64': 3.1.6
+      '@koromix/koffi-linux-arm64': 3.1.6
+      '@koromix/koffi-linux-ia32': 3.1.6
+      '@koromix/koffi-linux-loong64': 3.1.6
+      '@koromix/koffi-linux-riscv64': 3.1.6
+      '@koromix/koffi-linux-x64': 3.1.6
+      '@koromix/koffi-openbsd-ia32': 3.1.6
+      '@koromix/koffi-openbsd-x64': 3.1.6
+      '@koromix/koffi-win32-arm64': 3.1.6
+      '@koromix/koffi-win32-ia32': 3.1.6
+      '@koromix/koffi-win32-x64': 3.1.6
 
   lightningcss-android-arm64@1.33.0:
     optional: true
@@ -1553,7 +2395,7 @@ snapshots:
 
   undici-types@7.18.2: {}
 
-  vite@8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(tsx@4.23.12):
+  vite@8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(tsx@4.23.12)(yaml@2.9.0):
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.7
@@ -1565,11 +2407,12 @@ snapshots:
       esbuild: 0.28.2
       fsevents: 2.3.3
       tsx: 4.23.12
+      yaml: 2.9.0
 
-  vitest@4.1.11(@types/node@24.13.3)(vite@8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(tsx@4.23.12)):
+  vitest@4.1.11(@types/node@24.13.3)(vite@8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(tsx@4.23.12)(yaml@2.9.0)):
     dependencies:
       '@vitest/expect': 4.1.11
-      '@vitest/mocker': 4.1.11(vite@8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(tsx@4.23.12))
+      '@vitest/mocker': 4.1.11(vite@8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(tsx@4.23.12)(yaml@2.9.0))
       '@vitest/pretty-format': 4.1.11
       '@vitest/runner': 4.1.11
       '@vitest/snapshot': 4.1.11
@@ -1586,7 +2429,7 @@ snapshots:
       tinyexec: 1.3.0
       tinyglobby: 0.2.17
       tinyrainbow: 3.1.1
-      vite: 8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(tsx@4.23.12)
+      vite: 8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(tsx@4.23.12)(yaml@2.9.0)
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 24.13.3
@@ -1597,3 +2440,5 @@ snapshots:
     dependencies:
       siginfo: 2.0.0
       stackback: 0.0.2
+
+  yaml@2.9.0: {}

@@ -169,37 +169,126 @@ all**. Nothing in dsh corresponds to `ctx.embedder`, `ctx.chunker`,
 
 ---
 
-## 3. Ported packages
+## 3. Vendored harness (`vendor/dsh/`)
+
+The framework in §1 is nine packages copied by hand. The harness is 187, and
+copying those by hand would be a full-time job that goes stale the first time
+upstream moves. So this half is **a script**: `scripts/vendor-dsh.mjs`.
+
+```bash
+node scripts/vendor-dsh.mjs --list agent-loop llm-deepseek headless   # report only
+node scripts/vendor-dsh.mjs agent-loop llm-deepseek headless          # do it
+```
+
+Seeds name upstream packages without their scope or `dsh-` prefix. The script
+walks the declared dependency closure, so naming a bundle or an entrypoint
+brings everything under it.
+
+### Layout
+
+`vendor/dsh/<group>/<package>` mirrors upstream's own `packages/<group>/<package>`
+exactly, which is what makes a re-sync a per-path copy rather than a diff hunt.
+The three-way split of this repository reads off the tree:
+
+| Path | Origin |
+|---|---|
+| `vendor/*` | the Cordis framework — §1 |
+| `vendor/dsh/*/*` | the DeepSeek Harness — this section |
+| `packages/`, `apps/`, `examples/` | ours |
+
+`git diff --stat packages apps` therefore shows our work and nothing else.
+
+### What the script transforms
+
+| Transformation | Why |
+|---|---|
+| `@deepseek-ai/dsh-X` → `@se373/X`, `@deepseek-ai/Y` → `@se373/Y`, in manifests **and** sources | same rationale as §1: publishing under upstream's names would squat them. The rename table is built from the upstream manifest set, so a name that is not a workspace package (`@deepseek-ai/node-addon-landlock-run`) is left alone |
+| `main` / `exports.*.default` → `src/*.ts`; `types` stays on `lib/types/*.d.ts` | we run under `tsx` and never build. Runtime loads source; the typechecker reads generated declarations and never pulls relaxed-strictness sources into our program |
+| `publishConfig` and `files` dropped, `private: true` set | nothing here is published |
+| `tsconfig.json` regenerated from the manifest's workspace dependencies | upstream's references are relative to *their* depth, and a hand-edited path is a silent build break |
+| workspace `devDependencies` outside the closure are dropped | upstream devDeps carry test-only packages; we do not copy `tests/`, so pnpm would fail to link them. Each drop is reported |
+| `README.md` and `cordis.patch.yml` copied beside `src/` | this is the per-package documentation the working rules require — upstream already wrote it |
+
+`README.i18n.yaml`, `README.zh.md`, `lib/`, and `tests/` are not copied.
+
+### Local modifications
+
+Declared in the script's `LOCAL_MODS` table and re-applied on every sync. A
+`from` that stops matching is a hard failure, not a silent skip: upstream moved
+and the divergence needs re-deciding.
+
+| # | Package | Change | Why |
+|---|---|---|---|
+| 6 | `util/home-paths` | `DSH_HOME_DIR_NAME`: `.dsh` → `.se373` | without it our tree reads and writes a co-installed dsh's sessions, settings, and credential store |
+| 7 | `util/home-paths` | `DSH_HOME_ENV`: `DSH_HOME` → `SE373_HOME` | a dsh user pointing `$DSH_HOME` elsewhere must not drag our tree with it |
+
+Numbering continues §1's list; both are one log.
+
+**The key stayed upstream's.** `ctx.provide('dshHomePath', ...)` in
+`apps/cli/src/boot.ts` keeps dsh's name even though it now resolves `~/.se373`,
+because `!!js dshHomePath('sessions')` is what dsh's own patch YAML says — a row
+transplants verbatim. The name is upstream's; the value is ours.
+
+### Third-party npm dependencies
+
+Each needs an `allowBuilds` review in `pnpm-workspace.yaml` before install. Two
+are denied so far:
+
+| Package | Verdict | Why |
+|---|---|---|
+| `esbuild` | denied | `vendor/hmr` imports only its `BuildFailure` *type* |
+| `koffi` | denied | `session-persistence-jsonl/src/win32.ts` lazily loads it to call `kernel32.dll`. Never reached off Windows |
+
+---
+
+## 4. Ported packages
 
 Studied upstream, then written smaller. Neither file is a copy; the contract is
 what carries over.
 
-| Ours | Upstream studied | What we kept | What we dropped |
-|---|---|---|---|
-| `packages/core/invariants` | `packages/runtime-diagnostics/invariants` | `register(packageName, installer)` returning a disposer; `InvariantError` with `code: 'INVARIANT'` + `packageName`; regex allow/deny selection; child-fiber execution with reservation released on failure | i18n README pipeline; the `PendingInvariantRegistration` thenable shape; `package_allowlist` / `package_blocklist` naming (ours is `allow` / `deny`) |
+| Ours | Upstream studied | Status |
+|---|---|---|
+| ~~`packages/core/invariants`~~ | `runtime-diagnostics/invariants` | **retired 2026-08-27, phase 2.** Replaced by the vendored original |
 
-This table should stay short. Under the vendoring rule it grows only by
-exception.
+**The table is empty, and that is the finding.** The one port we wrote came back
+out at the first opportunity. It was faithful — its eight specs pass unchanged
+against upstream's registry, which is how we know — but it had dropped
+`PendingInvariantRegistration`, the thenable that makes a package's `apply`
+await its own invariant child before the fiber reports ready. Thirty packages
+now register through it. A reimplementation that is *almost* the contract is
+worse than no reimplementation, because the divergence is invisible until
+mount ordering matters.
+
+The specs moved to `vendor/dsh/runtime-diagnostics/invariants/tests/`, renamed
+to upstream's `package_allowlist` / `package_blocklist` config keys. They stay
+because they are what catches a bad rescope.
 
 ---
 
-## 4. Ours
+## 5. Ours
 
-Everything under `apps/`, `examples/`, `docs/`, the workspace and tsconfig
-layer, our own bundles, and every `packages/*` not listed in §3.
+Everything under `apps/`, `examples/`, `docs/`, `scripts/`, the workspace and
+tsconfig layer, our own bundles, and every `packages/*` not listed in §4.
 
 ---
 
 ## Known Limitations and Deferred Work
 
-- §2 will grow substantially at phases 2–5, which is where the agent spine is
-  ported. Each row must be filled in **as the port happens**, not afterwards.
+- **31 of the 187 in-scope packages are vendored** (phase 2's chat closure plus
+  the mock LLM server). Phases 3–5 pull the rest; `scripts/vendor-dsh.mjs` is
+  the mechanism, so widening is a seed-list edit rather than new work.
 - There is no automated check that this file matches the tree. dsh gates
-  provenance in CI; we do not yet.
+  provenance in CI; we do not yet. The script's own failure modes are checked
+  (a stale `LOCAL_MODS` entry throws, a dropped devDependency is reported), but
+  nothing verifies that §3's table still describes what the script does.
+- **Upstream `tests/` are not copied**, so a vendored package is exercised only
+  by whatever we write against it. Today that is the invariants registry and
+  the phase-2 spine spec.
 - The vendored set is pinned to a dsh working tree at `47f94385`, which is
   *older* than the `b150a55` the architecture doc was written against. Expect
   small drift between doc and code.
 - The §2 closure numbers are computed from declared manifest dependencies. A
   package may import less than it declares (dsh's own `hmr` declared less than
-  it imports, which is how we caught that), so 89 is an upper bound on what
-  must actually come along.
+  it imports, which is how we caught that), so 187 is an upper bound on what
+  must actually come along — phase 2 wanted 28 of the 126 in `base + headless`
+  to answer one task, which suggests the bound is loose.

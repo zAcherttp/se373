@@ -1,5 +1,8 @@
 packages:
   - vendor/*
+  # Harness packages vendored from dsh, mirroring its own packages/<group>/<pkg>
+  # layout so a sync is a straight per-path copy.
+  - vendor/dsh/*/*
   - packages/*/*
   - apps/*
   # Runnable example trees join as ONE member: examples/package.json declares
@@ -18,3 +21,7 @@ allowBuilds:
   # hmr imports only esbuild's `BuildFailure` TYPE (vendor/hmr/src/error.ts).
   # No runtime use, so its native binary download is dead weight.
   esbuild: false
+  # koffi is a Windows-only lazy import: session-persistence-jsonl/src/win32.ts
+  # loads it to call kernel32.dll for file locking. Never reached on darwin or
+  # linux, so its native build is dead weight. Flip to true for a Windows demo.
+  koffi: false
