@@ -1,0 +1,62 @@
+{
+  "name": "@se373/tool-fs",
+  "description": "Model-facing filesystem tools (read, write, edit) over the DeepSeek Harness filesystem seam (ctx.fs)",
+  "version": "0.1.1-rc.2",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./src/invariant.ts"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zAcherttp/se373.git",
+    "directory": "vendor/dsh/fs/tool-fs"
+  },
+  "dependencies": {
+    "diff": "^9.0.0",
+    "@se373/schemastery": "workspace:^"
+  },
+  "peerDependencies": {
+    "@se373/attachment": "workspace:^",
+    "@se373/fs": "workspace:^",
+    "@se373/invariants": "workspace:^",
+    "@se373/llm": "workspace:^",
+    "@se373/sandbox": "workspace:^",
+    "@se373/sandbox-policy": "workspace:^",
+    "@se373/session": "workspace:^",
+    "@se373/system-prompt": "workspace:^",
+    "@se373/tools": "workspace:^",
+    "@se373/user-approval": "workspace:^",
+    "@se373/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@se373/agent": "workspace:^",
+    "@se373/agent-loop": "workspace:^",
+    "@se373/attachment": "workspace:^",
+    "@se373/fs": "workspace:^",
+    "@se373/fs-local": "workspace:^",
+    "@se373/fs-observation-policy": "workspace:^",
+    "@se373/invariants": "workspace:^",
+    "@se373/llm": "workspace:^",
+    "@se373/llm-deepseek": "workspace:^",
+    "@se373/sandbox": "workspace:^",
+    "@se373/sandbox-policy": "workspace:^",
+    "@se373/session": "workspace:^",
+    "@se373/system-prompt": "workspace:^",
+    "@se373/tools": "workspace:^",
+    "@se373/user-approval": "workspace:^",
+    "@se373/cordis": "workspace:^"
+  }
+}

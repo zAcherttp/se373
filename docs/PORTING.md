@@ -221,6 +221,14 @@ and the divergence needs re-deciding.
 |---|---|---|---|
 | 6 | `util/home-paths` | `DSH_HOME_DIR_NAME`: `.dsh` → `.se373` | without it our tree reads and writes a co-installed dsh's sessions, settings, and credential store |
 | 7 | `util/home-paths` | `DSH_HOME_ENV`: `DSH_HOME` → `SE373_HOME` | a dsh user pointing `$DSH_HOME` elsewhere must not drag our tree with it |
+| 8 | `subprocess/subprocess` | `DSH_ENV_PREFIX`: `DSH_` → `SE373_` | the namespace the harness announces itself under inside child processes. A tool running under us should not report that it is inside dsh |
+
+Modification 8 was not a choice so much as a consequence, and it is worth
+recording why. `shell-env` types its exported keys as
+`` `${DSH_ENV_PREFIX}${string}` ``, so renaming the home variable in 7 made
+`SE373_HOME` unassignable and the vendored build stopped compiling. The type
+was upstream telling us the prefix is one namespace, not a spelling — moving
+half of it was the actual error.
 
 Numbering continues §1's list; both are one log.
 
@@ -238,6 +246,23 @@ are denied so far:
 |---|---|---|
 | `esbuild` | denied | `vendor/hmr` imports only its `BuildFailure` *type* |
 | `koffi` | denied | `session-persistence-jsonl/src/win32.ts` lazily loads it to call `kernel32.dll`. Never reached off Windows |
+| `node-pty` | allowed | a top-level import in `subprocess-local`, which every shell tool runs through, and there is no second subprocess provider upstream |
+| `@vscode/ripgrep` | allowed | its postinstall downloads the binary `tool-fs-search` shells out to. No binary, no grep or glob |
+
+### Out-of-tree upstream packages
+
+`OUT_OF_TREE` in the script names upstream workspace members that do not live
+under `packages/`. There is one: `native/landlock-run/packages/entry`, the JS
+seam over the Landlock launcher, which `sandbox-local` imports statically even
+on hosts that will never run Landlock (it probes, and falls back to Seatbelt on
+macOS). It is **BSD-3-Clause**, not MIT, and carries its own `LICENSE`.
+
+Its `optionalDependencies` — per-architecture Linux prebuilds — are dropped
+along with every other `optionalDependencies` block: they are `workspace:*`
+ranges into a native build tree we do not vendor, and pnpm rejects an
+unresolvable workspace range even when it is optional. The consequence is
+honest and narrow: on Linux, `sandbox-local`'s Landlock backend will fail its
+probe and the sandbox falls through to its next backend.
 
 ---
 
@@ -274,9 +299,13 @@ tsconfig layer, our own bundles, and every `packages/*` not listed in §4.
 
 ## Known Limitations and Deferred Work
 
-- **31 of the 187 in-scope packages are vendored** (phase 2's chat closure plus
-  the mock LLM server). Phases 3–5 pull the rest; `scripts/vendor-dsh.mjs` is
-  the mechanism, so widening is a seed-list edit rather than new work.
+- **59 of the 187 in-scope packages are vendored** (phases 2 and 3: the chat
+  closure, the tool and sandbox closure, the mock LLM server, and the Landlock
+  seam). Phases 4–5 pull the rest; `scripts/vendor-dsh.mjs` is the mechanism,
+  so widening is a seed-list edit rather than new work.
+- **The Landlock backend is inert.** See "Out-of-tree upstream packages" above.
+  On macOS this costs nothing; on Linux it silently narrows which sandbox
+  backends can be selected, and nothing in the tree says so at runtime.
 - There is no automated check that this file matches the tree. dsh gates
   provenance in CI; we do not yet. The script's own failure modes are checked
   (a stale `LOCAL_MODS` entry throws, a dropped devDependency is reported), but

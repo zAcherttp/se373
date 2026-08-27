@@ -84,6 +84,9 @@ importers:
       '@se373/agent-loop':
         specifier: workspace:*
         version: link:../vendor/dsh/core/agent-loop
+      '@se373/bash-sandbox':
+        specifier: workspace:*
+        version: link:../vendor/dsh/shell/bash-sandbox
       '@se373/code-runtime-worker-thread':
         specifier: workspace:*
         version: link:../vendor/dsh/code-runtime/code-runtime-worker-thread
@@ -99,6 +102,12 @@ importers:
       '@se373/credentials-local':
         specifier: workspace:*
         version: link:../vendor/dsh/credentials/credentials-local
+      '@se373/fs-observation-policy':
+        specifier: workspace:*
+        version: link:../vendor/dsh/fs/fs-observation-policy
+      '@se373/fs-sandbox':
+        specifier: workspace:*
+        version: link:../vendor/dsh/fs/fs-sandbox
       '@se373/headless':
         specifier: workspace:*
         version: link:../vendor/dsh/bundle/headless
@@ -117,6 +126,15 @@ importers:
       '@se373/llm-retry':
         specifier: workspace:*
         version: link:../vendor/dsh/llm/llm-retry
+      '@se373/permission-presets':
+        specifier: workspace:*
+        version: link:../vendor/dsh/interaction/permission-presets
+      '@se373/sandbox-local':
+        specifier: workspace:*
+        version: link:../vendor/dsh/sandbox/sandbox-local
+      '@se373/sandbox-policy':
+        specifier: workspace:*
+        version: link:../vendor/dsh/sandbox/sandbox-policy
       '@se373/session':
         specifier: workspace:*
         version: link:../vendor/dsh/core/session
@@ -126,9 +144,36 @@ importers:
       '@se373/settings-file':
         specifier: workspace:*
         version: link:../vendor/dsh/settings/settings-file
+      '@se373/shell-env':
+        specifier: workspace:*
+        version: link:../vendor/dsh/shell/shell-env
+      '@se373/spill-local':
+        specifier: workspace:*
+        version: link:../vendor/dsh/spill/spill-local
+      '@se373/spill-policy':
+        specifier: workspace:*
+        version: link:../vendor/dsh/spill/spill-policy
+      '@se373/subprocess-local':
+        specifier: workspace:*
+        version: link:../vendor/dsh/subprocess/subprocess-local
       '@se373/system-prompt':
         specifier: workspace:*
         version: link:../vendor/dsh/core/system-prompt
+      '@se373/tool-bash':
+        specifier: workspace:*
+        version: link:../vendor/dsh/shell/tool-bash
+      '@se373/tool-call-timeout-policy':
+        specifier: workspace:*
+        version: link:../vendor/dsh/guard/timeout-policy
+      '@se373/tool-fs':
+        specifier: workspace:*
+        version: link:../vendor/dsh/fs/tool-fs
+      '@se373/tool-fs-search':
+        specifier: workspace:*
+        version: link:../vendor/dsh/fs/tool-fs-search
+      '@se373/tool-str-replace-editor':
+        specifier: workspace:*
+        version: link:../vendor/dsh/fs/tool-str-replace-editor
       '@se373/tools':
         specifier: workspace:*
         version: link:../vendor/dsh/core/tools
@@ -475,6 +520,250 @@ importers:
         specifier: workspace:^
         version: link:../../util/launch-environment
 
+  vendor/dsh/fs/fs:
+    devDependencies:
+      '@se373/brand':
+        specifier: workspace:^
+        version: link:../../util/brand
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/sandbox':
+        specifier: workspace:^
+        version: link:../../sandbox/sandbox
+
+  vendor/dsh/fs/fs-local:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+      koffi:
+        specifier: ^3.1.0
+        version: 3.1.6
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/fs':
+        specifier: workspace:^
+        version: link:../fs
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+
+  vendor/dsh/fs/fs-observation-policy:
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/fs':
+        specifier: workspace:^
+        version: link:../fs
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+
+  vendor/dsh/fs/fs-sandbox:
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/fs':
+        specifier: workspace:^
+        version: link:../fs
+      '@se373/fs-local':
+        specifier: workspace:^
+        version: link:../fs-local
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/sandbox':
+        specifier: workspace:^
+        version: link:../../sandbox/sandbox
+      '@se373/sandbox-policy':
+        specifier: workspace:^
+        version: link:../../sandbox/sandbox-policy
+
+  vendor/dsh/fs/tool-fs:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+      diff:
+        specifier: ^9.0.0
+        version: 9.0.0
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../../core/agent
+      '@se373/agent-loop':
+        specifier: workspace:^
+        version: link:../../core/agent-loop
+      '@se373/attachment':
+        specifier: workspace:^
+        version: link:../../attachment/attachment
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/fs':
+        specifier: workspace:^
+        version: link:../fs
+      '@se373/fs-local':
+        specifier: workspace:^
+        version: link:../fs-local
+      '@se373/fs-observation-policy':
+        specifier: workspace:^
+        version: link:../fs-observation-policy
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/llm-deepseek':
+        specifier: workspace:^
+        version: link:../../llm/llm-deepseek
+      '@se373/sandbox':
+        specifier: workspace:^
+        version: link:../../sandbox/sandbox
+      '@se373/sandbox-policy':
+        specifier: workspace:^
+        version: link:../../sandbox/sandbox-policy
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@se373/system-prompt':
+        specifier: workspace:^
+        version: link:../../core/system-prompt
+      '@se373/tools':
+        specifier: workspace:^
+        version: link:../../core/tools
+      '@se373/user-approval':
+        specifier: workspace:^
+        version: link:../../interaction/user-approval
+
+  vendor/dsh/fs/tool-fs-search:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+      '@vscode/ripgrep':
+        specifier: ^1.18.0
+        version: 1.18.0
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../../core/agent
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/output-retention':
+        specifier: workspace:^
+        version: link:../../util/output-retention
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@se373/spill':
+        specifier: workspace:^
+        version: link:../../spill/spill
+      '@se373/subprocess':
+        specifier: workspace:^
+        version: link:../../subprocess/subprocess
+      '@se373/subprocess-local':
+        specifier: workspace:^
+        version: link:../../subprocess/subprocess-local
+      '@se373/system-prompt':
+        specifier: workspace:^
+        version: link:../../core/system-prompt
+      '@se373/timeout':
+        specifier: workspace:^
+        version: link:../../util/timeout
+      '@se373/tools':
+        specifier: workspace:^
+        version: link:../../core/tools
+
+  vendor/dsh/fs/tool-str-replace-editor:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../../core/agent
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/fs':
+        specifier: workspace:^
+        version: link:../fs
+      '@se373/fs-local':
+        specifier: workspace:^
+        version: link:../fs-local
+      '@se373/fs-observation-policy':
+        specifier: workspace:^
+        version: link:../fs-observation-policy
+      '@se373/fs-sandbox':
+        specifier: workspace:^
+        version: link:../fs-sandbox
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/sandbox':
+        specifier: workspace:^
+        version: link:../../sandbox/sandbox
+      '@se373/sandbox-policy':
+        specifier: workspace:^
+        version: link:../../sandbox/sandbox-policy
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@se373/system-prompt':
+        specifier: workspace:^
+        version: link:../../core/system-prompt
+      '@se373/tools':
+        specifier: workspace:^
+        version: link:../../core/tools
+
+  vendor/dsh/guard/timeout-policy:
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/timeout':
+        specifier: workspace:^
+        version: link:../../util/timeout
+      '@se373/tools':
+        specifier: workspace:^
+        version: link:../../core/tools
+
   vendor/dsh/identity/anonymous-user-id:
     devDependencies:
       '@se373/brand':
@@ -489,6 +778,80 @@ importers:
       '@se373/invariants':
         specifier: workspace:^
         version: link:../../runtime-diagnostics/invariants
+
+  vendor/dsh/interaction/commands:
+    dependencies:
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../../core/agent
+      '@se373/attachment':
+        specifier: workspace:^
+        version: link:../../attachment/attachment
+      '@se373/brand':
+        specifier: workspace:^
+        version: link:../../util/brand
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/scope':
+        specifier: workspace:^
+        version: link:../../core/scope
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@se373/typert-protocol':
+        specifier: workspace:^
+        version: link:../../typert/protocol
+
+  vendor/dsh/interaction/permission-presets:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
+    devDependencies:
+      '@se373/commands':
+        specifier: workspace:^
+        version: link:../commands
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/sandbox':
+        specifier: workspace:^
+        version: link:../../sandbox/sandbox
+      '@se373/sandbox-policy':
+        specifier: workspace:^
+        version: link:../../sandbox/sandbox-policy
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@se373/session-projection':
+        specifier: workspace:^
+        version: link:../../session/session-projection
+      '@se373/settings':
+        specifier: workspace:^
+        version: link:../../settings/settings
+      '@se373/shell':
+        specifier: workspace:^
+        version: link:../../shell/shell
+      '@se373/user-approval':
+        specifier: workspace:^
+        version: link:../user-approval
 
   vendor/dsh/interaction/user-approval:
     dependencies:
@@ -520,6 +883,24 @@ importers:
       '@se373/system-prompt':
         specifier: workspace:^
         version: link:../../core/system-prompt
+
+  vendor/dsh/jobs/jobs:
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../../core/agent
+      '@se373/brand':
+        specifier: workspace:^
+        version: link:../../util/brand
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
 
   vendor/dsh/llm/llm:
     dependencies:
@@ -641,6 +1022,8 @@ importers:
         specifier: workspace:^
         version: link:../../core/tools
 
+  vendor/dsh/native/landlock-run: {}
+
   vendor/dsh/runtime-diagnostics/invariants:
     dependencies:
       '@se373/schemastery':
@@ -650,6 +1033,90 @@ importers:
       '@se373/cordis':
         specifier: workspace:^
         version: link:../../../cordis
+
+  vendor/dsh/sandbox/sandbox:
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+
+  vendor/dsh/sandbox/sandbox-local:
+    dependencies:
+      '@se373/node-addon-landlock-run':
+        specifier: workspace:^
+        version: link:../../native/landlock-run
+      '@se373/sandbox-windows-acl':
+        specifier: workspace:^
+        version: link:../sandbox-windows-acl
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/sandbox':
+        specifier: workspace:^
+        version: link:../sandbox
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+
+  vendor/dsh/sandbox/sandbox-policy:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../../core/agent
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/sandbox':
+        specifier: workspace:^
+        version: link:../sandbox
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@se373/system-prompt':
+        specifier: workspace:^
+        version: link:../../core/system-prompt
+
+  vendor/dsh/sandbox/sandbox-windows-acl:
+    dependencies:
+      koffi:
+        specifier: ^3.1.0
+        version: 3.1.6
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/sandbox-local':
+        specifier: workspace:^
+        version: link:../sandbox-local
 
   vendor/dsh/session/session-persistence:
     devDependencies:
@@ -694,6 +1161,22 @@ importers:
         specifier: workspace:^
         version: link:../session-persistence
 
+  vendor/dsh/session/session-projection:
+    dependencies:
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+
   vendor/dsh/settings/settings:
     devDependencies:
       '@se373/brand':
@@ -736,6 +1219,279 @@ importers:
       '@se373/settings':
         specifier: workspace:^
         version: link:../settings
+
+  vendor/dsh/shell/bash-local:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/settings':
+        specifier: workspace:^
+        version: link:../../settings/settings
+      '@se373/shell':
+        specifier: workspace:^
+        version: link:../shell
+      '@se373/subprocess':
+        specifier: workspace:^
+        version: link:../../subprocess/subprocess
+      '@se373/subprocess-local':
+        specifier: workspace:^
+        version: link:../../subprocess/subprocess-local
+      '@se373/timeout':
+        specifier: workspace:^
+        version: link:../../util/timeout
+
+  vendor/dsh/shell/bash-sandbox:
+    devDependencies:
+      '@se373/bash-local':
+        specifier: workspace:^
+        version: link:../bash-local
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/node-addon-landlock-run':
+        specifier: workspace:^
+        version: link:../../native/landlock-run
+      '@se373/sandbox':
+        specifier: workspace:^
+        version: link:../../sandbox/sandbox
+      '@se373/sandbox-local':
+        specifier: workspace:^
+        version: link:../../sandbox/sandbox-local
+      '@se373/sandbox-policy':
+        specifier: workspace:^
+        version: link:../../sandbox/sandbox-policy
+      '@se373/shell':
+        specifier: workspace:^
+        version: link:../shell
+      '@se373/subprocess-local':
+        specifier: workspace:^
+        version: link:../../subprocess/subprocess-local
+
+  vendor/dsh/shell/shell:
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/sandbox':
+        specifier: workspace:^
+        version: link:../../sandbox/sandbox
+      '@se373/settings':
+        specifier: workspace:^
+        version: link:../../settings/settings
+      '@se373/subprocess':
+        specifier: workspace:^
+        version: link:../../subprocess/subprocess
+
+  vendor/dsh/shell/shell-env:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../../core/agent
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/home-paths':
+        specifier: workspace:^
+        version: link:../../util/home-paths
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/session-persistence':
+        specifier: workspace:^
+        version: link:../../session/session-persistence
+      '@se373/shell':
+        specifier: workspace:^
+        version: link:../shell
+      '@se373/tools':
+        specifier: workspace:^
+        version: link:../../core/tools
+
+  vendor/dsh/shell/tool-bash:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../../core/agent
+      '@se373/agent-loop':
+        specifier: workspace:^
+        version: link:../../core/agent-loop
+      '@se373/bash-local':
+        specifier: workspace:^
+        version: link:../bash-local
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/jobs':
+        specifier: workspace:^
+        version: link:../../jobs/jobs
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/sandbox':
+        specifier: workspace:^
+        version: link:../../sandbox/sandbox
+      '@se373/sandbox-policy':
+        specifier: workspace:^
+        version: link:../../sandbox/sandbox-policy
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@se373/session-persistence-jsonl':
+        specifier: workspace:^
+        version: link:../../session/session-persistence-jsonl
+      '@se373/shell':
+        specifier: workspace:^
+        version: link:../shell
+      '@se373/shell-env':
+        specifier: workspace:^
+        version: link:../shell-env
+      '@se373/subprocess-local':
+        specifier: workspace:^
+        version: link:../../subprocess/subprocess-local
+      '@se373/system-prompt':
+        specifier: workspace:^
+        version: link:../../core/system-prompt
+      '@se373/tools':
+        specifier: workspace:^
+        version: link:../../core/tools
+      '@se373/user-approval':
+        specifier: workspace:^
+        version: link:../../interaction/user-approval
+
+  vendor/dsh/spill/spill:
+    devDependencies:
+      '@se373/brand':
+        specifier: workspace:^
+        version: link:../../util/brand
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+
+  vendor/dsh/spill/spill-local:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/brand':
+        specifier: workspace:^
+        version: link:../../util/brand
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@se373/spill':
+        specifier: workspace:^
+        version: link:../spill
+
+  vendor/dsh/spill/spill-policy:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../../core/agent
+      '@se373/code-runtime-worker-thread':
+        specifier: workspace:^
+        version: link:../../code-runtime/code-runtime-worker-thread
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/output-retention':
+        specifier: workspace:^
+        version: link:../../util/output-retention
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@se373/spill':
+        specifier: workspace:^
+        version: link:../spill
+      '@se373/tools':
+        specifier: workspace:^
+        version: link:../../core/tools
+
+  vendor/dsh/subprocess/subprocess:
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+
+  vendor/dsh/subprocess/subprocess-local:
+    dependencies:
+      koffi:
+        specifier: ^3.1.0
+        version: 3.1.6
+      node-pty:
+        specifier: 1.2.0-beta.15
+        version: 1.2.0-beta.15
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/subprocess':
+        specifier: workspace:^
+        version: link:../subprocess
+      '@se373/timeout':
+        specifier: workspace:^
+        version: link:../../util/timeout
 
   vendor/dsh/test-support/llm-mock-server:
     devDependencies:
@@ -783,6 +1539,15 @@ importers:
         version: link:../../runtime-diagnostics/invariants
 
   vendor/dsh/util/launch-environment:
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+
+  vendor/dsh/util/output-retention:
     devDependencies:
       '@se373/cordis':
         specifier: workspace:^
@@ -1430,6 +2195,69 @@ packages:
   '@vitest/utils@4.1.11':
     resolution: {integrity: sha512-zTCVGpyFsGWBhllOyKlTw/vnr6D9qxsfSDyfbyZmTyjHw5N/VuvzHpHoQjm2ZJzn4RJgx5w4r7V0er69CmLgPQ==}
 
+  '@vscode/ripgrep-darwin-arm64@1.18.0':
+    resolution: {integrity: sha512-r3ktHSvbFycQNF6sl7sNDPocpsI7J+mEzh1IaZFkY0spm3k2Z9t8hPAeOK7+p0l6p6/swkQC14XWX01low+94Q==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@vscode/ripgrep-darwin-x64@1.18.0':
+    resolution: {integrity: sha512-25b4gWbL138dGuQU244ebCKKc0q05ULBMoFSz9oAEUHNeqK/lOJViDS7DRvbDazzAzSEdan391Znks/R5mkaTQ==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@vscode/ripgrep-linux-arm64@1.18.0':
+    resolution: {integrity: sha512-lQ/5zTG++U0E3IhVgS4EPTTn/U4okncaRMM5GOFfOYZywS4nuD31GhkHbNYlDk5CuDC68+hYJ0/eQeyCKJDA+g==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@vscode/ripgrep-linux-arm@1.18.0':
+    resolution: {integrity: sha512-GDAvufNDHu8zqLEmXstalQF0Wh6wQvdsBi/Vg3Yi3CK4a8XoFXqqXVEHEZ9xQz3t0NfoSEc9JbvK9DDS6FxyxQ==}
+    cpu: [arm]
+    os: [linux]
+
+  '@vscode/ripgrep-linux-ia32@1.18.0':
+    resolution: {integrity: sha512-YWLkSUtFd4Jh5EepIhA9RJSfv3uMAVMo+2rBIGHPBnvgLrZciIs2cDKei1/p6Wc/aCzUoHyMAg2R6tw4ZCBKGg==}
+    cpu: [ia32]
+    os: [linux]
+
+  '@vscode/ripgrep-linux-ppc64@1.18.0':
+    resolution: {integrity: sha512-quXVY8fwQ8O/lvU1yrSqSl3jlUzysRSb+AfUfCL/tRtphxsKlFvPAejryZ6vg4Bgvn8XL74xb4qMCDmWgYrT5w==}
+    cpu: [ppc64]
+    os: [linux]
+
+  '@vscode/ripgrep-linux-riscv64@1.18.0':
+    resolution: {integrity: sha512-f5kBQBrWfQt8Q7OhSORuNDei5dkYagBj3y4jImSUXGMy8B/Ke7SltSRcUtjPv166FAFfHCAmWuZp3+cWnX2/Vw==}
+    cpu: [riscv64]
+    os: [linux]
+
+  '@vscode/ripgrep-linux-s390x@1.18.0':
+    resolution: {integrity: sha512-rTOcJFGGcl2c07RUOWUo4U1ndnemKhY6A9hnMB18uk7jSgJc0d/QLBGWMWpumdtoJtpizn/wIv5mXIisJukusQ==}
+    cpu: [s390x]
+    os: [linux]
+
+  '@vscode/ripgrep-linux-x64@1.18.0':
+    resolution: {integrity: sha512-mQ3bVrUpnD2vs7QT0vX90Lt0cnUq467uFtEktIdsJJmW296RoSULRGqWgzG1AKxyBpNDD6l4ZO4qKf6SgyC23Q==}
+    cpu: [x64]
+    os: [linux]
+
+  '@vscode/ripgrep-win32-arm64@1.18.0':
+    resolution: {integrity: sha512-vfTIjq1OHnzUjxZcHVQAMbnggp8dpGf+0QKFOZHwWPqFwXxQC8eCWM+5NUdoJ6yrElCeMzoUTXoK/LdZaniB+Q==}
+    cpu: [arm64]
+    os: [win32]
+
+  '@vscode/ripgrep-win32-ia32@1.18.0':
+    resolution: {integrity: sha512-//rfAE+BOw5AC2EMmepmiE36jUuevtQYNQqqlw1s3m9FlRxjxEut97RkRPHAu9BG4mSojatZx+kXZXNdyI9caQ==}
+    cpu: [ia32]
+    os: [win32]
+
+  '@vscode/ripgrep-win32-x64@1.18.0':
+    resolution: {integrity: sha512-KNPvtElldqILHdnAetujPaowkNbpqJy3ssIGGN6F6Kve9Qi+nNLI2DN01O83JjCEVQbCzl8Ov3QZ9Eov3BR8Dg==}
+    cpu: [x64]
+    os: [win32]
+
+  '@vscode/ripgrep@1.18.0':
+    resolution: {integrity: sha512-ns5lWe44tSfbTMbVUsyB+I1819PVSw4AdpgK0RNkzfWfwy6+3IUNSxwSrfTno1/oWaS/hERNz+XLWVyga2aJBQ==}
+
   argparse@2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
 
@@ -1455,6 +2283,10 @@ packages:
   detect-libc@2.1.2:
     resolution: {integrity: sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==}
     engines: {node: '>=8'}
+
+  diff@9.0.0:
+    resolution: {integrity: sha512-svtcdpS8CgJyqAjEQIXdb3OjhFVVYjzGAPO8WGCmRbrml64SPw/jJD4GoE98aR7r25A0XcgrK3F02yw9R/vhQw==}
+    engines: {node: '>=0.3.1'}
 
   es-module-lexer@2.3.2:
     resolution: {integrity: sha512-poHGpORABojJJucnV9KbOavETW8lBVnphkW77ER5/BQ5Fz7oXSoCNek7IH3vR5nRjdsEz926ibFYX8KtLQmdyw==}
@@ -1581,6 +2413,9 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
+  node-addon-api@7.1.1:
+    resolution: {integrity: sha512-5m3bsyrjFWE1xf7nz7YXdN4udnVtXK6/Yfgn5qnahL6bCkf2yKt4k3nuTKAtT4r3IG8JNR2ncsIMdZuAzJjHQQ==}
+
   node-addon-native-custom-loader@0.1.5:
     resolution: {integrity: sha512-rL0XXRytayIChYf1xaG9/1NzGBRTyFkQTIpn+MDz/hpr0PZw1a9PZIoH9HlYfagNawhXU+jfN650EvoSIvR7Vw==}
     engines: {node: '>=20'}
@@ -1632,6 +2467,9 @@ packages:
   node-addon-require-builtin@0.1.5:
     resolution: {integrity: sha512-isaquiStlp7qdFpaffy+2ssJPUR/kLPRE5gqfeWbb0Ahph9H7O3BOFwThqkVaTrxfpnjrQauxlOEgvzD+snhUg==}
     engines: {node: '>=20'}
+
+  node-pty@1.2.0-beta.15:
+    resolution: {integrity: sha512-vORSzHXi4Ofl7HemVWpuudLqCPdaQb4LfpRCUpE5HPxhp4JYscl8zZwxh11p26v2wvW24WMwnMfLjhRLixrfxA==}
 
   obug@2.1.4:
     resolution: {integrity: sha512-4a+OsYv9UktOJKE+l1A4OufDgdRF9PifWj+tJnHURo/P+WOxpG4GzUFL9qCalmWauao6ogiG+QvnCovwPoyAWA==}
@@ -1811,6 +2649,9 @@ packages:
     resolution: {integrity: sha512-2AvhNX3mb8zd6Zy7INTtSpl1F15HW6Wnqj0srWlkKLcpYl/gMIMJiyuGq2KeI2YFxUPjdlB+3Lc10seMLtL4cA==}
     engines: {node: '>= 14.6'}
     hasBin: true
+
+  zod@4.4.3:
+    resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
 
 snapshots:
 
@@ -2115,6 +2956,57 @@ snapshots:
       convert-source-map: 2.0.0
       tinyrainbow: 3.1.1
 
+  '@vscode/ripgrep-darwin-arm64@1.18.0':
+    optional: true
+
+  '@vscode/ripgrep-darwin-x64@1.18.0':
+    optional: true
+
+  '@vscode/ripgrep-linux-arm64@1.18.0':
+    optional: true
+
+  '@vscode/ripgrep-linux-arm@1.18.0':
+    optional: true
+
+  '@vscode/ripgrep-linux-ia32@1.18.0':
+    optional: true
+
+  '@vscode/ripgrep-linux-ppc64@1.18.0':
+    optional: true
+
+  '@vscode/ripgrep-linux-riscv64@1.18.0':
+    optional: true
+
+  '@vscode/ripgrep-linux-s390x@1.18.0':
+    optional: true
+
+  '@vscode/ripgrep-linux-x64@1.18.0':
+    optional: true
+
+  '@vscode/ripgrep-win32-arm64@1.18.0':
+    optional: true
+
+  '@vscode/ripgrep-win32-ia32@1.18.0':
+    optional: true
+
+  '@vscode/ripgrep-win32-x64@1.18.0':
+    optional: true
+
+  '@vscode/ripgrep@1.18.0':
+    optionalDependencies:
+      '@vscode/ripgrep-darwin-arm64': 1.18.0
+      '@vscode/ripgrep-darwin-x64': 1.18.0
+      '@vscode/ripgrep-linux-arm': 1.18.0
+      '@vscode/ripgrep-linux-arm64': 1.18.0
+      '@vscode/ripgrep-linux-ia32': 1.18.0
+      '@vscode/ripgrep-linux-ppc64': 1.18.0
+      '@vscode/ripgrep-linux-riscv64': 1.18.0
+      '@vscode/ripgrep-linux-s390x': 1.18.0
+      '@vscode/ripgrep-linux-x64': 1.18.0
+      '@vscode/ripgrep-win32-arm64': 1.18.0
+      '@vscode/ripgrep-win32-ia32': 1.18.0
+      '@vscode/ripgrep-win32-x64': 1.18.0
+
   argparse@2.0.1: {}
 
   assertion-error@2.0.1: {}
@@ -2130,6 +3022,8 @@ snapshots:
   convert-source-map@2.0.0: {}
 
   detect-libc@2.1.2: {}
+
+  diff@9.0.0: {}
 
   es-module-lexer@2.3.2: {}
 
@@ -2256,6 +3150,8 @@ snapshots:
 
   nanoid@3.3.18: {}
 
+  node-addon-api@7.1.1: {}
+
   node-addon-native-custom-loader@0.1.5: {}
 
   node-addon-require-builtin-darwin-arm64@0.1.5:
@@ -2304,6 +3200,10 @@ snapshots:
       node-addon-require-builtin-win32-arm64-msvc: 0.1.5
       node-addon-require-builtin-win32-ia32-msvc: 0.1.5
       node-addon-require-builtin-win32-x64-msvc: 0.1.5
+
+  node-pty@1.2.0-beta.15:
+    dependencies:
+      node-addon-api: 7.1.1
 
   obug@2.1.4: {}
 
@@ -2442,3 +3342,5 @@ snapshots:
       stackback: 0.0.2
 
   yaml@2.9.0: {}
+
+  zod@4.4.3: {}

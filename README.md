@@ -12,7 +12,7 @@ them** — a harness for which an archetype is a subsystem it can compose,
 inspect, A/B compare, and export as an installable plugin.
 
 > Course project for SE373 (Kỹ thuật xây dựng hệ thống Agentic AI, UIT,
-> Semester 1 2026–27). Pre-semester work; phase 2 of 8 is running.
+> Semester 1 2026–27). Pre-semester work; phase 3 of 8 is running.
 
 ---
 
@@ -22,8 +22,8 @@ inspect, A/B compare, and export as an installable plugin.
 |---|---|---|
 | **1** | Cordis boot | ✅ shipped — [`phase-1`](../../releases/tag/phase-1) |
 | **2** | Agent spine → headless chat | ✅ shipped — [`phase-2`](../../releases/tag/phase-2) |
-| 3 | Tools → it can do work | next |
-| 4 | Web plane → the chat box | ⚠️ risk spike |
+| **3** | Tools → it can do work | ✅ shipped — [`phase-3`](../../releases/tag/phase-3) |
+| 4 | Web plane → the chat box | next · ⚠️ risk spike |
 | 5 | Multi-agent | |
 | 6a–d | Embeddings → knowledge plane → builder plane → authoring | |
 | 7 | Export: plugin + MCP server | |
@@ -60,12 +60,16 @@ That last pair is the point. Phase 1's claim isn't that a plugin loads — it's
 that unloading it **unwinds**, which is invariant I6 and the thing everything
 above depends on.
 
-Then the agent spine, which answers a task and exits:
+Then the agent, which reads your files, runs commands, and edits code:
 
 ```bash
 export DEEPSEEK_API_KEY=...
-pnpm se373 examples/chat/cordis.yml "what is 2 + 2"
+pnpm se373 examples/chat/cordis.yml "how many .ts files are under apps/?"
 ```
+
+Bash, file read/write, grep, glob, and a str-replace editor, all behind a
+sandbox and an approval seam. One shot per invocation — the conversation
+arrives with the chat box in phase 4.
 
 No key to hand? The same config runs against a local mock provider under
 `pnpm test` — that spec is what makes phase 2 checkable on a fresh clone.
@@ -94,7 +98,7 @@ vendored but unwanted is `disabled: true` in a config row, not an exclusion.
 
 Taking them is a script, not a chore: `scripts/vendor-dsh.mjs` walks the
 dependency closure from a seed, rescopes, repoints manifests at source, and
-re-applies our logged divergences. 31 packages are in so far.
+re-applies our logged divergences. 59 packages are in so far.
 
 ## Layers
 

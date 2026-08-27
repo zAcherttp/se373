@@ -1,0 +1,39 @@
+{
+  "extends": "../../../../tsconfig.vendor.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib/types"
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../../../../vendor/dsh/core/session"
+    },
+    {
+      "path": "../../../../vendor/dsh/interaction/commands"
+    },
+    {
+      "path": "../../../../vendor/dsh/interaction/user-approval"
+    },
+    {
+      "path": "../../../../vendor/dsh/runtime-diagnostics/invariants"
+    },
+    {
+      "path": "../../../../vendor/dsh/sandbox/sandbox"
+    },
+    {
+      "path": "../../../../vendor/dsh/sandbox/sandbox-policy"
+    },
+    {
+      "path": "../../../../vendor/dsh/session/session-projection"
+    },
+    {
+      "path": "../../../../vendor/dsh/settings/settings"
+    },
+    {
+      "path": "../../../../vendor/dsh/shell/shell"
+    }
+  ]
+}

@@ -55,6 +55,19 @@ const FRAMEWORK_DIR = new Map([
 ])
 
 /**
+ * Upstream workspace members that live outside `packages/`.
+ *
+ * `sandbox-local` statically imports the Landlock launcher's JS seam, so the
+ * name has to resolve even on a host that will never run Landlock (it probes
+ * and falls back to Seatbelt on macOS). Note the licence: this one is
+ * BSD-3-Clause, not MIT, and carries its own LICENSE file.
+ * @type {Map<string, string>} upstream path under the repo root -> our path under vendor/dsh
+ */
+const OUT_OF_TREE = new Map([
+  ['native/landlock-run/packages/entry', 'native/landlock-run'],
+])
+
+/**
  * Divergences applied on top of the copy, re-applied on every sync so a
  * re-vendor is idempotent. Every entry here must also appear in
  * `docs/PORTING.md` §1 "Our modifications on top". A `from` that no longer
@@ -78,6 +91,18 @@ const LOCAL_MODS = [
     from: "export const DSH_HOME_ENV = 'DSH_HOME'",
     to: "export const DSH_HOME_ENV = 'SE373_HOME'",
     why: 'a dsh user pointing $DSH_HOME somewhere must not move our tree with it',
+  },
+  {
+    // The namespace the harness announces itself under inside child processes:
+    // SE373_SHELL, SE373_SESSION_ID, SE373_SESSION_JSONL. A tool running under
+    // us should not report that it is inside dsh. This is also what keeps the
+    // rename above type-checkable: shell-env types its exported keys as
+    // `${DSH_ENV_PREFIX}${string}`, so SE373_HOME only fits once the prefix moves.
+    package: '@deepseek-ai/dsh-subprocess',
+    file: 'src/types.ts',
+    from: "export const DSH_ENV_PREFIX = 'DSH_' as const",
+    to: "export const DSH_ENV_PREFIX = 'SE373_' as const",
+    why: 'one prefix for every harness variable a child process sees',
   },
 ]
 
@@ -105,6 +130,10 @@ function scanUpstream() {
     }
   }
   walk(UP_PKGS)
+  for (const [from, to] of OUT_OF_TREE) {
+    const manifest = JSON.parse(readFileSync(join(UPSTREAM, from, 'package.json'), 'utf8'))
+    found.set(manifest.name, { dir: to, manifest, from })
+  }
   return found
 }
 
@@ -116,6 +145,11 @@ function scanUpstream() {
 function rescope(name) {
   const framework = FRAMEWORK.get(name)
   if (framework) return framework
+  // Not every `@deepseek-ai/*` name is upstream's own workspace: some are
+  // ordinary npm packages they publish and depend on, like
+  // `@deepseek-ai/node-addon-landlock-run`. Renaming one of those would point
+  // the manifest at a workspace member that does not exist.
+  if (!all.has(name)) return name
   if (name.startsWith('@deepseek-ai/dsh-')) return '@se373/' + name.slice('@deepseek-ai/dsh-'.length)
   if (name.startsWith('@deepseek-ai/')) return '@se373/' + name.slice('@deepseek-ai/'.length)
   return name
@@ -150,6 +184,11 @@ function sourceExports(exports) {
     const entry = { ...value }
     if (typeof entry.default === 'string' && entry.default.startsWith('./lib/')) {
       entry.default = './src/' + entry.default.slice('./lib/'.length).replace(/\.js$/, '.ts')
+    }
+    // Our tsconfigs emit declarations to lib/types. Most upstream packages
+    // already say that; one out-of-tree package emits beside its JS.
+    if (typeof entry.types === 'string' && entry.types.startsWith('./lib/') && !entry.types.startsWith('./lib/types/')) {
+      entry.types = './lib/types/' + entry.types.slice('./lib/'.length)
     }
     out[key] = entry
   }
@@ -258,12 +297,18 @@ const dropped = new Set()
 let written = 0
 let modded = 0
 for (const name of toVendor) {
-  const { dir, manifest } = all.get(name)
-  const from = join(UP_PKGS, dir)
+  const entry = all.get(name)
+  const { dir, manifest } = entry
+  const from = entry.from === undefined ? join(UP_PKGS, dir) : join(UPSTREAM, entry.from)
   const to = join(DEST_ROOT, dir)
   mkdirSync(to, { recursive: true })
 
   copySources(join(from, 'src'), join(to, 'src'), renames)
+  // A package with its own licence carries it; the rest are covered by the one
+  // LICENSE at the root of vendor/dsh.
+  const ownLicense = entry.from === undefined ? undefined : join(UPSTREAM, dirname(dirname(entry.from)), 'LICENSE')
+  if (ownLicense !== undefined && existsSync(ownLicense)) cpSync(ownLicense, join(to, 'LICENSE'))
+
   for (const sidecar of SIDECARS) {
     const src = join(from, sidecar)
     if (!existsSync(src)) continue
@@ -284,6 +329,10 @@ for (const name of toVendor) {
     repository: { type: 'git', url: 'git+https://github.com/zAcherttp/se373.git', directory: `vendor/dsh/${dir}` },
   }
   if (manifest.dsh) out.dsh = manifest.dsh
+  // `optionalDependencies` are dropped wholesale. The only one in the taken set
+  // is Landlock's per-architecture Linux prebuilds, which are `workspace:*`
+  // members of a native build tree we do not vendor; pnpm rejects an
+  // unresolvable workspace range even when it is optional.
   for (const field of ['dependencies', 'peerDependencies', 'devDependencies']) {
     const source = manifest[field]
     if (!source) continue

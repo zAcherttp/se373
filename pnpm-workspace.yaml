@@ -25,3 +25,12 @@ allowBuilds:
   # loads it to call kernel32.dll for file locking. Never reached on darwin or
   # linux, so its native build is dead weight. Flip to true for a Windows demo.
   koffi: false
+
+  # node-pty: a top-level import in subprocess-local, which every shell tool
+  # runs through. A native build, and unavoidable -- there is no second
+  # subprocess provider upstream.
+  node-pty: true
+
+  # @vscode/ripgrep: postinstall downloads the ripgrep binary that tool-fs-search
+  # shells out to. No binary, no grep or glob tool.
+  '@vscode/ripgrep': true

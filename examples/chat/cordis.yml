@@ -2,10 +2,11 @@
 #
 # Every row is dsh's own, with dsh's own id. This file is a narrowed transcript
 # of `bundle/base`'s and `bundle/headless`'s patch layers, restricted to the 30
-# packages phase 2 vendors. It is deliberately NOT a curated design: when phase
-# 3 widens the vendored set, rows come back by uncommenting, not by rethinking.
+# packages phases 2 and 3 vendor. It is deliberately NOT a curated design: when
+# a later phase widens the vendored set, rows come back by copying upstream's,
+# not by rethinking them.
 #
-# Run:  pnpm se373 examples/chat/cordis.yml "what is 2 + 2"
+# Run:  pnpm se373 examples/chat/cordis.yml "how many .ts files are under vendor?"
 
 - id: timer
   name: '@se373/cordis-plugin-timer'
@@ -26,6 +27,10 @@
 
 - id: approval
   name: '@se373/user-approval'
+  config:
+    # A one-shot run has nobody to ask, so `danger-full-access` is the only mode
+    # that answers without hanging. Phase 4's chat box is what makes `ask` real.
+    policy: !!js "(process.env.SE373_PERMISSION_MODE ?? 'workspace-write') === 'danger-full-access' ? 'never' : 'ask'"
 
 # --- providers ---------------------------------------------------------------
 
@@ -77,6 +82,83 @@
   name: '@se373/agent-loop'
   config:
     agents: []
+
+# --- the effect boundary -----------------------------------------------------
+#
+# Phase 3. Every row below is dsh's, verbatim, including the platform `disabled`
+# expressions -- which is the point of I3: a Windows demo needs no code change,
+# only different rows evaluating true.
+
+- id: subprocess
+  name: '@se373/subprocess-local'
+
+- id: sandbox
+  name: '@se373/sandbox-local'
+
+- id: sandbox-policy
+  name: '@se373/sandbox-policy'
+  config:
+    mode: !!js process.env.SE373_PERMISSION_MODE ?? 'workspace-write'
+    workspaceRoot: !!js process.cwd()
+
+- id: bash-sandbox
+  name: '@se373/bash-sandbox'
+  disabled: !!js process.platform === 'win32'
+  config:
+    timeoutMs: 60000
+
+- id: permission
+  name: '@se373/permission-presets'
+  config:
+    presets:
+      read-only:
+        sandbox: read-only
+        approval: ask
+      workspace-write:
+        sandbox: workspace-write
+        approval: ask
+      danger-full-access:
+        sandbox: danger-full-access
+        approval: never
+
+- id: shell-env
+  name: '@se373/shell-env'
+
+- id: fs-sandbox
+  name: '@se373/fs-sandbox'
+
+- id: fs-observation-policy
+  name: '@se373/fs-observation-policy'
+
+- id: spill-local
+  name: '@se373/spill-local'
+
+- id: spill-policy
+  name: '@se373/spill-policy'
+  config:
+    maxInlineBytes: 50000
+
+- id: timeout-policy
+  name: '@se373/tool-call-timeout-policy'
+
+# --- the tools ---------------------------------------------------------------
+
+- id: tool-bash
+  name: '@se373/tool-bash'
+  disabled: !!js process.platform === 'win32'
+
+- id: tool-fs
+  name: '@se373/tool-fs'
+
+- id: tool-fs-search
+  name: '@se373/tool-fs-search'
+  config:
+    sampleOverCapGlobResults: false
+
+- id: tool-str-replace-editor
+  name: '@se373/tool-str-replace-editor'
+  config:
+    maxOutputChars: 16000
 
 # --- the one-shot driver -----------------------------------------------------
 

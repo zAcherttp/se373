@@ -1,0 +1,63 @@
+{
+  "name": "@se373/permission-presets",
+  "description": "User-facing permission presets (ctx.permissionPresets) for the DeepSeek Harness: one product-level Permissions select bundling the sandbox-mode and approval-policy knobs, written through to their own session events",
+  "version": "0.1.1-rc.2",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./src/invariant.ts"
+    },
+    "./types": {
+      "types": "./lib/types/types.d.ts",
+      "default": "./src/types/types.ts"
+    },
+    "./client": {
+      "types": "./lib/types/client.d.ts",
+      "default": "./src/types/client.ts"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zAcherttp/se373.git",
+    "directory": "vendor/dsh/interaction/permission-presets"
+  },
+  "dependencies": {
+    "@se373/schemastery": "workspace:^",
+    "zod": "^4.4.3"
+  },
+  "peerDependencies": {
+    "@se373/shell": "workspace:^",
+    "@se373/commands": "workspace:^",
+    "@se373/invariants": "workspace:^",
+    "@se373/sandbox": "workspace:^",
+    "@se373/sandbox-policy": "workspace:^",
+    "@se373/session": "workspace:^",
+    "@se373/session-projection": "workspace:^",
+    "@se373/settings": "workspace:^",
+    "@se373/user-approval": "workspace:^",
+    "@se373/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@se373/shell": "workspace:^",
+    "@se373/commands": "workspace:^",
+    "@se373/invariants": "workspace:^",
+    "@se373/sandbox": "workspace:^",
+    "@se373/sandbox-policy": "workspace:^",
+    "@se373/session": "workspace:^",
+    "@se373/session-projection": "workspace:^",
+    "@se373/settings": "workspace:^",
+    "@se373/user-approval": "workspace:^",
+    "@se373/cordis": "workspace:^"
+  }
+}

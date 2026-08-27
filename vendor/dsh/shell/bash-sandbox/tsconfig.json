@@ -1,0 +1,27 @@
+{
+  "extends": "../../../../tsconfig.vendor.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib/types"
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../../../../vendor/dsh/runtime-diagnostics/invariants"
+    },
+    {
+      "path": "../../../../vendor/dsh/sandbox/sandbox"
+    },
+    {
+      "path": "../../../../vendor/dsh/sandbox/sandbox-policy"
+    },
+    {
+      "path": "../../../../vendor/dsh/shell/bash-local"
+    },
+    {
+      "path": "../../../../vendor/dsh/shell/shell"
+    }
+  ]
+}

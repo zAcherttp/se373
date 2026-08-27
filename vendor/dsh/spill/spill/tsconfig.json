@@ -1,0 +1,24 @@
+{
+  "extends": "../../../../tsconfig.vendor.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib/types"
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../../../../vendor/dsh/core/session"
+    },
+    {
+      "path": "../../../../vendor/dsh/llm/llm"
+    },
+    {
+      "path": "../../../../vendor/dsh/runtime-diagnostics/invariants"
+    },
+    {
+      "path": "../../../../vendor/dsh/util/brand"
+    }
+  ]
+}

@@ -25,6 +25,21 @@
     "@se373/agent-default-model": "workspace:*",
     "@se373/agent-loop": "workspace:*",
     "@se373/code-runtime-worker-thread": "workspace:*",
-    "@se373/headless": "workspace:*"
+    "@se373/headless": "workspace:*",
+    "@se373/subprocess-local": "workspace:*",
+    "@se373/sandbox-local": "workspace:*",
+    "@se373/sandbox-policy": "workspace:*",
+    "@se373/bash-sandbox": "workspace:*",
+    "@se373/permission-presets": "workspace:*",
+    "@se373/shell-env": "workspace:*",
+    "@se373/fs-sandbox": "workspace:*",
+    "@se373/fs-observation-policy": "workspace:*",
+    "@se373/spill-local": "workspace:*",
+    "@se373/spill-policy": "workspace:*",
+    "@se373/tool-call-timeout-policy": "workspace:*",
+    "@se373/tool-bash": "workspace:*",
+    "@se373/tool-fs": "workspace:*",
+    "@se373/tool-fs-search": "workspace:*",
+    "@se373/tool-str-replace-editor": "workspace:*"
   }
 }

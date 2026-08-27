@@ -1,0 +1,27 @@
+{
+  "extends": "../../../../tsconfig.vendor.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib/types"
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../../../../vendor/dsh/core/agent"
+    },
+    {
+      "path": "../../../../vendor/dsh/core/session"
+    },
+    {
+      "path": "../../../../vendor/dsh/core/system-prompt"
+    },
+    {
+      "path": "../../../../vendor/dsh/runtime-diagnostics/invariants"
+    },
+    {
+      "path": "../../../../vendor/dsh/sandbox/sandbox"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "name": "@se373/bash-sandbox",
+  "description": "Sandbox-consuming implementation of the DeepSeek Harness bash executor seam (confines every command via ctx.sandbox, reports denial/enforcement result facts)",
+  "version": "0.1.1-rc.2",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./src/invariant.ts"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zAcherttp/se373.git",
+    "directory": "vendor/dsh/shell/bash-sandbox"
+  },
+  "peerDependencies": {
+    "@se373/shell": "workspace:^",
+    "@se373/bash-local": "workspace:^",
+    "@se373/invariants": "workspace:^",
+    "@se373/sandbox": "workspace:^",
+    "@se373/sandbox-policy": "workspace:^",
+    "@se373/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@se373/shell": "workspace:^",
+    "@se373/bash-local": "workspace:^",
+    "@se373/invariants": "workspace:^",
+    "@se373/subprocess-local": "workspace:^",
+    "@se373/sandbox": "workspace:^",
+    "@se373/sandbox-local": "workspace:^",
+    "@se373/sandbox-policy": "workspace:^",
+    "@se373/cordis": "workspace:^",
+    "@se373/node-addon-landlock-run": "workspace:^"
+  }
+}
