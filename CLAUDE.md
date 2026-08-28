@@ -63,7 +63,7 @@ architecture doc §13 and §14 carry the consequences.
 - **The evolution ladder has three rungs**, and the bottom one must exist: add an MCP row (free), compose from a recipe (near-deterministic), fork a block with a gated install (the ambitious one). `mcp-client` lands at phase 3.5 for exactly this reason — one package.
 - **Forks are per-workspace and may install dependencies**, plan-gated, inside their own lockfile, in the order install → conformance → move in → HMR.
 - **6d is not the cut candidate.** Authoring is the claim. Staging composition ahead of it is demo choreography, not build order.
-- **Phase 4 takes `bundle/web-app` whole** — 78 packages, 59 → 137 — plus dsh's chat roster and our board as a row in their layout. Replacing the `root` slot is unproven ground upstream; do not. **The browser cannot run from source**: budget the build pipeline as a workstream.
+- **Phase 4 takes `bundle/web-app` whole** — 78 packages, 60 → 138 — plus dsh's chat roster and our board as a row in their layout. Replacing the `root` slot is unproven ground upstream; do not. **The browser cannot run from source**: budget the build pipeline as a workstream.
 - **`ctx.runtimeGraph` comes before the web plane** (phase 3.5), with the `graph_inspect` tool as its first consumer rather than a view.
 - **Knowledge plane: `sqlite-vec` over `node:sqlite`, 384 dims, multilingual by default.** Pin the dimensionality, not the model — then the model is a config row and the fingerprint catches the swap.
 - **Sync policy: neither freeze nor track.** Update the clone when something looks worth having, read the breaking changes, re-run the vendoring script for the affected seeds, read the diff.
@@ -125,13 +125,12 @@ formality.
 
 ## Immediate next steps
 
-1. **Start phase 3.5** (runtime graph) — `ctx.runtimeGraph`, the `graph_inspect`
-   tool as its first consumer, the JSONL app-log sink beside it, and
-   `mcp-client` as a disabled row. All four are cheap, none needs a build, and
-   landing them first turns phase 4's board into rendering rather than
-   semantics.
-2. **Then phase 4** (web plane) — the risk spike. 78 new packages plus a build
-   workstream, and it is what turns approval's `ask` from a hang into a prompt.
+1. **Start phase 4** (web plane) — the risk spike, and now the only thing
+   between here and the user being able to drive this themselves. 78 new
+   packages plus a build workstream; it is what turns approval's `ask` from a
+   hang into a prompt, and what gives the graph a board instead of a tool call.
+   Take the build first, not the board: it is the part that can fail in a way
+   no amount of design prevents.
 3. ~~Name the project~~ — settled: `@se373/*`.
 4. ~~Write `docs/PORTING.md`~~ — done.
 5. ~~Get the milestone dates~~ — **dropped 2026-08-27.** The user's call: phases are what we can go back to and reproduce, and otherwise we go at our own pace. Still worth confirming in week 1 whether solo is permitted.
@@ -141,13 +140,18 @@ formality.
    harness answers a task headlessly.
 9. ~~Start phase 3~~ — shipped, tagged `phase-3`. 59 vendored; it reads,
    searches, runs commands, and edits.
+10. ~~Start phase 3.5~~ — shipped, tagged `phase-3.5`. 60 vendored plus our
+    first three own packages. The agent inspects its own runtime, every run
+    leaves a durable log, and `mcp-client` sits there disabled. D10 closed.
 
 ## Risks being tracked
 
-- **Phase 4 (web plane) is the risk spike, and solo makes it worse.** 78 new packages *and* a build pipeline — two TypeScript programs, `tsdown` per client package, Vite, a watcher — because `client-modules` reads `lib/client.js` off disk and there is no source path to the browser. If the semester slips, it slips there. The board is committed, so the old fallback (a terminal renderer) is off the table; what survives instead is that phase 3.5 lands the projection first, so a late phase 4 costs the *view*, not the data.
+- **Phase 4 (web plane) is the risk spike, and solo makes it worse.** 78 new packages *and* a build pipeline — two TypeScript programs, `tsdown` per client package, Vite, a watcher — because `client-modules` reads `lib/client.js` off disk and there is no source path to the browser. If the semester slips, it slips there. The board is committed, so the old fallback (a terminal renderer) is off the table; what survives instead is that phase 3.5 landed the projection first, so a late phase 4 costs the *view*, not the data — that mitigation is now banked rather than planned.
+- **The vendor build already fails, and phase 4 is where that starts mattering.** `npx tsc -b tsconfig.vendor.json` exits `2` with ~447 errors — 236 in `vendor/schemastery`, 25 in `vendor/loader`, none of ours — and emits anyway, which is why nothing has broken: it is a declaration build whose output only feeds `paths`. A client build the browser actually loads may not be so forgiving. Find out early rather than at the end of the phase.
+- **Nothing has been driven by a human yet.** Every check so far is either headless or mock-driven; there is no API key on this machine and no UI to paste one into. Phase 4 is the first time the system meets a user, and first contact usually finds things no amount of hand-verification does.
 - Model-authored UI is a demo cliff — keep a deterministic fallback for anything shown live.
 - **Solo changes the scope calculus, not the schedule.** Six *recipes* ship and the block vocabulary must span all six, but only two archetypes get built out — the generality is the claim, the demos are evidence for it. Cut breadth before depth.
-- **D9 and D10 are the two things this design opened.** The runtime graph has no push transport upstream (`pluginInventory.list()` is poll-only), and rung 1 of the evolution ladder assumes a third-party MCP server exists to connect to.
+- **D9 is what this design opened, and it is now smaller than it was.** The runtime graph still has no push transport upstream (`pluginInventory.list()` is poll-only), but node transitions are recorded as they happen rather than sampled, so a polling board is a latency compromise and not a lossy one. ~~D10~~ closed 2026-08-28: the third-party MCP path works, no fallback server needed.
 - dsh is a developer preview with an unstable API; Cordis advertises the same.
 
 ## Working with me on this

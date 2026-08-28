@@ -740,26 +740,32 @@ Adopting these costs nothing and keeps the codebase legible to anyone who knows 
 
 Each phase ends with something that **runs**. Slice vertically; never ship a layer with nothing above it.
 
-| # | Phase | Ends when | Introduces |
-|---|---|---|---|
-| 1 | Cordis boot | CLI boots a plugin tree and prints | loader, fiber, effect, disposal, config rows |
-| 2 | Agent spine | **headless chat in terminal** | `ctx.sessions`, `ctx.llm`, minimal turn loop |
-| 3 | Tools | **it can do work** | `ctx.tools`, guard pipeline, `fs` + `bash` |
-| **3.5** | **Runtime graph** | **the agent can inspect its own runtime** | `ctx.runtimeGraph`, the `graph_inspect` tool, the JSONL app-log sink, `mcp-client` as a disabled row |
-| 4 | Web plane | **your chat box, and the board beside it** | the build pipeline, dsh's shell and chat roster, our board plugin, a push transport for the graph |
-| 5 | Multi-agent | **subagents run** | `ctx.agentPresets`, `subagent-spawn-in-process` |
-| 6a | **Embedding seam** | vectors exist | `ctx.embedder` + ONNX local, `sqlite-vec` at 384 dims |
-| 6b | Knowledge plane | **knowledge agent answers** | remaining L3 seams, ingest events |
-| 6c | Builder plane | **recipe → working agent** | `ctx.blocks` as a repository, `ctx.builder`, the cookbook |
-| 6d | **Authoring** | **agent forks a block and it hot-swaps in** | fork namespace, gated install, conformance suites, staging→HMR |
-| 7 | Export | **installable plugin + MCP server** | `ctx.promotion`, MCP codegen |
-| 8 | Eval / A/B | **compare view** | `ctx.retrievalEval`, isolate realms |
+Status is the git tag, not a judgement: a phase is shipped when
+`git checkout <tag>` reproduces its `Demonstrable` command from
+[FEATURE-LOG.md](FEATURE-LOG.md).
+
+| # | Phase | Ends when | Introduces | Status |
+|---|---|---|---|---|
+| 1 | Cordis boot | CLI boots a plugin tree and prints | loader, fiber, effect, disposal, config rows | ✅ `phase-1` |
+| 2 | Agent spine | **headless chat in terminal** | `ctx.sessions`, `ctx.llm`, minimal turn loop | ✅ `phase-2` |
+| 3 | Tools | **it can do work** | `ctx.tools`, guard pipeline, `fs` + `bash` | ✅ `phase-3` |
+| **3.5** | **Runtime graph** | **the agent can inspect its own runtime** | `ctx.runtimeGraph`, the `graph_inspect` tool, the JSONL app-log sink, `mcp-client` as a disabled row | ✅ `phase-3.5` |
+| 4 | Web plane | **your chat box, and the board beside it** | the build pipeline, dsh's shell and chat roster, our board plugin, a push transport for the graph | ← next |
+| 5 | Multi-agent | **subagents run** | `ctx.agentPresets`, `subagent-spawn-in-process` | |
+| 6a | **Embedding seam** | vectors exist | `ctx.embedder` + ONNX local, `sqlite-vec` at 384 dims | |
+| 6b | Knowledge plane | **knowledge agent answers** | remaining L3 seams, ingest events | |
+| 6c | Builder plane | **recipe → working agent** | `ctx.blocks` as a repository, `ctx.builder`, the cookbook | |
+| 6d | **Authoring** | **agent forks a block and it hot-swaps in** | fork namespace, gated install, conformance suites, staging→HMR | |
+| 7 | Export | **installable plugin + MCP server** | `ctx.promotion`, MCP codegen | |
+| 8 | Eval / A/B | **compare view** | `ctx.retrievalEval`, isolate realms | |
 
 **Risk spike: phase 4.** 78 new packages *plus* a second TypeScript program, `tsdown` per client package, a Vite build, and a watcher. The `tsx`-from-source posture does not survive contact with the browser: `client-modules` reads `lib/client.js` off disk and fails loud when it is absent. Budget the build as a workstream, not a footnote.
 
+Phase 3.5 sharpened that: `npx tsc -b tsconfig.vendor.json` already exits `2` with ~447 errors in vendored sources while still emitting the declarations our program needs. That is survivable for a declaration build nothing executes. It is *not* survivable for a build whose output the browser loads, so phase 4's first task is finding out which of those two the client build is.
+
 **Sequencing notes.**
 
-- **3.5 comes before 4.** `ctx.runtimeGraph` is ours, has no upstream analogue, needs no build, and can be debugged against a live 59-package tree today. Landing it first means phase 4's board is rendering rather than semantics. Its first consumer is the `graph_inspect` tool, not a view — that satisfies the vertical-slice rule without waiting for a browser.
+- ~~**3.5 comes before 4.**~~ **Done, 2026-08-28.** It paid off as intended: the projection, the edges, the realm resolution and the transitions were all debugged against a live 60-package tree with no build in the loop, and `examples/graph-demo/` drives the real agent through the real registry with no API key. Phase 4's board is now rendering rather than semantics.
 - **6a gates 6b gates 6c.** Do not reorder.
 - **6d is not the cut candidate.** Authoring is the claim, not the flourish; see `docs/design/builder-plane.md` §4. Staging composition ahead of authoring is demo choreography, not build order.
 - **`mcp-client` lands at 3.5, not 7.** It costs one package and it is the bottom rung of the evolution ladder — the only rung that cannot fail on camera.
@@ -783,7 +789,7 @@ Each phase ends with something that **runs**. Slice vertically; never ship a lay
 
 **D1–D8 and D10 are closed.** D3–D8 closed together on 2026-08-27 in a 32-decision design interview; `docs/design/builder-plane.md` carries the reasoning and the two decisions it opened in their place. D10 closed on 2026-08-28 by trying it rather than by arguing about it — which was the instruction, and the answer came back cheaper than either branch had assumed.
 
-**D9 is the one still open**, and phase 3.5 deliberately left it alone: the projection is point-in-time by contract, so the push-transport question stays a phase-4 decision rather than a phase-3.5 guess.
+**D9 is the one still open**, and phase 3.5 shipped without touching it, as planned: the projection is point-in-time by contract, so the push-transport question stayed a phase-4 decision rather than a phase-3.5 guess. Phase 3.5 did narrow it, though. Node **transitions** are recorded as they happen rather than sampled, so a poller recovers the history it slept through even when it misses the moment — which means a polling board is now a *latency* compromise rather than a *lossy* one, and the case for a forwarded-event contribution rests on how the board should feel, not on what it would otherwise lose.
 
 **D1 and D2 are closed.** The scope is `@se373/*`; the vendored spine is taken under MIT with notices preserved. State the vendored-vs-built split in the README anyway — not as a defence, but because it is the clearest way to show where the work went: the spine is the floor, L3 and L4 are the project.
 

@@ -367,7 +367,7 @@ tsconfig layer, our own bundles, and every `packages/*` not listed in §4.
   `mcp/mcp-client` alone plus the `@modelcontextprotocol/sdk` dependency. The
   re-vendor of the other fourteen packages in its closure produced a byte-identical
   tree, which is the first independent evidence that the script is idempotent.
-- **Phase 4 takes `bundle/web-app` whole: 78 more packages, 59 → 137.** Measured
+- **Phase 4 takes `bundle/web-app` whole: 78 more packages, 60 → 138.** Measured
   2026-08-27. Two smaller tiers were considered and rejected — a page with no
   host RPC (3 new packages) and the `/api` transport without dsh's UI (27) — on
   the grounds that dsh's chat view is 14,904 lines we would otherwise

@@ -248,3 +248,94 @@ validating against the real registered schema, not passing bytes through.
 - **Still one shot.** No conversation, no resume, no todo list, no subagents,
   no skills, no compaction — 59 of the 187 in-scope packages.
 - **No key-free demonstrable.** See above.
+
+---
+
+## phase-3.5 — The agent can inspect its own runtime
+
+**2026-08-28** · **Commit** `769373a` · **Tag** `phase-3.5`
+
+**Roadmap** — Infrastructure, plus Topic 2 (*Tool Use*): `graph_inspect` is a
+tool like any other, registered through the same registry with the same
+canonical output contract. It is also the data layer phase 4's board renders,
+so a late phase 4 costs the *view*, not the projection.
+**Phase** — §13 phase 3.5, "Runtime graph".
+
+**Demonstrable**
+
+The agent asks what is running inside its own process and gets a structured
+answer back — no API key, because the mock provider supplies only the *decision*
+to call the tool. Everything else is the shipping tree.
+
+```bash
+pnpm install
+node --import tsx/esm examples/graph-demo/demo.mts
+```
+
+It prints the tool result and the path of the run log that boot just wrote:
+
+```
+--- graph_inspect returned ---
+1 of 41 rows — disabled 1
+
+294ad8f1:mcp-client  (@se373/mcp-client)
+  lifecycle       disabled
+  ...
+  config
+    { "transport": "stdio", "serverName": "everything", ... }
+--- end ---
+That is the component that is configured but not running.
+
+run log for this boot: ~/.se373/logs/20260828T055040535Z-11331.jsonl.zstd
+```
+
+The disabled row is the point. It has no fiber, no lifecycle and no live
+instance, and it is in the projection anyway, with its connection config intact
+— you cannot turn on what you cannot see.
+
+Two more, both key-free, both run from a clean checkout at this tag:
+
+```bash
+node --import tsx/esm examples/realm-split/inspect.mts   # exits 0 on PASS, 1 on collapse
+pnpm test                                                # 2 files, 10 tests
+```
+
+`realm-split` is a falsification test: two isolation realms publishing one
+service name. It exits non-zero if edge resolution ever stops being
+realm-aware, which is a mistake that is otherwise silent until the A/B demo.
+
+**Note on the vendor build.** `npx tsc -b tsconfig.vendor.json` is still needed
+before `pnpm typecheck` (it emits the declarations `paths` points at), and it
+still exits `2` with ~447 errors — 236 in `vendor/schemastery`, 25 in
+`vendor/loader`, none in ours. It emits regardless, and `pnpm typecheck` is
+clean afterwards. Pre-existing since phase 1; recorded here so the next person
+does not read it as damage.
+
+**Packages**
+
+Three of ours — the first packages in this repo that are not vendored and not a
+demo — and one more vendored, 60 total:
+
+| Package | What it does |
+|---|---|
+| `@se373/runtime-graph` | `ctx.runtimeGraph`. Every configured row, disabled ones included, across three derived axes plus realm, realm-aware dependency edges, observed lifecycle transitions, and an optional contributed role via the `graph/node` waterfall |
+| `@se373/tool-graph-inspect` | `graph_inspect`, its own row so it is disable-able (I3) |
+| `@se373/logger-jsonl` | A second Cordis exporter beside the console one. One run-keyed JSONL file per run under `$SE373_HOME/logs`; a missing footer is how a crash is identified |
+| `@se373/mcp-client` (vendored) | Ships as a `disabled: true` row with its connection shape filled in. Closes D10: verified against `@modelcontextprotocol/server-everything`, 13 tools arriving as `mcp__everything__*` |
+
+**Not yet**
+
+- **No push transport.** The snapshot is point-in-time and D9 is still open on
+  purpose: `pluginInventory.list()` is poll-only upstream, and the right answer
+  depends on what the board needs. Transitions are the one piece of history the
+  projection keeps, which is what lets a poller recover what it slept through.
+- **Almost every row is untyped.** Only our three packages contribute to
+  `graph/node`; the 60 vendored rows contribute nothing, so `role: seam` is not
+  yet the useful default view it is meant to become. Annotating a vendored
+  package would mean editing it, and the next sync would overwrite it.
+- **Transitions start when the graph row mounts**, not when the process does.
+  `internal/status` has no backlog. Same boundary the app log has.
+- **No failure reason on a `failed` node.** Cordis keeps the startup error
+  private to the fiber. The transitions show the path in; the log says why.
+- **Nothing renders any of this.** No board, no log dock, no browser at all —
+  that is phase 4, and it is the risk spike.
