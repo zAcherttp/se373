@@ -135,12 +135,138 @@ importers:
       '@se373/agent-loop':
         specifier: workspace:*
         version: link:../vendor/dsh/core/agent-loop
+      '@se373/api-gateway':
+        specifier: workspace:*
+        version: link:../vendor/dsh/api/gateway
+      '@se373/api-remotes':
+        specifier: workspace:*
+        version: link:../vendor/dsh/api/remotes
+      '@se373/attachment-local':
+        specifier: workspace:*
+        version: link:../vendor/dsh/attachment/attachment-local
       '@se373/bash-sandbox':
         specifier: workspace:*
         version: link:../vendor/dsh/shell/bash-sandbox
+      '@se373/client-connection':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/connection
+      '@se373/client-hmr':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/hmr
+      '@se373/client-locale':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/locale
+      '@se373/client-modules':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/modules
+      '@se373/client-runtime':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/runtime
+      '@se373/client-ui-attachment':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-attachment
+      '@se373/client-ui-commands':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-commands
+      '@se373/client-ui-conversation':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-conversation
+      '@se373/client-ui-cordis':
+        specifier: workspace:*
+        version: link:../vendor/dsh/extensions/ui-cordis
+      '@se373/client-ui-deliverables':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-deliverables
+      '@se373/client-ui-directory-picker-browse':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-directory-picker-browse
+      '@se373/client-ui-directory-picker-native':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-directory-picker-native
+      '@se373/client-ui-goal':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-goal
+      '@se373/client-ui-input-trigger':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-input-trigger
+      '@se373/client-ui-jobs':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-jobs
+      '@se373/client-ui-layout':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-layout
+      '@se373/client-ui-message-feedback':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-message-feedback
+      '@se373/client-ui-model-selection':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-model-selection
+      '@se373/client-ui-permission-presets':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-permission-presets
+      '@se373/client-ui-plan':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-plan
+      '@se373/client-ui-reference':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-reference
+      '@se373/client-ui-renderer':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-renderer
+      '@se373/client-ui-settings':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-settings
+      '@se373/client-ui-settings-general':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-settings-general
+      '@se373/client-ui-settings-models':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-settings-models
+      '@se373/client-ui-settings-plugin-inventory':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-settings-plugin-inventory
+      '@se373/client-ui-settings-plugins':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-settings-plugins
+      '@se373/client-ui-sidebar':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-sidebar
+      '@se373/client-ui-skill':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-skill
+      '@se373/client-ui-subagent':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-subagent
+      '@se373/client-ui-theme':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-theme
+      '@se373/client-ui-tool':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-tool
+      '@se373/client-ui-trajectory':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-trajectory
+      '@se373/client-ui-user-questions':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-user-questions
+      '@se373/client-ui-workflow-run':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-workflow-run
+      '@se373/client-ui-workspace':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-workspace
       '@se373/code-runtime-worker-thread':
         specifier: workspace:*
         version: link:../vendor/dsh/code-runtime/code-runtime-worker-thread
+      '@se373/commands':
+        specifier: workspace:*
+        version: link:../vendor/dsh/interaction/commands
+      '@se373/cordis-client-runner':
+        specifier: workspace:*
+        version: link:../vendor/dsh/extensions/cordis-client-runner
+      '@se373/cordis-host-runner':
+        specifier: workspace:*
+        version: link:../vendor/dsh/extensions/cordis-host-runner
       '@se373/cordis-plugin-group':
         specifier: workspace:*
         version: link:../vendor/group
@@ -153,18 +279,45 @@ importers:
       '@se373/credentials-local':
         specifier: workspace:*
         version: link:../vendor/dsh/credentials/credentials-local
+      '@se373/file-reference-local':
+        specifier: workspace:*
+        version: link:../vendor/dsh/context/file-reference-local
       '@se373/fs-observation-policy':
         specifier: workspace:*
         version: link:../vendor/dsh/fs/fs-observation-policy
       '@se373/fs-sandbox':
         specifier: workspace:*
         version: link:../vendor/dsh/fs/fs-sandbox
+      '@se373/goal':
+        specifier: workspace:*
+        version: link:../vendor/dsh/goal/goal
       '@se373/headless':
         specifier: workspace:*
         version: link:../vendor/dsh/bundle/headless
       '@se373/hello':
         specifier: workspace:*
         version: link:../packages/demo/hello
+      '@se373/host-apiproxy':
+        specifier: workspace:*
+        version: link:../vendor/dsh/host/apiproxy
+      '@se373/host-directory-picker':
+        specifier: workspace:*
+        version: link:../vendor/dsh/host/directory-picker
+      '@se373/host-directory-picker-auto':
+        specifier: workspace:*
+        version: link:../vendor/dsh/host/directory-picker-auto
+      '@se373/host-directory-picker-browse':
+        specifier: workspace:*
+        version: link:../vendor/dsh/host/directory-picker-browse
+      '@se373/host-directory-picker-native':
+        specifier: workspace:*
+        version: link:../vendor/dsh/host/directory-picker-native
+      '@se373/host-plugin-inventory':
+        specifier: workspace:*
+        version: link:../vendor/dsh/host/plugin-inventory
+      '@se373/host-webserver':
+        specifier: workspace:*
+        version: link:../vendor/dsh/host/webserver
       '@se373/invariants':
         specifier: workspace:*
         version: link:../vendor/dsh/runtime-diagnostics/invariants
@@ -186,9 +339,15 @@ importers:
       '@se373/mcp-client':
         specifier: workspace:*
         version: link:../vendor/dsh/mcp/mcp-client
+      '@se373/message-feedback':
+        specifier: workspace:*
+        version: link:../vendor/dsh/feedback/message-feedback
       '@se373/permission-presets':
         specifier: workspace:*
         version: link:../vendor/dsh/interaction/permission-presets
+      '@se373/plan-mode':
+        specifier: workspace:*
+        version: link:../vendor/dsh/plan/plan-mode
       '@se373/runtime-graph':
         specifier: workspace:*
         version: link:../packages/runtime/runtime-graph
@@ -201,27 +360,66 @@ importers:
       '@se373/session':
         specifier: workspace:*
         version: link:../vendor/dsh/core/session
+      '@se373/session-log-export':
+        specifier: workspace:*
+        version: link:../vendor/dsh/session-query/session-log-export
       '@se373/session-persistence-jsonl':
         specifier: workspace:*
         version: link:../vendor/dsh/session/session-persistence-jsonl
+      '@se373/session-projection':
+        specifier: workspace:*
+        version: link:../vendor/dsh/session/session-projection
+      '@se373/session-projection-cache':
+        specifier: workspace:*
+        version: link:../vendor/dsh/session/session-projection-cache
+      '@se373/session-query-sqlite':
+        specifier: workspace:*
+        version: link:../vendor/dsh/session-query/session-query-sqlite
+      '@se373/session-reference':
+        specifier: workspace:*
+        version: link:../vendor/dsh/context/session-reference
+      '@se373/session-stats':
+        specifier: workspace:*
+        version: link:../vendor/dsh/session/session-stats
+      '@se373/session-title':
+        specifier: workspace:*
+        version: link:../vendor/dsh/session/session-title
       '@se373/settings-file':
         specifier: workspace:*
         version: link:../vendor/dsh/settings/settings-file
       '@se373/shell-env':
         specifier: workspace:*
         version: link:../vendor/dsh/shell/shell-env
+      '@se373/skill':
+        specifier: workspace:*
+        version: link:../vendor/dsh/skill/skill
       '@se373/spill-local':
         specifier: workspace:*
         version: link:../vendor/dsh/spill/spill-local
       '@se373/spill-policy':
         specifier: workspace:*
         version: link:../vendor/dsh/spill/spill-policy
+      '@se373/storage':
+        specifier: workspace:*
+        version: link:../vendor/dsh/storage/storage
+      '@se373/storage-domain':
+        specifier: workspace:*
+        version: link:../vendor/dsh/storage/storage-domain
+      '@se373/storage-json':
+        specifier: workspace:*
+        version: link:../vendor/dsh/storage/storage-json
+      '@se373/subagent':
+        specifier: workspace:*
+        version: link:../vendor/dsh/subagent/subagent
       '@se373/subprocess-local':
         specifier: workspace:*
         version: link:../vendor/dsh/subprocess/subprocess-local
       '@se373/system-prompt':
         specifier: workspace:*
         version: link:../vendor/dsh/core/system-prompt
+      '@se373/token-meter':
+        specifier: workspace:*
+        version: link:../vendor/dsh/llm/token-meter
       '@se373/tool-bash':
         specifier: workspace:*
         version: link:../vendor/dsh/shell/tool-bash
@@ -240,12 +438,30 @@ importers:
       '@se373/tool-str-replace-editor':
         specifier: workspace:*
         version: link:../vendor/dsh/fs/tool-str-replace-editor
+      '@se373/tool-todo':
+        specifier: workspace:*
+        version: link:../vendor/dsh/todo/tool-todo
       '@se373/tools':
         specifier: workspace:*
         version: link:../vendor/dsh/core/tools
+      '@se373/typert-loader':
+        specifier: workspace:*
+        version: link:../vendor/dsh/typert/loader
+      '@se373/typert-registry':
+        specifier: workspace:*
+        version: link:../vendor/dsh/typert/registry
       '@se373/user-approval':
         specifier: workspace:*
         version: link:../vendor/dsh/interaction/user-approval
+      '@se373/user-questions':
+        specifier: workspace:*
+        version: link:../vendor/dsh/interaction/user-questions
+      '@se373/web-app':
+        specifier: workspace:*
+        version: link:../vendor/dsh/bundle/web-app
+      '@se373/workspace':
+        specifier: workspace:*
+        version: link:../vendor/dsh/workspace/workspace
 
   packages/demo/hello:
     devDependencies:
@@ -422,6 +638,28 @@ importers:
       '@se373/cordis':
         specifier: workspace:^
         version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+
+  vendor/dsh/attachment/attachment-local:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+      sharp:
+        specifier: ^0.35.3
+        version: 0.35.4(@types/node@24.13.3)
+    devDependencies:
+      '@se373/attachment':
+        specifier: workspace:^
+        version: link:../attachment
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/home-paths':
+        specifier: workspace:^
+        version: link:../../util/home-paths
       '@se373/invariants':
         specifier: workspace:^
         version: link:../../runtime-diagnostics/invariants
@@ -4028,6 +4266,31 @@ importers:
         specifier: workspace:^
         version: link:../../session/session-title
 
+  vendor/dsh/session-query/session-query-sqlite:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/cordis-plugin-loader':
+        specifier: workspace:^
+        version: link:../../../loader
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@se373/session-persistence':
+        specifier: workspace:^
+        version: link:../../session/session-persistence
+      '@se373/session-query':
+        specifier: workspace:^
+        version: link:../session-query
+
   vendor/dsh/session/session-persistence:
     devDependencies:
       '@se373/brand':
@@ -5107,6 +5370,9 @@ packages:
     resolution: {integrity: sha512-Vj1jF3cPfxg7OAfoI7QnVKLoILlm2JF9pnVHrX8qx7AHMiYWT+NDAA7jChlNgRS4WTLc/fD1lXLmPixluj+3Gg==}
     engines: {node: '>=6.9.0'}
 
+  '@emnapi/runtime@1.11.3':
+    resolution: {integrity: sha512-Xz4Tpyki7XyrpbUK1jR1AhdAdaXyhhY4lZ3neLodmhpuWfy2PAQN5B46sAiU4liOXGLkHypn/qU+jvfWSCYYLA==}
+
   '@esbuild/aix-ppc64@0.25.12':
     resolution: {integrity: sha512-Hhmwd6CInZ3dwpuGTF8fJG6yoWmsToE+vYgD4nytZVxcu1ulHpUQRAB1UJ8+N1Am3Mz4+xOByoQoSZf4D+CpkA==}
     engines: {node: '>=18'}
@@ -5424,6 +5690,168 @@ packages:
     engines: {node: '>=20'}
     peerDependencies:
       hono: ^4
+
+  '@img/colour@1.1.0':
+    resolution: {integrity: sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ==}
+    engines: {node: '>=18'}
+
+  '@img/sharp-darwin-arm64@0.35.4':
+    resolution: {integrity: sha512-Uhfl4V4lhP2nbUVF9+hyH1+luj86f1gUFeo8ALYxFoULoU+G87D43BfeMP8XHsk9boxAnCY/bf2EHwhA7MuGsA==}
+    engines: {node: '>=20.9.0'}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@img/sharp-darwin-x64@0.35.4':
+    resolution: {integrity: sha512-hWniXY3bG5qKpkKrAwPe4y+VTPmf086YQAnkxWh7uA1YrlRouWGa0M0Mxj3ZjnXFkv7/TD1bTy9lGUK26vRvWw==}
+    engines: {node: '>=20.9.0'}
+    cpu: [x64]
+    os: [darwin]
+
+  '@img/sharp-freebsd-wasm32@0.35.4':
+    resolution: {integrity: sha512-lIsKw/BU+kjB4eZjxrYrZmwOJYi3Ajrv66iAlBmUPyKc3HpnloevB1g3wxGD9P/5BbQ1brBGl65VRRrCvQDEqA==}
+    engines: {node: '>=20.9.0'}
+    os: [freebsd]
+
+  '@img/sharp-libvips-darwin-arm64@1.3.3':
+    resolution: {integrity: sha512-suTBPTDGrI9WodccaDdwZItTSaBYASlBk1NSfElSHrUfzu3szG6lvIF58+WiFvnfzuK8ZBFS5zE00PxqxnRiPg==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@img/sharp-libvips-darwin-x64@1.3.3':
+    resolution: {integrity: sha512-FVJZ5mITMobmXIz/hPDTw0EintTW5H3WfrxwLqEqjiIihlu+hVRyGrFQ60xl0Lxn7Bt3zdpevPaQi0HEzqz9fw==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@img/sharp-libvips-linux-arm64@1.3.3':
+    resolution: {integrity: sha512-0DaL0A6Xu6sQSQFwe4iVCrKWU2cCTItnRsYsCdxAMm9NF6twAA9BKnoqy4hqz4+azQ0JHuA26qiUKsf1XJ/v5A==}
+    cpu: [arm64]
+    os: [linux]
+    libc: [glibc]
+
+  '@img/sharp-libvips-linux-arm@1.3.3':
+    resolution: {integrity: sha512-3rbU4vqXXc3hY/OiXdl52xZvT0F1yEngWfvqudtPJg/KkyiaQw2DRsFrNzpmLvfavbwOq3qXn36GP8obHRULQA==}
+    cpu: [arm]
+    os: [linux]
+    libc: [glibc]
+
+  '@img/sharp-libvips-linux-ppc64@1.3.3':
+    resolution: {integrity: sha512-cdn1OvUBwsXhbC0zSzJnNzf5MZ/mTrobawDvNXBTxe8VtqKAm0sRuEY2Evzovb/w9JMk4TvRxqt1mekSuJz64w==}
+    cpu: [ppc64]
+    os: [linux]
+    libc: [glibc]
+
+  '@img/sharp-libvips-linux-riscv64@1.3.3':
+    resolution: {integrity: sha512-HjPVx7yKz+0lqdhDlTw1tt90wamBoxhiXpvl1XZpJLiHH4RCJ5yDTqH+VlYPv2fwFs89JFw4c1IexYOcQUi4IQ==}
+    cpu: [riscv64]
+    os: [linux]
+    libc: [glibc]
+
+  '@img/sharp-libvips-linux-s390x@1.3.3':
+    resolution: {integrity: sha512-neWLh+3yCNThxnfy3c4BbVBeGgt9aftno+XbT56iK28RgeDs3UOFWviLWlUu0bArYVYJaFDK+RRohbicUNCm8Q==}
+    cpu: [s390x]
+    os: [linux]
+    libc: [glibc]
+
+  '@img/sharp-libvips-linux-x64@1.3.3':
+    resolution: {integrity: sha512-4vKmvAst9nrowcqquKFAyZJUDolUaIp8uRiN0mWFguJ1IplC9/pitXtlnnlU4aa/eJw3J7i67V+pwUL+wZGdsA==}
+    cpu: [x64]
+    os: [linux]
+    libc: [glibc]
+
+  '@img/sharp-libvips-linuxmusl-arm64@1.3.3':
+    resolution: {integrity: sha512-Y9kQaLMuNoB0bPYOOdcZMaseNrFpPodIWWMrx+CZyydf2xn68j9WYc6sWWRrDwNkzCQjKYfc68L7jKjGlHMibw==}
+    cpu: [arm64]
+    os: [linux]
+    libc: [musl]
+
+  '@img/sharp-libvips-linuxmusl-x64@1.3.3':
+    resolution: {integrity: sha512-fj8Mv0HHfD1Rr+4I68+3agJynxDWtBFgicTbSOb9Bke6pIwzGcJ+RX/yHjmiEGFMCavY/dxvem7MyNaJF+wDiw==}
+    cpu: [x64]
+    os: [linux]
+    libc: [musl]
+
+  '@img/sharp-linux-arm64@0.35.4':
+    resolution: {integrity: sha512-De4jpEnAU8Hd5oT0j1G3uL4ZvTuipVMn7YC6vPaJhy6/7EwEae0SVAoBrUMYQbkLGDm85taVWwuPc1a44LTzCQ==}
+    engines: {node: '>=20.9.0'}
+    cpu: [arm64]
+    os: [linux]
+    libc: [glibc]
+
+  '@img/sharp-linux-arm@0.35.4':
+    resolution: {integrity: sha512-7OAS8gI0EReKGVN2HssHlM6umJgxF5VI3xN0p9FA91p/YO+ou5hiNghLdZ5BEHztwaaK5+bLKRf8x/o2L2nk9A==}
+    engines: {node: '>=20.9.0'}
+    cpu: [arm]
+    os: [linux]
+    libc: [glibc]
+
+  '@img/sharp-linux-ppc64@0.35.4':
+    resolution: {integrity: sha512-2oYZJeIl4kCcMGk4ouZVjnkCtFrpQFlNEtJ6GbxzhHQchwH0NH/qEb9ykmOl29dqwMq+JhFdZn+1ak2FKhI9fQ==}
+    engines: {node: '>=20.9.0'}
+    cpu: [ppc64]
+    os: [linux]
+    libc: [glibc]
+
+  '@img/sharp-linux-riscv64@0.35.4':
+    resolution: {integrity: sha512-cPbNChoRURAWdebDIHSenxRpgEdy7JkPydSnUxRm9VvKD7m0/xVaR/8Fzlu81pk5nHEvHH87UZUA7cTtwnbJSA==}
+    engines: {node: '>=20.9.0'}
+    cpu: [riscv64]
+    os: [linux]
+    libc: [glibc]
+
+  '@img/sharp-linux-s390x@0.35.4':
+    resolution: {integrity: sha512-RY0JFY8Fd6RonCBtHz+DvadaPkXDSI1AUn6yWL9TipqkZ1vY8w8evqdgyDFnkm4/K1ve1TvZiaePP5oSd4+WVQ==}
+    engines: {node: '>=20.9.0'}
+    cpu: [s390x]
+    os: [linux]
+    libc: [glibc]
+
+  '@img/sharp-linux-x64@0.35.4':
+    resolution: {integrity: sha512-9qvvEAuk8k89TfWUoX2htWjbAMX8p+NxCppjpcg5k6xMsjhBQPTsoIh36h9Qde4WRuGpJeYnOjdosDn/cnv+OA==}
+    engines: {node: '>=20.9.0'}
+    cpu: [x64]
+    os: [linux]
+    libc: [glibc]
+
+  '@img/sharp-linuxmusl-arm64@0.35.4':
+    resolution: {integrity: sha512-KB5jxpfWQTr0nc3xdHtWChdbifHrBGsd2SM62Eyxrl8afikm+f5qGBU75SJIZBT/S1MC8XyacdlXBMSWq6OURA==}
+    engines: {node: '>=20.9.0'}
+    cpu: [arm64]
+    os: [linux]
+    libc: [musl]
+
+  '@img/sharp-linuxmusl-x64@0.35.4':
+    resolution: {integrity: sha512-f+eZJZIQNEEd26RPSW+76chwOf1XtA2Y/O+5ocVyLliHkeih3e+jhLVBdNTd2rS3IbNXK8+ug93Vf5ZXtF5Lxg==}
+    engines: {node: '>=20.9.0'}
+    cpu: [x64]
+    os: [linux]
+    libc: [musl]
+
+  '@img/sharp-wasm32@0.35.4':
+    resolution: {integrity: sha512-zQnl4Kwp7Q6NHsENtU2T/00Zi+w3AQNwz3+UaTyVBy2FpXrzXzGjndpK61onhZjRtRpQXxCTeqw19bVyXOh7jA==}
+    engines: {node: '>=20.9.0'}
+
+  '@img/sharp-webcontainers-wasm32@0.35.4':
+    resolution: {integrity: sha512-ESfNkywmCfPNyaZjxooddJQiQ+l/nTpGEOGthxiLnIHXC/CmcBixnfwUleX9mCz9ovrUUvKMap/pm8RYbzfwaA==}
+    engines: {node: '>=20.9.0'}
+    cpu: [wasm32]
+
+  '@img/sharp-win32-arm64@0.35.4':
+    resolution: {integrity: sha512-iNdlBX9gLVvqe2I3uIJSIKTq6wckP/DYxZtcqxm09x5Gi24DnFBmPAWZmr60ZyYMG0xlzo6goG3670ar+RXvRw==}
+    engines: {node: '>=20.9.0'}
+    cpu: [arm64]
+    os: [win32]
+
+  '@img/sharp-win32-ia32@0.35.4':
+    resolution: {integrity: sha512-kqRsbaa5CS6KHlpxnN7WhE6vAAugXyZButpRdvDWetlv6Qv4N9WTcrWzF7tXfB9T7MsoadqdI8hmwLq6UlLvtw==}
+    engines: {node: ^20.9.0}
+    cpu: [ia32]
+    os: [win32]
+
+  '@img/sharp-win32-x64@0.35.4':
+    resolution: {integrity: sha512-XtmnYhBcrORsJ4XJngyzr/EWP0hRZLAZRFaApdKuviyqF78+ylxh2y06ZmtULAMOnObJ3ucpN0AcwSWnMowTRg==}
+    engines: {node: '>=20.9.0'}
+    cpu: [x64]
+    os: [win32]
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -7348,6 +7776,11 @@ packages:
     resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}
     hasBin: true
 
+  semver@7.8.5:
+    resolution: {integrity: sha512-Y7/KDsb8LjooZpwaqGyulO6DQlksgCncchHGk+sZIY4SBvUocMBEFH5Ur1fI4dV+Jvl0w6cjvucaIi40puRioA==}
+    engines: {node: '>=10'}
+    hasBin: true
+
   send@1.2.1:
     resolution: {integrity: sha512-1gnZf7DFcoIcajTjTwjwuDjzuz4PPcY2StKPlsGAQ1+YH20IRVrBaXSWmdjowTJ6u8Rc01PoYOGHXfP1mYcZNQ==}
     engines: {node: '>= 18'}
@@ -7361,6 +7794,15 @@ packages:
 
   setprototypeof@1.2.0:
     resolution: {integrity: sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==}
+
+  sharp@0.35.4:
+    resolution: {integrity: sha512-n++8XWcj+jCOr2IOl7h8LbKnGBDY4aPbmprMONBNFdn0ImXqpGVv5zliDs0V9HbmbCQLpbuo2ej9rAoOQTvMDA==}
+    engines: {node: '>=20.9.0'}
+    peerDependencies:
+      '@types/node': '*'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
 
   shebang-command@2.0.0:
     resolution: {integrity: sha512-kHxr2zZpYtdmrN1qDjrrX/Z1rR1kG8Dx+gkpK1G4eXmvXswmcE1hTWBWYUzlraYw1/yZp6YuDY77YtvbN0dmDA==}
@@ -7499,6 +7941,9 @@ packages:
         optional: true
       unrun:
         optional: true
+
+  tslib@2.8.1:
+    resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
   tsx@4.23.12:
     resolution: {integrity: sha512-FDf4L4sYzKtzWYhU/Xm0AQFdTjdIxNo9ElTf2mxXM6k8YMHXzYUe4yODVaXP4V9uMFbVg8c0qyBccK2OOxb45Q==}
@@ -7890,6 +8335,11 @@ snapshots:
       '@babel/helper-string-parser': 7.29.7
       '@babel/helper-validator-identifier': 7.29.7
 
+  '@emnapi/runtime@1.11.3':
+    dependencies:
+      tslib: 2.8.1
+    optional: true
+
   '@esbuild/aix-ppc64@0.25.12':
     optional: true
 
@@ -8049,6 +8499,112 @@ snapshots:
   '@hono/node-server@2.1.1(hono@4.13.5)':
     dependencies:
       hono: 4.13.5
+
+  '@img/colour@1.1.0': {}
+
+  '@img/sharp-darwin-arm64@0.35.4':
+    optionalDependencies:
+      '@img/sharp-libvips-darwin-arm64': 1.3.3
+    optional: true
+
+  '@img/sharp-darwin-x64@0.35.4':
+    optionalDependencies:
+      '@img/sharp-libvips-darwin-x64': 1.3.3
+    optional: true
+
+  '@img/sharp-freebsd-wasm32@0.35.4':
+    dependencies:
+      '@img/sharp-wasm32': 0.35.4
+    optional: true
+
+  '@img/sharp-libvips-darwin-arm64@1.3.3':
+    optional: true
+
+  '@img/sharp-libvips-darwin-x64@1.3.3':
+    optional: true
+
+  '@img/sharp-libvips-linux-arm64@1.3.3':
+    optional: true
+
+  '@img/sharp-libvips-linux-arm@1.3.3':
+    optional: true
+
+  '@img/sharp-libvips-linux-ppc64@1.3.3':
+    optional: true
+
+  '@img/sharp-libvips-linux-riscv64@1.3.3':
+    optional: true
+
+  '@img/sharp-libvips-linux-s390x@1.3.3':
+    optional: true
+
+  '@img/sharp-libvips-linux-x64@1.3.3':
+    optional: true
+
+  '@img/sharp-libvips-linuxmusl-arm64@1.3.3':
+    optional: true
+
+  '@img/sharp-libvips-linuxmusl-x64@1.3.3':
+    optional: true
+
+  '@img/sharp-linux-arm64@0.35.4':
+    optionalDependencies:
+      '@img/sharp-libvips-linux-arm64': 1.3.3
+    optional: true
+
+  '@img/sharp-linux-arm@0.35.4':
+    optionalDependencies:
+      '@img/sharp-libvips-linux-arm': 1.3.3
+    optional: true
+
+  '@img/sharp-linux-ppc64@0.35.4':
+    optionalDependencies:
+      '@img/sharp-libvips-linux-ppc64': 1.3.3
+    optional: true
+
+  '@img/sharp-linux-riscv64@0.35.4':
+    optionalDependencies:
+      '@img/sharp-libvips-linux-riscv64': 1.3.3
+    optional: true
+
+  '@img/sharp-linux-s390x@0.35.4':
+    optionalDependencies:
+      '@img/sharp-libvips-linux-s390x': 1.3.3
+    optional: true
+
+  '@img/sharp-linux-x64@0.35.4':
+    optionalDependencies:
+      '@img/sharp-libvips-linux-x64': 1.3.3
+    optional: true
+
+  '@img/sharp-linuxmusl-arm64@0.35.4':
+    optionalDependencies:
+      '@img/sharp-libvips-linuxmusl-arm64': 1.3.3
+    optional: true
+
+  '@img/sharp-linuxmusl-x64@0.35.4':
+    optionalDependencies:
+      '@img/sharp-libvips-linuxmusl-x64': 1.3.3
+    optional: true
+
+  '@img/sharp-wasm32@0.35.4':
+    dependencies:
+      '@emnapi/runtime': 1.11.3
+    optional: true
+
+  '@img/sharp-webcontainers-wasm32@0.35.4':
+    dependencies:
+      '@img/sharp-wasm32': 0.35.4
+    optional: true
+
+  '@img/sharp-win32-arm64@0.35.4':
+    optional: true
+
+  '@img/sharp-win32-ia32@0.35.4':
+    optional: true
+
+  '@img/sharp-win32-x64@0.35.4':
+    optional: true
 
   '@isaacs/cliui@8.0.2':
     dependencies:
@@ -9953,6 +10509,8 @@ snapshots:
 
   semver@6.3.1: {}
 
+  semver@7.8.5: {}
+
   send@1.2.1(supports-color@9.4.0):
     dependencies:
       debug: 4.4.3(supports-color@9.4.0)
@@ -9981,6 +10539,39 @@ snapshots:
   setimmediate@1.0.5: {}
 
   setprototypeof@1.2.0: {}
+
+  sharp@0.35.4(@types/node@24.13.3):
+    dependencies:
+      '@img/colour': 1.1.0
+      detect-libc: 2.1.2
+      semver: 7.8.5
+    optionalDependencies:
+      '@img/sharp-darwin-arm64': 0.35.4
+      '@img/sharp-darwin-x64': 0.35.4
+      '@img/sharp-freebsd-wasm32': 0.35.4
+      '@img/sharp-libvips-darwin-arm64': 1.3.3
+      '@img/sharp-libvips-darwin-x64': 1.3.3
+      '@img/sharp-libvips-linux-arm': 1.3.3
+      '@img/sharp-libvips-linux-arm64': 1.3.3
+      '@img/sharp-libvips-linux-ppc64': 1.3.3
+      '@img/sharp-libvips-linux-riscv64': 1.3.3
+      '@img/sharp-libvips-linux-s390x': 1.3.3
+      '@img/sharp-libvips-linux-x64': 1.3.3
+      '@img/sharp-libvips-linuxmusl-arm64': 1.3.3
+      '@img/sharp-libvips-linuxmusl-x64': 1.3.3
+      '@img/sharp-linux-arm': 0.35.4
+      '@img/sharp-linux-arm64': 0.35.4
+      '@img/sharp-linux-ppc64': 0.35.4
+      '@img/sharp-linux-riscv64': 0.35.4
+      '@img/sharp-linux-s390x': 0.35.4
+      '@img/sharp-linux-x64': 0.35.4
+      '@img/sharp-linuxmusl-arm64': 0.35.4
+      '@img/sharp-linuxmusl-x64': 0.35.4
+      '@img/sharp-webcontainers-wasm32': 0.35.4
+      '@img/sharp-win32-arm64': 0.35.4
+      '@img/sharp-win32-ia32': 0.35.4
+      '@img/sharp-win32-x64': 0.35.4
+      '@types/node': 24.13.3
 
   shebang-command@2.0.0:
     dependencies:
@@ -10114,6 +10705,9 @@ snapshots:
       - '@volar/typescript'
       - oxc-resolver
       - vue-tsc
+
+  tslib@2.8.1:
+    optional: true
 
   tsx@4.23.12:
     dependencies:

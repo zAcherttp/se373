@@ -65,9 +65,22 @@ export async function boot(options: BootOptions): Promise<BootedTree> {
   await ctx.plugin(Loader)
 
   let stopping: Promise<void> | undefined
+  // Declared before `stop` closes over it, and mutable rather than `const`,
+  // because a row can ask to exit while the tree is still mounting -- an
+  // unknown flag or `--help` does exactly that, from inside `ctx.loader.create`
+  // below. Reading a `const` from its own initializer's stack is a
+  // ReferenceError, which turned a clean usage exit into a wall of loader
+  // errors ending in "Cannot access 'entryId' before initialization".
+  let entryId: string | undefined
 
-  /** Unload the tree once, and let every caller await the same unload. */
+  /**
+   * Unload the tree once, and let every caller await the same unload.
+   *
+   * Before the entry exists there is nothing mounted to unload, so this
+   * resolves immediately and the caller's exit still runs.
+   */
   const stop = (): Promise<void> => {
+    if (entryId === undefined) return Promise.resolve()
     stopping ??= ctx.loader.remove(entryId).then(() => { ctx.logger.info('unloaded') })
     return stopping
   }
@@ -89,7 +102,7 @@ export async function boot(options: BootOptions): Promise<BootedTree> {
 
   // `create` returns the entry id, not a fiber; unloading goes back through the
   // loader by that id.
-  const entryId = await ctx.loader.create({
+  entryId = await ctx.loader.create({
     name: '@se373/cordis-plugin-include',
     config: { path: options.configFile },
   })

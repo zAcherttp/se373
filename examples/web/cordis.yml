@@ -1,0 +1,473 @@
+# Phase-4 tree: the browser surface.
+#
+# Two layers, both transcribed from dsh's own bundles rather than designed
+# here -- `bundle/base` for the host spine and `bundle/web-app` for the web
+# patch over it. We do not vendor those bundles as bundles (they name ~36
+# packages outside our closure), so this file is the transcript, the same way
+# `examples/chat/cordis.yml` transcribes base + headless.
+#
+# Requires a build. The host runs from source under tsx; the browser cannot:
+#   pnpm build
+#   pnpm se373 examples/web/cordis.yml
+#
+# One deliberate divergence from upstream's web patch, marked below: dsh
+# disables the model-facing tool rows here because each Web session mounts an
+# agent PRESET that owns its own tools. We ship no preset roster yet (phase 5),
+# so those rows stay on the host plane exactly as in the chat tree -- otherwise
+# the agent would open with no tools at all.
+
+- id: timer
+  name: '@se373/cordis-plugin-timer'
+
+- id: invariants
+  name: '@se373/invariants'
+
+# --- our observability plane ---------------------------------------------------
+
+- id: runtime-graph
+  name: '@se373/runtime-graph'
+
+- id: logger-jsonl
+  name: '@se373/logger-jsonl'
+  config:
+    dir: !!js dshHomePath('logs')
+    maxRuns: 5
+    compression: zstd
+    levels:
+      default: 2
+
+# --- host spine (bundle/base) --------------------------------------------------
+
+- id: llm
+  name: '@se373/llm'
+
+- id: session
+  name: '@se373/session'
+
+# Typert: the reflected descriptors and the transport-agnostic dispatch face
+# every client shape shares. `typert-loader` is what mounts each package's
+# generated `./typert` contribution.
+- id: typert
+  name: '@se373/typert-registry'
+
+- id: typert-loader
+  name: '@se373/typert-loader'
+
+- id: typert-gateway
+  name: '@se373/api-gateway'
+
+- id: session-projection
+  name: '@se373/session-projection'
+
+# The session-query implementation. Not optional here despite upstream's base
+# calling full-text search opt-in: `host-apiproxy` INJECTS `sessionQuery`, so
+# without a provider the whole gateway sits pending and every /api route 404s.
+# Upstream's web patch restates these values; `openAt: never` defers the
+# node:sqlite import to the first search.
+- id: session-query-sqlite
+  name: '@se373/session-query-sqlite'
+  config:
+    path: ':memory:'
+    openAt: never
+
+- id: session-title
+  name: '@se373/session-title'
+  config:
+    fallbackMaxWords: 5
+    fallbackMaxBytes: 40
+    maxTitleBytes: 80
+
+- id: user-questions
+  name: '@se373/user-questions'
+
+# Only the implementation is a row. `@se373/attachment` is the abstract seam and
+# registers the same service name, so mounting both throws on the second. This
+# is not optional either: `api-gateway` INJECTS `attachments`, and
+# `client-connection` reads `attachments.imageLimits` to size its request body.
+# `attachment-local` brings `sharp`, which is the price of image attachments.
+- id: attachment-local
+  name: '@se373/attachment-local'
+
+- id: commands
+  name: '@se373/commands'
+
+- id: goal
+  name: '@se373/goal'
+
+- id: skill
+  name: '@se373/skill'
+
+- id: subagent
+  name: '@se373/subagent'
+
+- id: token-meter
+  name: '@se373/token-meter'
+
+- id: agent
+  name: '@se373/agent'
+
+- id: agent-default-model
+  name: '@se373/agent-default-model'
+  config:
+    provider: deepseek-official
+    model: deepseek-v4-flash
+
+- id: settings
+  name: '@se373/settings-file'
+
+- id: credentials
+  name: '@se373/credentials-local'
+
+- id: llm-deepseek
+  name: '@se373/llm-deepseek'
+  config:
+    baseURL: !!js process.env.SE373_LLM_BASE_URL
+
+- id: llm-retry
+  name: '@se373/llm-retry'
+
+- id: session-persistence-jsonl
+  name: '@se373/session-persistence-jsonl'
+  config:
+    root: !!js dshHomePath('sessions')
+
+- id: system-prompt
+  name: '@se373/system-prompt'
+  config:
+    persona: >-
+      You are a coding agent powered by the {{model}} model. Your working directory is {{cwd}}.
+
+- id: tools
+  name: '@se373/tools'
+
+- id: agent-loop
+  name: '@se373/agent-loop'
+  config:
+    # Empty on purpose: the Web surface creates sessions on client request
+    # rather than mounting an agent at startup.
+    agents: []
+
+# --- the sandbox and tool plane ------------------------------------------------
+#
+# Upstream's web patch disables every row from here to the end of this block,
+# because a Web session mounts an agent preset that composes its own. We have no
+# preset roster yet, so they stay where the chat tree has them.
+
+- id: subprocess
+  name: '@se373/subprocess-local'
+
+- id: sandbox
+  name: '@se373/sandbox-local'
+
+- id: sandbox-policy
+  name: '@se373/sandbox-policy'
+  config:
+    mode: !!js process.env.SE373_PERMISSION_MODE ?? 'workspace-write'
+    workspaceRoot: !!js process.cwd()
+
+- id: bash-sandbox
+  name: '@se373/bash-sandbox'
+  disabled: !!js process.platform === 'win32'
+  config:
+    timeoutMs: 60000
+
+- id: fs-sandbox
+  name: '@se373/fs-sandbox'
+
+- id: fs-observation-policy
+  name: '@se373/fs-observation-policy'
+
+- id: permission
+  name: '@se373/permission-presets'
+  config:
+    presets:
+      read-only:
+        sandbox: read-only
+        approval: ask
+      workspace-write:
+        sandbox: workspace-write
+        approval: ask
+      danger-full-access:
+        sandbox: danger-full-access
+        approval: never
+
+- id: approval
+  name: '@se373/user-approval'
+  config:
+    # The browser is what makes `ask` real: unlike the one-shot tree, there is
+    # somebody to answer. This is the row phase 4 exists to change.
+    policy: !!js "(process.env.SE373_PERMISSION_MODE ?? 'workspace-write') === 'danger-full-access' ? 'never' : 'ask'"
+
+- id: shell-env
+  name: '@se373/shell-env'
+
+- id: spill-local
+  name: '@se373/spill-local'
+
+- id: spill-policy
+  name: '@se373/spill-policy'
+  config:
+    maxInlineBytes: 50000
+
+- id: timeout-policy
+  name: '@se373/tool-call-timeout-policy'
+
+- id: tool-bash
+  name: '@se373/tool-bash'
+  disabled: !!js process.platform === 'win32'
+
+- id: tool-fs
+  name: '@se373/tool-fs'
+
+- id: tool-fs-search
+  name: '@se373/tool-fs-search'
+  config:
+    sampleOverCapGlobResults: false
+
+- id: tool-str-replace-editor
+  name: '@se373/tool-str-replace-editor'
+  config:
+    maxOutputChars: 16000
+
+- id: tool-todo
+  name: '@se373/tool-todo'
+  config:
+    allowParallelInProgress: true
+
+# `plan-mode` is deliberately absent. Its whole configuration is the prompt
+# section it injects, and that section is upstream's product writing, not a
+# default we can supply. Mounting it with our own text would put words in the
+# agent's mouth and call them dsh's; `ui-plan` renders nothing without it.
+
+- id: code-runtime
+  name: '@se373/code-runtime-worker-thread'
+
+# Our own tool: the agent can inspect the runtime it is running inside, from
+# the chat box rather than from a script.
+- id: tool-graph-inspect
+  name: '@se373/tool-graph-inspect'
+
+# Disabled row, kept visible on purpose (invariant I3): one edit connects a
+# third-party MCP server and its tools reach the agent.
+- id: mcp-client
+  name: '@se373/mcp-client'
+  disabled: true
+  config:
+    transport: stdio
+    serverName: everything
+    command: npx
+    args: ['-y', '@modelcontextprotocol/server-everything']
+    failOnStartupError: false
+
+# --- web host rows (bundle/web-app) --------------------------------------------
+
+- id: storage
+  name: '@se373/storage'
+
+- id: storage-json
+  name: '@se373/storage-json'
+  config:
+    root: !!js dshHomePath('storages')
+
+- id: storage-domain
+  name: '@se373/storage-domain'
+  config:
+    backend: json
+
+- id: workspace
+  name: '@se373/workspace'
+
+- id: message-feedback
+  name: '@se373/message-feedback'
+  config:
+    maxNoteBytes: 8192
+
+- id: session-log-download
+  name: '@se373/session-log-export'
+
+- id: session-projection-cache
+  name: '@se373/session-projection-cache'
+  config:
+    writeEveryEvents: 200
+    writeIntervalMs: 5000
+
+- id: session-reference
+  name: '@se373/session-reference'
+
+- id: file-reference-local
+  name: '@se373/file-reference-local'
+
+- id: session-stats
+  name: '@se373/session-stats'
+
+- id: directory-picker
+  name: '@se373/host-directory-picker-auto'
+
+# Read-only projection of the live Loader entries for trusted client RPCs.
+# Upstream's; ours is `ctx.runtimeGraph` above, and the two coexist.
+- id: plugin-inventory
+  name: '@se373/host-plugin-inventory'
+
+- id: api-gateway
+  name: '@se373/host-apiproxy'
+
+- id: cordis-host-runner
+  name: '@se373/cordis-host-runner'
+
+# --- the transport -------------------------------------------------------------
+
+# Parses the web flags (--host, --port, --trusted-host, --no-open) and provides
+# them as an ordinary service, so the rows below resolve their expressions only
+# after it exists.
+- id: web-startup
+  name: '@se373/web-app/startup'
+
+- id: webserver
+  name: '@se373/host-webserver'
+  inject: [webStartup]
+  config:
+    host: !!js ctx.webStartup.host ?? '127.0.0.1'
+    port: !!js ctx.webStartup.port ?? 3080
+
+# Resolves the built frontend dist, mounts the static fallback, registers the
+# web-surface prompt section and the shell URL variable, and prints the URL.
+- id: web-runtime
+  name: '@se373/web-app'
+  inject: [webStartup]
+  config:
+    openBrowser: !!js ctx.webStartup.openBrowser
+    printUrl: true
+    surfaceContext: true
+    trustedHosts: !!js ctx.webStartup.trustedHosts
+
+- id: client-hmr
+  name: '@se373/client-hmr'
+
+# --- browser roster (dsh.client rows) ------------------------------------------
+#
+# The node half of each row is a host plugin; its browser half is the
+# `lib/client.js` bundle `client-modules` serves. Every row here needs
+# `pnpm build` to have run.
+
+- id: modules
+  name: '@se373/client-modules'
+
+- id: connection
+  name: '@se373/client-connection'
+  inject: [webRuntime]
+  config:
+    trustedHosts: !!js ctx.webRuntime.trustedHosts
+
+- id: api-remotes
+  name: '@se373/api-remotes'
+
+- id: client-runtime
+  name: '@se373/client-runtime'
+
+- id: cordis-client-runner
+  name: '@se373/cordis-client-runner'
+
+- id: ui-theme
+  name: '@se373/client-ui-theme'
+
+- id: locale
+  name: '@se373/client-locale'
+
+- id: ui-layout
+  name: '@se373/client-ui-layout'
+
+- id: ui-renderer
+  name: '@se373/client-ui-renderer'
+
+- id: ui-sidebar
+  name: '@se373/client-ui-sidebar'
+
+- id: ui-settings
+  name: '@se373/client-ui-settings'
+
+- id: ui-settings-general
+  name: '@se373/client-ui-settings-general'
+
+- id: ui-settings-models
+  name: '@se373/client-ui-settings-models'
+
+- id: ui-settings-plugin-inventory
+  name: '@se373/client-ui-settings-plugin-inventory'
+
+- id: ui-settings-plugins
+  name: '@se373/client-ui-settings-plugins'
+
+- id: ui-conversation
+  name: '@se373/client-ui-conversation'
+
+- id: ui-attachment
+  name: '@se373/client-ui-attachment'
+
+- id: ui-tool
+  name: '@se373/client-ui-tool'
+
+- id: ui-cordis
+  name: '@se373/client-ui-cordis'
+
+- id: ui-workflow-run
+  name: '@se373/client-ui-workflow-run'
+
+- id: ui-deliverables
+  name: '@se373/client-ui-deliverables'
+
+- id: ui-workspace
+  name: '@se373/client-ui-workspace'
+
+- id: ui-input-trigger
+  name: '@se373/client-ui-input-trigger'
+
+- id: ui-commands
+  name: '@se373/client-ui-commands'
+
+- id: ui-skill
+  name: '@se373/client-ui-skill'
+
+- id: ui-subagent
+  name: '@se373/client-ui-subagent'
+
+- id: ui-reference
+  name: '@se373/client-ui-reference'
+
+- id: ui-jobs
+  name: '@se373/client-ui-jobs'
+
+- id: ui-goal
+  name: '@se373/client-ui-goal'
+
+- id: ui-message-feedback
+  name: '@se373/client-ui-message-feedback'
+
+- id: ui-model-selection
+  name: '@se373/client-ui-model-selection'
+
+- id: ui-permission
+  name: '@se373/client-ui-permission-presets'
+
+- id: ui-plan
+  name: '@se373/client-ui-plan'
+
+- id: ui-user-questions
+  name: '@se373/client-ui-user-questions'
+
+- id: ui-trajectory
+  name: '@se373/client-ui-trajectory'
+
+# The official brand occupants are deliberately absent: `ui-brand-official`
+# gates on a build profile we never set, so mounting it would add a row that
+# renders nothing -- and what it would render is not ours to display.
+
+# --- runtime invariant companions ----------------------------------------------
+
+- id: runtime-graph-invariant
+  name: '@se373/runtime-graph/invariant'
+
+- id: logger-jsonl-invariant
+  name: '@se373/logger-jsonl/invariant'
+
+- id: tool-graph-inspect-invariant
+  name: '@se373/tool-graph-inspect/invariant'

@@ -43,6 +43,15 @@
       "@se373/attachment/src/*": [
         "./vendor/dsh/attachment/attachment/src/*"
       ],
+      "@se373/attachment-local": [
+        "./vendor/dsh/attachment/attachment-local/src/index.ts"
+      ],
+      "@se373/attachment-local/invariant": [
+        "./vendor/dsh/attachment/attachment-local/src/invariant.ts"
+      ],
+      "@se373/attachment-local/src/*": [
+        "./vendor/dsh/attachment/attachment-local/src/*"
+      ],
       "@se373/app-boot": [
         "./vendor/dsh/boot/app-boot/src/index.ts"
       ],
@@ -1158,6 +1167,15 @@
       ],
       "@se373/session-query/src/*": [
         "./vendor/dsh/session-query/session-query/src/*"
+      ],
+      "@se373/session-query-sqlite": [
+        "./vendor/dsh/session-query/session-query-sqlite/src/index.ts"
+      ],
+      "@se373/session-query-sqlite/invariant": [
+        "./vendor/dsh/session-query/session-query-sqlite/src/invariant.ts"
+      ],
+      "@se373/session-query-sqlite/src/*": [
+        "./vendor/dsh/session-query/session-query-sqlite/src/*"
       ],
       "@se373/session-persistence": [
         "./vendor/dsh/session/session-persistence/src/index.ts"

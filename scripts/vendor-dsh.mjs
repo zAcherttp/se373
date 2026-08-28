@@ -226,6 +226,31 @@ const LOCAL_MODS = [
     to: 'const productTitle = process.env.SE373_CLIENT_TITLE ?? DEFAULT_CLIENT_TITLE',
     why: 'only SE373_CLIENT_* reaches the browser; a DSH_ read is silently undefined',
   },
+  {
+    // 14-16 are the product name. It is upstream's in three fallbacks that we
+    // reach precisely because we mount no official brand row -- so without
+    // these the app introduces itself as dsh in its own sidebar, tab title and
+    // startup line.
+    package: '@deepseek-ai/dsh-client-ui-sidebar',
+    file: 'src/client/SidebarRoot.tsx',
+    from: '<span className={css.fallbackBrandName}>DSH Local Build</span>',
+    to: '<span className={css.fallbackBrandName}>SE373 Agentic Builder</span>',
+    why: 'the sidebar names the product, and this product is not dsh',
+  },
+  {
+    package: '@deepseek-ai/dsh-client-ui-renderer',
+    file: 'src/client/DocumentTitle.tsx',
+    from: "const DEFAULT_CLIENT_TITLE = 'DSH Local Build'",
+    to: "const DEFAULT_CLIENT_TITLE = 'SE373 Agentic Builder'",
+    why: 'the browser tab names the product, and this product is not dsh',
+  },
+  {
+    package: '@deepseek-ai/dsh-web-app',
+    file: 'src/index.ts',
+    from: "console.log(`dsh web: ${webUrl}",
+    to: "console.log(`se373 web: ${webUrl}",
+    why: 'the startup line names the product, and this product is not dsh',
+  },
 ]
 
 /**
@@ -244,6 +269,33 @@ const EXTRA_DEPS = new Map([
   // `import type { ScopeKey } from '.../scope'` in src/api-proxy.ts.
   ['@deepseek-ai/dsh-host-apiproxy', { '@deepseek-ai/dsh-scope': 'workspace:^' }],
 ])
+
+/**
+ * Vendored files replaced wholesale with our own, from `scripts/replacements/`.
+ *
+ * Distinct from `LOCAL_MODS`, which edits upstream's text and hard-fails when
+ * the anchor moves. This is for a file whose *content* is not ours to ship at
+ * all, where a from/to patch would be a pile of coordinates rather than an
+ * argument. Today that is one file: upstream's brand mark is an exact extract
+ * of DeepSeek's logo, and a page carrying their mark would misrepresent whose
+ * work it is.
+ *
+ * A replacement keeps the module's exported surface, because every call site is
+ * upstream's and none of them should have to know.
+ * @type {{package: string, file: string, why: string}[]}
+ */
+const REPLACED_FILES = [
+  {
+    package: '@deepseek-ai/dsh-client-ui-primitives',
+    file: 'src/FishLogo.tsx',
+    why: 'their brand mark is not ours to display',
+  },
+  {
+    package: '@deepseek-ai/dsh-client-ui-settings-models',
+    file: 'src/onboarding-copy.ts',
+    why: 'the welcome notice is DeepSeek addressing their developers, not us addressing ours',
+  },
+]
 
 /**
  * Files copied verbatim beside `src/`, when upstream has them.
@@ -678,6 +730,16 @@ for (const name of toVendor) {
     out.dependencies = { ...out.dependencies, [rescope(dep)]: range }
   }
   writeFileSync(join(to, 'package.json'), JSON.stringify(out, null, 2) + '\n')
+
+  for (const replacement of REPLACED_FILES.filter(r => r.package === name)) {
+    const source = join(REPO, 'scripts', 'replacements', dir, replacement.file)
+    if (!existsSync(source)) throw new Error(`replacement missing: ${source} — ${replacement.why}`)
+    if (!existsSync(join(to, replacement.file))) {
+      throw new Error(`replacement target no longer exists: ${name} ${replacement.file} — ${replacement.why}`)
+    }
+    cpSync(source, join(to, replacement.file))
+    modded += 1
+  }
 
   for (const mod of LOCAL_MODS.filter(m => m.package === name)) {
     const target = join(to, mod.file)
