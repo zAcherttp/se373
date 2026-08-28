@@ -227,7 +227,8 @@ export interface RuntimeGraphNode {
   /**
    * Config as the fiber received it — validated and schema-defaulted when the
    * row is mounted, raw from the config file when it is not. Sanitized to JSON:
-   * a `!!js` expression that resolved to a function reads as `"[Function]"`.
+   * a `!!js` expression that resolved to a function reads as `"[Function]"`,
+   * one whose property cannot even be read as `"[Unreadable]"`.
    */
   readonly config: GraphJsonValue
 }

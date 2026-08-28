@@ -20,6 +20,7 @@ export default defineConfig({
       'packages/*/*/tests/**/*.spec.ts',
       'apps/*/tests/**/*.spec.ts',
       'vendor/dsh/*/*/tests/**/*.spec.ts',
+      'scripts/tests/**/*.spec.ts',
     ],
     environment: 'node',
   },

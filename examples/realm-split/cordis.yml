@@ -21,8 +21,17 @@
 - id: runtime-graph
   name: '@se373/runtime-graph'
 
+# The graph's Remote face. Here because this tree is the one that exercises the
+# projection's awkward shapes, so it is also the honest place to check that the
+# wire cast still carries all of them.
+- id: board-gateway
+  name: '@se373/board-gateway'
+
 - id: runtime-graph-invariant
   name: '@se373/runtime-graph/invariant'
+
+- id: board-gateway-invariant
+  name: '@se373/board-gateway/invariant'
 
 # --- realm alpha -------------------------------------------------------------
 

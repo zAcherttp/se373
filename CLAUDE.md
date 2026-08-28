@@ -69,7 +69,8 @@ architecture doc §13 and §14 carry the consequences.
 - **Sync policy: neither freeze nor track.** Update the clone when something looks worth having, read the breaking changes, re-run the vendoring script for the affected seeds, read the diff.
 - **Divergence policy:** small mechanical edits go in `LOCAL_MODS`; anything additive is our own package plugging into the vendored seam; never fork a vendored package into `packages/`.
 
-- **Testing is not a priority until the web plane.** The user's call. Two specs exist (the invariants registry, the phase-2 spine) and they stay; do not add more before phase 4.
+- **Tests earn their place by catching a silent failure.** ~~Not a priority until the web plane~~ — lifted 2026-08-28, after the web plane and the preset plane. The rule that replaced it: a test is worth writing when the thing it checks could be wrong without anything failing loudly. That excludes "this row mounted" and "this tool is registered" — the invariant companions answer those against the shipping tree at every boot, which is strictly better than a fixture. It excludes vendored behaviour, which is checked upstream. It excludes rendered text.
+  **Every new test must be shown to fail against the bug it describes.** Two of the first batch passed on broken code until that check was applied; one of them was rewritten from scratch as a result.
 - **We do not port.** The one port we wrote (`invariants`) was retired at the first opportunity for the vendored original — it was faithful and still dropped a load-bearing thenable. `docs/PORTING.md` §4.
 - **The upstream tree is 238 packages, not ~50.** The old figure counted directories under `packages/`. 150 are off our path.
 
@@ -129,10 +130,9 @@ formality.
    model and `sqlite-vec` at 384 dims. It is the first phase where the thing
    being built has no upstream analogue at all, so the vendor-and-document rule
    stops carrying the work.
-2. **Re-read the testing decision.** "Not a priority until the web plane" was
-   the standing call; the web plane arrived two phases ago. Two specs is thin
-   for 150 vendored packages, a four-stage build, a browser and a preset plane —
-   and phase 6 is where we start writing code with no upstream to check it.
+2. ~~Re-read the testing decision~~ — **done 2026-08-28.** Nine specs, written
+   against silent failure modes rather than for coverage, and each one shown to
+   fail against the bug it describes.
 3. ~~Name the project~~ — settled: `@se373/*`.
 4. ~~Write `docs/PORTING.md`~~ — done.
 5. ~~Get the milestone dates~~ — **dropped 2026-08-27.** The user's call: phases are what we can go back to and reproduce, and otherwise we go at our own pace. Still worth confirming in week 1 whether solo is permitted.
@@ -156,7 +156,7 @@ formality.
 - ~~**Phase 4 is the risk spike**~~, ~~**the vendor build already fails**~~, ~~**nothing has been driven by a human yet**~~ — **all three retired 2026-08-28.** Phase 4 shipped; the vendor build exits `0` on upstream's own tsconfigs; a real turn has been driven through the browser by hand. What the phase actually taught is worth keeping: the hard parts were configuration the upstream tree had already solved, and the fix each time was to vendor upstream's answer rather than derive our own.
 - **The build is now load-bearing and has no test.** Four stages plus Vite, and a break in any of them is a browser that does not boot. Nothing checks it but running it.
 - ~~**The web tree diverges from upstream's patch in one place**~~ — **closed 2026-08-28.** The model-facing rows are behind presets now, exactly as upstream's patch has them.
-- **Testing has outlived its deferral twice.** Two specs cover 150 vendored packages, a four-stage build, a browser and a preset plane. Phase 6 is where we begin writing code with no upstream implementation to check it against, which is the first time the absence will actually cost something.
+- ~~**Testing has outlived its deferral twice.**~~ **Addressed 2026-08-28.** Nine specs now, chosen by silent-failure risk rather than coverage. What is still untested is the four-stage build itself: a break in it is a browser that does not boot, and nothing checks it but running it.
 - Model-authored UI is a demo cliff — keep a deterministic fallback for anything shown live.
 - **Solo changes the scope calculus, not the schedule.** Six *recipes* ship and the block vocabulary must span all six, but only two archetypes get built out — the generality is the claim, the demos are evidence for it. Cut breadth before depth.
 - **D9 is what this design opened, and it is now smaller than it was.** The runtime graph still has no push transport upstream (`pluginInventory.list()` is poll-only), but node transitions are recorded as they happen rather than sampled, so a polling board is a latency compromise and not a lossy one. ~~D10~~ closed 2026-08-28: the third-party MCP path works, no fallback server needed.

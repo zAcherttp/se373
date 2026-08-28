@@ -14,11 +14,11 @@ import type { Fiber } from '@se373/cordis'
 import type {} from '@se373/cordis-plugin-loader'
 import type { Entry } from '@se373/cordis-plugin-loader'
 import { owningEntry } from './attribute.ts'
+import { sanitize } from './sanitize.ts'
 import { phaseOf } from './lifecycle.ts'
 import type { TransitionRecorder } from './transitions.ts'
 import type {
   FunctionalKind,
-  GraphJsonValue,
   NodeRole,
   RuntimeGraphEdge,
   RuntimeGraphNode,
@@ -26,66 +26,14 @@ import type {
 } from './types.ts'
 import { NODE_ROLES } from './types.ts'
 
-/** The effect label `ctx.tools.register()` attaches to its disposer. */
-const TOOL_REGISTER_LABEL = 'tools.register()'
-
-/** Guard against a config object that cycles or nests without bound. */
-const MAX_CONFIG_DEPTH = 12
-
 /** Cordis's service-implementation record, as much of it as the projection reads. */
 interface Impl {
   name: string
   fiber: Fiber
 }
 
-/**
- * Reduce an arbitrary config value to something that survives JSON.
- *
- * A `!!js` row can put a function, a service handle, or a cyclic object into
- * config; the projection has to be sendable, so those become labels rather than
- * throwing or silently dropping the field.
- * @param value - the value to sanitize.
- * @param seen - objects already on the current path, for cycle detection.
- * @param depth - remaining nesting budget.
- * @returns a JSON-safe projection of `value`.
- */
-function sanitize(value: unknown, seen: Set<object>, depth = MAX_CONFIG_DEPTH): GraphJsonValue {
-  if (value === null || value === undefined) return null
-  switch (typeof value) {
-    case 'boolean':
-    case 'string':
-      return value
-    case 'number':
-      return Number.isFinite(value) ? value : String(value)
-    case 'bigint':
-      return String(value)
-    case 'function':
-      return '[Function]'
-    case 'symbol':
-      return String(value)
-    default:
-      break
-  }
-  const object = value as object
-  if (seen.has(object)) return '[Circular]'
-  if (depth <= 0) return '[Truncated]'
-  if (object instanceof Date) return object.toISOString()
-  if (object instanceof RegExp || object instanceof Error) return String(object)
-  seen.add(object)
-  try {
-    if (Array.isArray(object)) {
-      return object.map(item => sanitize(item, seen, depth - 1))
-    }
-    const out: Record<string, GraphJsonValue> = {}
-    for (const [key, item] of Object.entries(object)) {
-      if (item === undefined) continue
-      out[key] = sanitize(item, seen, depth - 1)
-    }
-    return out
-  } finally {
-    seen.delete(object)
-  }
-}
+/** The effect label `ctx.tools.register()` attaches to its disposer. */
+const TOOL_REGISTER_LABEL = 'tools.register()'
 
 /**
  * Every service name this context resolves differently from the root context.

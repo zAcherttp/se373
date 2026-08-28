@@ -62,9 +62,11 @@ function collect(root: string): Session[] {
 /**
  * Drop ids the disk no longer has from the workspace store.
  *
- * Written back only when something changed, so a dry run and a no-op run both
- * leave the file's mtime alone.
+ * Reached only after `--yes`: the dry run exits before this. Written back only
+ * when something actually changed, so a run that finds nothing to repair leaves
+ * the file's mtime alone.
  * @param surviving - session ids still present on disk.
+ * @returns how many ids were dropped across both lists.
  */
 function repairRegistry(surviving: ReadonlySet<string>): number {
   const path = dshHomePath('storages', 'workspace.json')
@@ -83,7 +85,7 @@ function repairRegistry(surviving: ReadonlySet<string>): number {
   for (const workspace of Object.values(store.tables?.workspaces ?? {})) {
     workspace.sessionIds = keep(workspace.sessionIds)
   }
-  if (dropped > 0 && confirmed) writeFileSync(path, `${JSON.stringify(store, null, 2)}\n`)
+  if (dropped > 0) writeFileSync(path, `${JSON.stringify(store, null, 2)}\n`)
   return dropped
 }
 
