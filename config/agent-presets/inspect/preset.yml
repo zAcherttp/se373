@@ -1,0 +1,5 @@
+name: Inspect
+description: >-
+  Read-only. Reads files, searches, and inspects the runtime it is running in —
+  but cannot edit, run a shell, or delegate.
+order: 2

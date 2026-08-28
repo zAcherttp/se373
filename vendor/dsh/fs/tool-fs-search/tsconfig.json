@@ -9,31 +9,40 @@
   ],
   "references": [
     {
-      "path": "../../../../vendor/dsh/core/session"
+      "path": "../../../cosmokit"
     },
     {
-      "path": "../../../../vendor/dsh/core/system-prompt"
+      "path": "../../../cordis"
     },
     {
-      "path": "../../../../vendor/dsh/core/tools"
+      "path": "../../../schemastery"
     },
     {
-      "path": "../../../../vendor/dsh/llm/llm"
+      "path": "../../util/output-retention"
     },
     {
-      "path": "../../../../vendor/dsh/runtime-diagnostics/invariants"
+      "path": "../../llm/llm"
     },
     {
-      "path": "../../../../vendor/dsh/spill/spill"
+      "path": "../../core/session"
     },
     {
-      "path": "../../../../vendor/dsh/subprocess/subprocess"
+      "path": "../../core/tools"
     },
     {
-      "path": "../../../../vendor/dsh/util/output-retention"
+      "path": "../../core/system-prompt"
     },
     {
-      "path": "../../../../vendor/dsh/util/timeout"
+      "path": "../../shell/shell"
+    },
+    {
+      "path": "../../spill/spill"
+    },
+    {
+      "path": "../../util/timeout"
+    },
+    {
+      "path": "../../runtime-diagnostics/invariants"
     }
   ]
 }

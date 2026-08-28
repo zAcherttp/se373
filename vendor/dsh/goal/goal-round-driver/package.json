@@ -1,0 +1,53 @@
+{
+  "name": "@se373/goal-round-driver",
+  "description": "Race-fenced same-session goal-round driver",
+  "version": "0.1.1-rc.2",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./src/invariant.ts"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zAcherttp/se373.git",
+    "directory": "vendor/dsh/goal/goal-round-driver"
+  },
+  "se373": {
+    "upstream": {
+      "repo": "deepseek-ai/deepseek-harness",
+      "rev": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e",
+      "path": "packages/goal/goal-round-driver",
+      "name": "@deepseek-ai/dsh-goal-round-driver"
+    }
+  },
+  "peerDependencies": {
+    "@se373/agent": "workspace:^",
+    "@se373/goal": "workspace:^",
+    "@se373/invariants": "workspace:^",
+    "@se373/llm": "workspace:^",
+    "@se373/session": "workspace:^",
+    "@se373/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@se373/agent": "workspace:^",
+    "@se373/goal": "workspace:^",
+    "@se373/invariants": "workspace:^",
+    "@se373/llm": "workspace:^",
+    "@se373/session": "workspace:^",
+    "@se373/system-prompt": "workspace:^",
+    "@se373/tools": "workspace:^",
+    "@se373/cordis": "workspace:^"
+  }
+}

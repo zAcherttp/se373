@@ -1,0 +1,99 @@
+# The `inspect` agent preset: read the code and the runtime, change neither.
+#
+# Ours, not a transcription. It exists to make one thing concrete: a preset is a
+# COMPOSITION, and the difference between two agents is which rows they list.
+#
+# It also makes the LIMIT of that concrete, which is the more useful half. Two
+# different mechanisms are at work here and they are not interchangeable:
+#
+#   ABSENT   the shell, delegation, skills, goals and todos are simply not
+#            composed. They are not in the catalog the model is shown, so there
+#            is nothing to call and nothing to refuse. That is stronger than any
+#            permission mode: `workspace-write` still puts `bash` in front of
+#            the model and asks a human at the moment it fires.
+#
+#   DENIED   file writing. `tool-fs` registers `read`, `write` and `edit` as one
+#            suite with no read-only switch, so the tools ARE in the catalog and
+#            the guarantee has to come from underneath: this preset shadows `fs`
+#            and `sandboxPolicy` in its own realm, backed by a read-only policy,
+#            so a write reaches the boundary and is refused there.
+#
+# The persona below says so plainly rather than claiming the tools are missing.
+# An agent told it cannot do something it can see in its catalog will try, and
+# a preset that lies to its own model is worse than one that explains itself.
+
+- id: persona
+  name: '@se373/persona'
+  config:
+    text: >-
+      You are a read-only analyst powered by the {{model}} model. Your working
+      directory is {{cwd}}. You can read files, search the workspace, and
+      inspect the plugin runtime you are running inside.
+
+      You have no shell and no way to delegate — those tools are not in your
+      catalog at all. The `write` and `edit` tools ARE in your catalog and will
+      be refused: this agent runs against a read-only filesystem. Do not try
+      them. If a task needs a change made, describe the change precisely enough
+      that someone else can make it, and say that you cannot.
+
+- id: agent-instructions
+  name: '@se373/agent-instructions'
+  config:
+    maxBytes: 65536
+
+# Reading and searching. `tool-fs` brings `write` and `edit` with it -- the
+# suite has no read-only switch -- so the filesystem it acts on is shadowed
+# below rather than the tools being filtered here.
+- id: tool-fs
+  name: '@se373/tool-fs'
+
+- id: tool-fs-search
+  name: '@se373/tool-fs-search'
+  config:
+    sampleOverCapGlobResults: false
+
+# This preset's own filesystem, read-only. Both rows share one entry-local
+# realm: `fs-sandbox` resolves `sandboxPolicy` at construction, so a policy
+# outside the realm would be the host's and this preset would inherit whatever
+# mode the deployment happens to run. Nothing outside the realm is affected --
+# the host's own policy still governs the `standard` preset's shell.
+- id: read-only-filesystem
+  name: '@se373/cordis-plugin-group'
+  group: true
+  isolate:
+    fs: true
+    sandboxPolicy: true
+  config:
+    - id: sandbox-policy
+      name: '@se373/sandbox-policy'
+      config:
+        mode: read-only
+        workspaceRoot: !!js process.cwd()
+
+    - id: fs-sandbox
+      name: '@se373/fs-sandbox'
+
+# The point of the preset: this agent's subject is the runtime.
+- id: tool-graph-inspect
+  name: '@se373/tool-graph-inspect'
+
+# Compaction, because a reading agent fills its context fastest of all.
+- id: compaction
+  name: '@se373/cordis-plugin-group'
+  group: true
+  isolate:
+    compaction: true
+    toolResultPruner: true
+  config:
+    - id: compaction-basic
+      name: '@se373/compaction-basic'
+
+    - id: command-compact
+      name: '@se373/command-compact'
+
+    - id: tool-result-pruner
+      name: '@se373/compaction-tool-result-pruner'
+      config:
+        thresholdChars: 8192
+        headChars: 4096
+        tailChars: 1024

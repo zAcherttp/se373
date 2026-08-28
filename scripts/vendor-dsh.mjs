@@ -511,11 +511,18 @@ const renames = new Map(
 )
 
 const listOnly = process.argv.includes('--list')
-const seeds = process.argv.slice(2).filter(a => !a.startsWith('--'))
-if (seeds.length === 0) {
-  console.error('usage: node scripts/vendor-dsh.mjs [--list] <seed>...')
-  process.exit(2)
-}
+const argvSeeds = process.argv.slice(2).filter(a => !a.startsWith('--'))
+/**
+ * The seed set, from the command line or from the canonical file.
+ *
+ * Defaulting to the file is what keeps a targeted re-vendor from silently
+ * shrinking the tree: the solution files and the paths facade are regenerated
+ * WHOLE on every run, and a run seeded with one package used to leave every
+ * other package's generated tsconfig describing an older layout.
+ */
+const seeds = argvSeeds.length > 0
+  ? argvSeeds
+  : Object.values(JSON.parse(readFileSync(join(REPO, 'scripts', 'vendor-seeds.json'), 'utf8')).seeds).flat()
 
 /** Resolve a bare seed to its upstream name. */
 const resolveSeed = (seed) => {
@@ -600,16 +607,16 @@ const BASE_TSCONFIG = new Map([
  * `vendor/`, the Landlock launcher, and the root bases — plus one extra level
  * of nesting, because our harness tree sits under `vendor/dsh`.
  * @param value - the path as upstream wrote it, relative to its package dir.
- * @param upstreamDir - the upstream package directory, `<group>/<pkg>`.
+ * @param fromDir - the absolute upstream package directory.
  * @param ourDir - the absolute directory the vendored package is written to.
  * @param vendored - every upstream `<group>/<pkg>` this run produced.
  * @returns the rewritten path, or `undefined` when the target is not vendored.
  */
-function remapProjectPath(value, upstreamDir, ourDir, vendored) {
+function remapProjectPath(value, fromDir, ourDir, vendored) {
   // Intra-package halves (./tsconfig.host.json) need no rewriting at all.
   if (value.startsWith('./')) return value
 
-  const absolute = resolve(join(UP_PKGS, upstreamDir), value)
+  const absolute = resolve(fromDir, value)
   const suffixIndex = absolute.lastIndexOf('/tsconfig')
   const suffix = suffixIndex === -1 ? '' : absolute.slice(suffixIndex + 1)
   const target = suffixIndex === -1 ? absolute : absolute.slice(0, suffixIndex)
@@ -646,23 +653,25 @@ function remapProjectPath(value, upstreamDir, ourDir, vendored) {
  *
  * So the tsconfigs are vendored like the sources are, for the same reason: the
  * curation is the value, and we cannot re-derive it.
- * @param from - the upstream package directory.
+ * @param from - the absolute upstream package directory.
  * @param to - the destination directory.
- * @param upstreamDir - the upstream package directory, `<group>/<pkg>`.
  * @param vendored - every upstream `<group>/<pkg>` this run produced.
  */
-function vendorTsconfigs(from, to, upstreamDir, vendored) {
+function vendorTsconfigs(from, to, vendored) {
   const names = readdirSync(from).filter(name => /^tsconfig(\..+)?\.json$/.test(name))
   for (const name of names) {
     const config = JSON.parse(readFileSync(join(from, name), 'utf8').replace(/^\s*\/\/.*$/gm, ''))
     if (typeof config.extends === 'string') {
-      const mapped = remapProjectPath(config.extends, upstreamDir, to, vendored)
-      if (mapped === undefined) throw new Error(`${upstreamDir}/${name}: cannot map extends ${config.extends}`)
-      config.extends = mapped
+      // An out-of-tree package extends a base inside ITS repo subtree, which we
+      // do not vendor -- the Landlock launcher is the one such case. It joins
+      // our host program like everything else, so it gets our host base rather
+      // than a dangling path.
+      config.extends = remapProjectPath(config.extends, from, to, vendored)
+        ?? relative(to, join(REPO, 'tsconfig.host.base.json'))
     }
     if (Array.isArray(config.references)) {
       config.references = config.references
-        .map(reference => remapProjectPath(reference.path, upstreamDir, to, vendored))
+        .map(reference => remapProjectPath(reference.path, from, to, vendored))
         .filter(path => path !== undefined)
         .map(path => ({ path }))
     }
@@ -778,7 +787,7 @@ for (const name of toVendor) {
     modded += 1
   }
 
-  vendorTsconfigs(from, to, dir, vendoredDirs)
+  vendorTsconfigs(from, to, vendoredDirs)
   written += 1
 }
 

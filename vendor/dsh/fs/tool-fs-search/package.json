@@ -51,7 +51,6 @@
   "devDependencies": {
     "@se373/agent": "workspace:^",
     "@se373/subprocess": "workspace:^",
-    "@se373/subprocess-local": "workspace:^",
     "@se373/invariants": "workspace:^",
     "@se373/llm": "workspace:^",
     "@se373/output-retention": "workspace:^",

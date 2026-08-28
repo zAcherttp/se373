@@ -9,25 +9,31 @@
   ],
   "references": [
     {
-      "path": "../../../../vendor/dsh/boot/cmdline"
+      "path": "../../../cordis"
     },
     {
-      "path": "../../../../vendor/dsh/code-runtime/code-runtime-worker-thread"
+      "path": "../../../loader"
     },
     {
-      "path": "../../../../vendor/dsh/core/agent"
+      "path": "../../../schemastery"
     },
     {
-      "path": "../../../../vendor/dsh/core/agent-default-model"
+      "path": "../../core/agent"
     },
     {
-      "path": "../../../../vendor/dsh/core/session"
+      "path": "../../core/agent-default-model"
     },
     {
-      "path": "../../../../vendor/dsh/llm/llm"
+      "path": "../../llm/llm"
     },
     {
-      "path": "../../../../vendor/dsh/runtime-diagnostics/invariants"
+      "path": "../../core/session"
+    },
+    {
+      "path": "../../runtime-diagnostics/invariants"
+    },
+    {
+      "path": "../../boot/cmdline"
     }
   ]
 }

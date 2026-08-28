@@ -1,11 +1,13 @@
 {
   "extends": "../../../../tsconfig.host.base.json",
   "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "outDir": "lib",
     "rootDir": "src",
-    "outDir": "lib/types"
+    "tsBuildInfoFile": "lib/.tsbuildinfo"
   },
   "include": [
-    "src"
-  ],
-  "references": []
+    "src/**/*.ts"
+  ]
 }

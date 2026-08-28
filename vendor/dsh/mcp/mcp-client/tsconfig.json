@@ -9,22 +9,28 @@
   ],
   "references": [
     {
-      "path": "../../../../vendor/dsh/attachment/attachment"
+      "path": "../../../cosmokit"
     },
     {
-      "path": "../../../../vendor/dsh/core/tools"
+      "path": "../../../cordis"
     },
     {
-      "path": "../../../../vendor/dsh/llm/llm"
+      "path": "../../../schemastery"
     },
     {
-      "path": "../../../../vendor/dsh/runtime-diagnostics/invariants"
+      "path": "../../llm/llm"
     },
     {
-      "path": "../../../../vendor/dsh/subprocess/subprocess"
+      "path": "../../core/tools"
     },
     {
-      "path": "../../../../vendor/dsh/util/timeout"
+      "path": "../../subprocess/subprocess"
+    },
+    {
+      "path": "../../runtime-diagnostics/invariants"
+    },
+    {
+      "path": "../../util/timeout"
     }
   ]
 }

@@ -1,0 +1,49 @@
+{
+  "name": "@se373/persona",
+  "description": "Composition-authored deployment persona section for the DeepSeek Harness",
+  "version": "0.1.1-rc.2",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./src/invariant.ts"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zAcherttp/se373.git",
+    "directory": "vendor/dsh/preset/persona"
+  },
+  "se373": {
+    "upstream": {
+      "repo": "deepseek-ai/deepseek-harness",
+      "rev": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e",
+      "path": "packages/preset/persona",
+      "name": "@deepseek-ai/dsh-persona"
+    }
+  },
+  "dependencies": {
+    "@se373/schemastery": "workspace:^"
+  },
+  "peerDependencies": {
+    "@se373/invariants": "workspace:^",
+    "@se373/system-prompt": "workspace:^",
+    "@se373/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@se373/invariants": "workspace:^",
+    "@se373/scope": "workspace:^",
+    "@se373/system-prompt": "workspace:^",
+    "@se373/cordis": "workspace:^"
+  }
+}

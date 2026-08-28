@@ -1,0 +1,10 @@
+{
+  "//": "The canonical seed set: what `node scripts/vendor-dsh.mjs` vendors when given no arguments. Each entry names an upstream package without its scope or `dsh-` prefix; the script walks the declared dependency closure from all of them. Grouped by the phase that introduced them, because that is how they were decided.",
+  "seeds": {
+    "phase-2 · the agent spine": ["headless", "llm-deepseek", "llm-mock-server", "session-persistence-jsonl"],
+    "phase-3 · tools and the sandbox": ["tool-bash", "tool-fs", "tool-fs-search", "tool-str-replace-editor", "node-addon-landlock-run"],
+    "phase-3.5 · the runtime graph": ["mcp-client"],
+    "phase-4 · the web plane": ["web-app", "client-ui-primitives", "client-ui-slots", "client-web", "pwsh-local", "typert-generator", "typert-loader", "session-query-sqlite", "attachment-local"],
+    "phase-5 · presets and subagents": ["subagent-spawn-in-process", "subagent-fork-in-process", "tool-subagent", "tool-subagent-control", "tool-subagent-report", "jobs-local", "skill-filesystem", "tool-skill", "agent-instructions", "persona", "tool-goal", "tool-jobs", "compaction-basic", "command-compact", "compaction-tool-result-pruner", "goal-round-driver", "command-goal"]
+  }
+}

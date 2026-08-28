@@ -135,9 +135,15 @@ importers:
       '@se373/agent-default-model':
         specifier: workspace:*
         version: link:../vendor/dsh/core/agent-default-model
+      '@se373/agent-instructions':
+        specifier: workspace:*
+        version: link:../vendor/dsh/context/agent-instructions
       '@se373/agent-loop':
         specifier: workspace:*
         version: link:../vendor/dsh/core/agent-loop
+      '@se373/agent-presets':
+        specifier: workspace:*
+        version: link:../vendor/dsh/preset/agent-presets
       '@se373/api-gateway':
         specifier: workspace:*
         version: link:../vendor/dsh/api/gateway
@@ -168,6 +174,9 @@ importers:
       '@se373/client-runtime':
         specifier: workspace:*
         version: link:../vendor/dsh/client/runtime
+      '@se373/client-ui-agent-preset':
+        specifier: workspace:*
+        version: link:../vendor/dsh/client/ui-agent-preset
       '@se373/client-ui-attachment':
         specifier: workspace:*
         version: link:../vendor/dsh/client/ui-attachment
@@ -267,9 +276,21 @@ importers:
       '@se373/code-runtime-worker-thread':
         specifier: workspace:*
         version: link:../vendor/dsh/code-runtime/code-runtime-worker-thread
+      '@se373/command-compact':
+        specifier: workspace:*
+        version: link:../vendor/dsh/compaction/command-compact
+      '@se373/command-goal':
+        specifier: workspace:*
+        version: link:../vendor/dsh/goal/command-goal
       '@se373/commands':
         specifier: workspace:*
         version: link:../vendor/dsh/interaction/commands
+      '@se373/compaction-basic':
+        specifier: workspace:*
+        version: link:../vendor/dsh/compaction/compaction-basic
+      '@se373/compaction-tool-result-pruner':
+        specifier: workspace:*
+        version: link:../vendor/dsh/compaction/compaction-tool-result-pruner
       '@se373/cordis-client-runner':
         specifier: workspace:*
         version: link:../vendor/dsh/extensions/cordis-client-runner
@@ -300,6 +321,9 @@ importers:
       '@se373/goal':
         specifier: workspace:*
         version: link:../vendor/dsh/goal/goal
+      '@se373/goal-round-driver':
+        specifier: workspace:*
+        version: link:../vendor/dsh/goal/goal-round-driver
       '@se373/headless':
         specifier: workspace:*
         version: link:../vendor/dsh/bundle/headless
@@ -330,6 +354,9 @@ importers:
       '@se373/invariants':
         specifier: workspace:*
         version: link:../vendor/dsh/runtime-diagnostics/invariants
+      '@se373/jobs-local':
+        specifier: workspace:*
+        version: link:../vendor/dsh/jobs/jobs-local
       '@se373/llm':
         specifier: workspace:*
         version: link:../vendor/dsh/llm/llm
@@ -354,6 +381,9 @@ importers:
       '@se373/permission-presets':
         specifier: workspace:*
         version: link:../vendor/dsh/interaction/permission-presets
+      '@se373/persona':
+        specifier: workspace:*
+        version: link:../vendor/dsh/preset/persona
       '@se373/plan-mode':
         specifier: workspace:*
         version: link:../vendor/dsh/plan/plan-mode
@@ -402,6 +432,9 @@ importers:
       '@se373/skill':
         specifier: workspace:*
         version: link:../vendor/dsh/skill/skill
+      '@se373/skill-filesystem':
+        specifier: workspace:*
+        version: link:../vendor/dsh/skill/skill-filesystem
       '@se373/spill-local':
         specifier: workspace:*
         version: link:../vendor/dsh/spill/spill-local
@@ -420,6 +453,12 @@ importers:
       '@se373/subagent':
         specifier: workspace:*
         version: link:../vendor/dsh/subagent/subagent
+      '@se373/subagent-fork-in-process':
+        specifier: workspace:*
+        version: link:../vendor/dsh/subagent/subagent-fork-in-process
+      '@se373/subagent-spawn-in-process':
+        specifier: workspace:*
+        version: link:../vendor/dsh/subagent/subagent-spawn-in-process
       '@se373/subprocess-local':
         specifier: workspace:*
         version: link:../vendor/dsh/subprocess/subprocess-local
@@ -441,12 +480,30 @@ importers:
       '@se373/tool-fs-search':
         specifier: workspace:*
         version: link:../vendor/dsh/fs/tool-fs-search
+      '@se373/tool-goal':
+        specifier: workspace:*
+        version: link:../vendor/dsh/goal/tool-goal
       '@se373/tool-graph-inspect':
         specifier: workspace:*
         version: link:../packages/runtime/tool-graph-inspect
+      '@se373/tool-jobs':
+        specifier: workspace:*
+        version: link:../vendor/dsh/jobs/tool-jobs
+      '@se373/tool-skill':
+        specifier: workspace:*
+        version: link:../vendor/dsh/skill/tool-skill
       '@se373/tool-str-replace-editor':
         specifier: workspace:*
         version: link:../vendor/dsh/fs/tool-str-replace-editor
+      '@se373/tool-subagent':
+        specifier: workspace:*
+        version: link:../vendor/dsh/subagent/tool-subagent
+      '@se373/tool-subagent-control':
+        specifier: workspace:*
+        version: link:../vendor/dsh/subagent/tool-subagent-control
+      '@se373/tool-subagent-report':
+        specifier: workspace:*
+        version: link:../vendor/dsh/subagent/tool-subagent-report
       '@se373/tool-todo':
         specifier: workspace:*
         version: link:../vendor/dsh/todo/tool-todo
@@ -2736,6 +2793,36 @@ importers:
         specifier: workspace:^
         version: link:../../util/timeout
 
+  vendor/dsh/compaction/command-compact:
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../../core/agent
+      '@se373/commands':
+        specifier: workspace:^
+        version: link:../../interaction/commands
+      '@se373/compaction':
+        specifier: workspace:^
+        version: link:../compaction
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/cordis-plugin-include':
+        specifier: workspace:^
+        version: link:../../../include
+      '@se373/cordis-plugin-loader':
+        specifier: workspace:^
+        version: link:../../../loader
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+
   vendor/dsh/compaction/compaction:
     devDependencies:
       '@se373/brand':
@@ -2756,6 +2843,126 @@ importers:
       '@se373/session':
         specifier: workspace:^
         version: link:../../core/session
+
+  vendor/dsh/compaction/compaction-basic:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../../core/agent
+      '@se373/commands':
+        specifier: workspace:^
+        version: link:../../interaction/commands
+      '@se373/compaction':
+        specifier: workspace:^
+        version: link:../compaction
+      '@se373/compaction-tool-result-pruner':
+        specifier: workspace:^
+        version: link:../compaction-tool-result-pruner
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/cordis-plugin-include':
+        specifier: workspace:^
+        version: link:../../../include
+      '@se373/cordis-plugin-loader':
+        specifier: workspace:^
+        version: link:../../../loader
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/llm-retry':
+        specifier: workspace:^
+        version: link:../../llm/llm-retry
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@se373/token-meter':
+        specifier: workspace:^
+        version: link:../../llm/token-meter
+      '@se373/tools':
+        specifier: workspace:^
+        version: link:../../core/tools
+
+  vendor/dsh/compaction/compaction-tool-result-pruner:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/compaction':
+        specifier: workspace:^
+        version: link:../compaction
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/cordis-plugin-include':
+        specifier: workspace:^
+        version: link:../../../include
+      '@se373/cordis-plugin-loader':
+        specifier: workspace:^
+        version: link:../../../loader
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@se373/token-meter':
+        specifier: workspace:^
+        version: link:../../llm/token-meter
+
+  vendor/dsh/context/agent-instructions:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../../core/agent
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/cordis-plugin-loader':
+        specifier: workspace:^
+        version: link:../../../loader
+      '@se373/fs':
+        specifier: workspace:^
+        version: link:../../fs/fs
+      '@se373/home-paths':
+        specifier: workspace:^
+        version: link:../../util/home-paths
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/llm-deepseek':
+        specifier: workspace:^
+        version: link:../../llm/llm-deepseek
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@se373/system-prompt':
+        specifier: workspace:^
+        version: link:../../core/system-prompt
+      '@se373/tool-fs':
+        specifier: workspace:^
+        version: link:../../fs/tool-fs
+      '@se373/tools':
+        specifier: workspace:^
+        version: link:../../core/tools
 
   vendor/dsh/context/file-reference:
     dependencies:
@@ -3207,6 +3414,9 @@ importers:
       '@se373/session-persistence':
         specifier: workspace:^
         version: link:../../session/session-persistence
+      '@se373/session-persistence-jsonl':
+        specifier: workspace:^
+        version: link:../../session/session-persistence-jsonl
       '@se373/storage':
         specifier: workspace:^
         version: link:../../storage/storage
@@ -3308,9 +3518,6 @@ importers:
       '@se373/agent':
         specifier: workspace:^
         version: link:../../core/agent
-      '@se373/agent-loop':
-        specifier: workspace:^
-        version: link:../../core/agent-loop
       '@se373/attachment':
         specifier: workspace:^
         version: link:../../attachment/attachment
@@ -3320,12 +3527,6 @@ importers:
       '@se373/fs':
         specifier: workspace:^
         version: link:../fs
-      '@se373/fs-local':
-        specifier: workspace:^
-        version: link:../fs-local
-      '@se373/fs-observation-policy':
-        specifier: workspace:^
-        version: link:../fs-observation-policy
       '@se373/invariants':
         specifier: workspace:^
         version: link:../../runtime-diagnostics/invariants
@@ -3387,9 +3588,6 @@ importers:
       '@se373/subprocess':
         specifier: workspace:^
         version: link:../../subprocess/subprocess
-      '@se373/subprocess-local':
-        specifier: workspace:^
-        version: link:../../subprocess/subprocess-local
       '@se373/system-prompt':
         specifier: workspace:^
         version: link:../../core/system-prompt
@@ -3415,15 +3613,6 @@ importers:
       '@se373/fs':
         specifier: workspace:^
         version: link:../fs
-      '@se373/fs-local':
-        specifier: workspace:^
-        version: link:../fs-local
-      '@se373/fs-observation-policy':
-        specifier: workspace:^
-        version: link:../fs-observation-policy
-      '@se373/fs-sandbox':
-        specifier: workspace:^
-        version: link:../fs-sandbox
       '@se373/invariants':
         specifier: workspace:^
         version: link:../../runtime-diagnostics/invariants
@@ -3445,6 +3634,33 @@ importers:
       '@se373/tools':
         specifier: workspace:^
         version: link:../../core/tools
+
+  vendor/dsh/goal/command-goal:
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../../core/agent
+      '@se373/commands':
+        specifier: workspace:^
+        version: link:../../interaction/commands
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/cordis-plugin-loader':
+        specifier: workspace:^
+        version: link:../../../loader
+      '@se373/goal':
+        specifier: workspace:^
+        version: link:../goal
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
 
   vendor/dsh/goal/goal:
     dependencies:
@@ -3482,6 +3698,67 @@ importers:
       '@se373/typert-protocol':
         specifier: workspace:^
         version: link:../../typert/protocol
+
+  vendor/dsh/goal/goal-round-driver:
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../../core/agent
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/goal':
+        specifier: workspace:^
+        version: link:../goal
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@se373/system-prompt':
+        specifier: workspace:^
+        version: link:../../core/system-prompt
+      '@se373/tools':
+        specifier: workspace:^
+        version: link:../../core/tools
+
+  vendor/dsh/goal/tool-goal:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../../core/agent
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/cordis-plugin-loader':
+        specifier: workspace:^
+        version: link:../../../loader
+      '@se373/goal':
+        specifier: workspace:^
+        version: link:../goal
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@se373/system-prompt':
+        specifier: workspace:^
+        version: link:../../core/system-prompt
+      '@se373/tools':
+        specifier: workspace:^
+        version: link:../../core/tools
 
   vendor/dsh/guard/timeout-policy:
     devDependencies:
@@ -3903,6 +4180,80 @@ importers:
         specifier: workspace:^
         version: link:../../core/session
 
+  vendor/dsh/jobs/jobs-local:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../../core/agent
+      '@se373/brand':
+        specifier: workspace:^
+        version: link:../../util/brand
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/cordis-plugin-include':
+        specifier: workspace:^
+        version: link:../../../include
+      '@se373/cordis-plugin-loader':
+        specifier: workspace:^
+        version: link:../../../loader
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/jobs':
+        specifier: workspace:^
+        version: link:../jobs
+      '@se373/scope':
+        specifier: workspace:^
+        version: link:../../core/scope
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@se373/timeout':
+        specifier: workspace:^
+        version: link:../../util/timeout
+
+  vendor/dsh/jobs/tool-jobs:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../../core/agent
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/jobs':
+        specifier: workspace:^
+        version: link:../jobs
+      '@se373/jobs-local':
+        specifier: workspace:^
+        version: link:../jobs-local
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/output-retention':
+        specifier: workspace:^
+        version: link:../../util/output-retention
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@se373/system-prompt':
+        specifier: workspace:^
+        version: link:../../core/system-prompt
+      '@se373/tools':
+        specifier: workspace:^
+        version: link:../../core/tools
+
   vendor/dsh/llm/llm:
     dependencies:
       '@se373/schemastery':
@@ -3998,9 +4349,18 @@ importers:
       '@se373/llm':
         specifier: workspace:^
         version: link:../llm
+      '@se373/llm-deepseek':
+        specifier: workspace:^
+        version: link:../llm-deepseek
+      '@se373/llm-mock-server':
+        specifier: workspace:^
+        version: link:../../test-support/llm-mock-server
       '@se373/session':
         specifier: workspace:^
         version: link:../../core/session
+      '@se373/session-persistence-jsonl':
+        specifier: workspace:^
+        version: link:../../session/session-persistence-jsonl
       '@se373/system-prompt':
         specifier: workspace:^
         version: link:../../core/system-prompt
@@ -4060,6 +4420,9 @@ importers:
       '@se373/attachment':
         specifier: workspace:^
         version: link:../../attachment/attachment
+      '@se373/attachment-local':
+        specifier: workspace:^
+        version: link:../../attachment/attachment-local
       '@se373/cordis':
         specifier: workspace:^
         version: link:../../../cordis
@@ -4169,6 +4532,25 @@ importers:
       '@se373/tools':
         specifier: workspace:^
         version: link:../../core/tools
+
+  vendor/dsh/preset/persona:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/scope':
+        specifier: workspace:^
+        version: link:../../core/scope
+      '@se373/system-prompt':
+        specifier: workspace:^
+        version: link:../../core/system-prompt
 
   vendor/dsh/runtime-diagnostics/invariants:
     dependencies:
@@ -4500,6 +4882,9 @@ importers:
       '@se373/session':
         specifier: workspace:^
         version: link:../../core/session
+      '@se373/session-persistence-jsonl':
+        specifier: workspace:^
+        version: link:../session-persistence-jsonl
       '@se373/session-projection':
         specifier: workspace:^
         version: link:../session-projection
@@ -4688,12 +5073,6 @@ importers:
       '@se373/agent':
         specifier: workspace:^
         version: link:../../core/agent
-      '@se373/agent-loop':
-        specifier: workspace:^
-        version: link:../../core/agent-loop
-      '@se373/bash-local':
-        specifier: workspace:^
-        version: link:../bash-local
       '@se373/cordis':
         specifier: workspace:^
         version: link:../../../cordis
@@ -4703,6 +5082,9 @@ importers:
       '@se373/jobs':
         specifier: workspace:^
         version: link:../../jobs/jobs
+      '@se373/jobs-local':
+        specifier: workspace:^
+        version: link:../../jobs/jobs-local
       '@se373/llm':
         specifier: workspace:^
         version: link:../../llm/llm
@@ -4724,12 +5106,12 @@ importers:
       '@se373/shell-env':
         specifier: workspace:^
         version: link:../shell-env
-      '@se373/subprocess-local':
-        specifier: workspace:^
-        version: link:../../subprocess/subprocess-local
       '@se373/system-prompt':
         specifier: workspace:^
         version: link:../../core/system-prompt
+      '@se373/tool-jobs':
+        specifier: workspace:^
+        version: link:../../jobs/tool-jobs
       '@se373/tools':
         specifier: workspace:^
         version: link:../../core/tools
@@ -4755,6 +5137,68 @@ importers:
       '@se373/scope':
         specifier: workspace:^
         version: link:../../core/scope
+
+  vendor/dsh/skill/skill-filesystem:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+      chokidar:
+        specifier: ^5.0.0
+        version: 5.0.0
+      yaml:
+        specifier: ^2.4.2
+        version: 2.9.0
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/fs':
+        specifier: workspace:^
+        version: link:../../fs/fs
+      '@se373/home-paths':
+        specifier: workspace:^
+        version: link:../../util/home-paths
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/skill':
+        specifier: workspace:^
+        version: link:../skill
+
+  vendor/dsh/skill/tool-skill:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../../core/agent
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/scope':
+        specifier: workspace:^
+        version: link:../../core/scope
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@se373/skill':
+        specifier: workspace:^
+        version: link:../skill
+      '@se373/skill-filesystem':
+        specifier: workspace:^
+        version: link:../skill-filesystem
+      '@se373/tools':
+        specifier: workspace:^
+        version: link:../../core/tools
 
   vendor/dsh/spill/spill:
     devDependencies:
@@ -4937,6 +5381,256 @@ importers:
       '@se373/user-approval':
         specifier: workspace:^
         version: link:../../interaction/user-approval
+
+  vendor/dsh/subagent/subagent-fork-in-process:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../../core/agent
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/cordis-plugin-loader':
+        specifier: workspace:^
+        version: link:../../../loader
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@se373/subagent':
+        specifier: workspace:^
+        version: link:../subagent
+      '@se373/subagent-in-process-driver':
+        specifier: workspace:^
+        version: link:../subagent-in-process-driver
+      '@se373/subagent-spawn-in-process':
+        specifier: workspace:^
+        version: link:../subagent-spawn-in-process
+
+  vendor/dsh/subagent/subagent-in-process-driver:
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../../core/agent
+      '@se373/agent-presets':
+        specifier: workspace:^
+        version: link:../../preset/agent-presets
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/cordis-plugin-include':
+        specifier: workspace:^
+        version: link:../../../include
+      '@se373/cordis-plugin-loader':
+        specifier: workspace:^
+        version: link:../../../loader
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/sandbox-policy':
+        specifier: workspace:^
+        version: link:../../sandbox/sandbox-policy
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@se373/subagent':
+        specifier: workspace:^
+        version: link:../subagent
+      '@se373/system-prompt':
+        specifier: workspace:^
+        version: link:../../core/system-prompt
+      '@se373/tool-fs':
+        specifier: workspace:^
+        version: link:../../fs/tool-fs
+      '@se373/tools':
+        specifier: workspace:^
+        version: link:../../core/tools
+      '@se373/user-approval':
+        specifier: workspace:^
+        version: link:../../interaction/user-approval
+
+  vendor/dsh/subagent/subagent-spawn-in-process:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../../core/agent
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/cordis-plugin-loader':
+        specifier: workspace:^
+        version: link:../../../loader
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/llm-deepseek':
+        specifier: workspace:^
+        version: link:../../llm/llm-deepseek
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@se373/subagent':
+        specifier: workspace:^
+        version: link:../subagent
+      '@se373/subagent-in-process-driver':
+        specifier: workspace:^
+        version: link:../subagent-in-process-driver
+      '@se373/tool-bash':
+        specifier: workspace:^
+        version: link:../../shell/tool-bash
+      '@se373/tool-subagent':
+        specifier: workspace:^
+        version: link:../tool-subagent
+
+  vendor/dsh/subagent/tool-subagent:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../../core/agent
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/cordis-plugin-loader':
+        specifier: workspace:^
+        version: link:../../../loader
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/jobs':
+        specifier: workspace:^
+        version: link:../../jobs/jobs
+      '@se373/jobs-local':
+        specifier: workspace:^
+        version: link:../../jobs/jobs-local
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@se373/session-persistence':
+        specifier: workspace:^
+        version: link:../../session/session-persistence
+      '@se373/session-persistence-jsonl':
+        specifier: workspace:^
+        version: link:../../session/session-persistence-jsonl
+      '@se373/subagent':
+        specifier: workspace:^
+        version: link:../subagent
+      '@se373/subagent-spawn-in-process':
+        specifier: workspace:^
+        version: link:../subagent-spawn-in-process
+      '@se373/system-prompt':
+        specifier: workspace:^
+        version: link:../../core/system-prompt
+      '@se373/tool-jobs':
+        specifier: workspace:^
+        version: link:../../jobs/tool-jobs
+      '@se373/tools':
+        specifier: workspace:^
+        version: link:../../core/tools
+
+  vendor/dsh/subagent/tool-subagent-control:
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../../core/agent
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@se373/session-persistence':
+        specifier: workspace:^
+        version: link:../../session/session-persistence
+      '@se373/session-persistence-jsonl':
+        specifier: workspace:^
+        version: link:../../session/session-persistence-jsonl
+      '@se373/session-projection':
+        specifier: workspace:^
+        version: link:../../session/session-projection
+      '@se373/subagent':
+        specifier: workspace:^
+        version: link:../subagent
+      '@se373/subagent-spawn-in-process':
+        specifier: workspace:^
+        version: link:../subagent-spawn-in-process
+      '@se373/tools':
+        specifier: workspace:^
+        version: link:../../core/tools
+
+  vendor/dsh/subagent/tool-subagent-report:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/agent':
+        specifier: workspace:^
+        version: link:../../core/agent
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@se373/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@se373/session-persistence':
+        specifier: workspace:^
+        version: link:../../session/session-persistence
+      '@se373/session-persistence-jsonl':
+        specifier: workspace:^
+        version: link:../../session/session-persistence-jsonl
+      '@se373/subagent':
+        specifier: workspace:^
+        version: link:../subagent
+      '@se373/subagent-spawn-in-process':
+        specifier: workspace:^
+        version: link:../subagent-spawn-in-process
+      '@se373/system-prompt':
+        specifier: workspace:^
+        version: link:../../core/system-prompt
+      '@se373/tool-subagent-control':
+        specifier: workspace:^
+        version: link:../tool-subagent-control
+      '@se373/tools':
+        specifier: workspace:^
+        version: link:../../core/tools
 
   vendor/dsh/subprocess/subprocess:
     devDependencies:
@@ -6901,6 +7595,10 @@ packages:
     resolution: {integrity: sha512-Qgzu8kfBvo+cA4962jnP1KkS6Dop5NS6g7R5LFYJr4b8Ub94PPQXUksCw9PvXoeXPRRddRNC5C1JQUR2SMGtnA==}
     engines: {node: '>= 14.16.0'}
 
+  chokidar@5.0.0:
+    resolution: {integrity: sha512-TQMmc3w+5AxjpL8iIiwebF73dRDF4fBIieAqGn9RGCWaEVwQ6Fb2cGe31Yns0RRIzii5goJ1Y7xbMwo1TxMplw==}
+    engines: {node: '>= 20.19.0'}
+
   clsx@2.1.1:
     resolution: {integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==}
     engines: {node: '>=6'}
@@ -7776,6 +8474,10 @@ packages:
   readdirp@4.1.2:
     resolution: {integrity: sha512-GDhwkLfywWL2s6vEjyhri+eXmfH6j1L7JE27WhqLeYzoh/A3DBaYGEj2H/HFZCn/kMfim73FXxEJTw06WtxQwg==}
     engines: {node: '>= 14.18.0'}
+
+  readdirp@5.1.1:
+    resolution: {integrity: sha512-Kko+Y5XQ6fM+Ce3dq3m9YGxnacYZYl9cA1wZjaF3Vbry2L3i1qVg8+CAgNPsXRArPMUMCaOR7oa9Nqntc43JKA==}
+    engines: {node: '>= 20.19.0'}
 
   regex-recursion@6.0.2:
     resolution: {integrity: sha512-0YCaSCq2VRIebiaUviZNs0cBz1kg5kVS2UKUfNIx8YVs1cN3AV7NTctO5FOKBA+UT2BPJIWZauYHPqJODG50cg==}
@@ -9419,6 +10121,10 @@ snapshots:
     dependencies:
       readdirp: 4.1.2
 
+  chokidar@5.0.0:
+    dependencies:
+      readdirp: 5.1.1
+
   clsx@2.1.1: {}
 
   color-convert@2.0.1:
@@ -10472,6 +11178,8 @@ snapshots:
       util-deprecate: 1.0.2
 
   readdirp@4.1.2: {}
+
+  readdirp@5.1.1: {}
 
   regex-recursion@6.0.2:
     dependencies:

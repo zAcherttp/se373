@@ -94,11 +94,39 @@
 - id: goal
   name: '@se373/goal'
 
+- id: goal-round-driver
+  name: '@se373/goal-round-driver'
+
+- id: command-goal
+  name: '@se373/command-goal'
+
+# The background-job registry, keyed by owning agent, so one host instance
+# serves every session. Its model-facing controls are a preset row.
+- id: jobs
+  name: '@se373/jobs-local'
+
 - id: skill
   name: '@se373/skill'
 
 - id: subagent
   name: '@se373/subagent'
+
+# The delegation backends. Host-plane because `subagents` is a process
+# singleton whose cross-session queries the api-proxy serves to the browser,
+# and a provider name may only be registered once. A preset chooses the TOOLS.
+- id: subagent-spawn-in-process
+  name: '@se373/subagent-spawn-in-process'
+
+- id: subagent-fork-in-process
+  name: '@se373/subagent-fork-in-process'
+
+# Host-plane for the same reason as the registry, and not because a preset may
+# not want it: it registers a continuable SETUP on that singleton rather than a
+# tool an agent calls, and the setup list is not scope-aware -- one copy per
+# mounted preset would register `report` once per live session and throw on the
+# second.
+- id: tool-subagent-report
+  name: '@se373/tool-subagent-report'
 
 - id: token-meter
   name: '@se373/token-meter'
@@ -140,6 +168,24 @@
 - id: tools
   name: '@se373/tools'
 
+# --- the agent plane -----------------------------------------------------------
+#
+# Every model-facing row now lives in a PRESET, not here. The roster mounts one
+# composition per process under a standing scope, and each session joins by
+# scope parentage; a subagent joins its parent's standing mount rather than
+# re-mounting by id, so a composition edited mid-session cannot hand a child a
+# different generation than its parent's history was produced under.
+#
+# `trust: system` marks the shipped root read-only. `$SE373_HOME/.agent-presets`
+# is added automatically as a `user` root, which is where a copy lands.
+- id: agent-presets
+  name: '@se373/agent-presets'
+  config:
+    default: standard
+    roots:
+      - path: !!js new URL('../../config/agent-presets', baseUrl).pathname
+        trust: system
+
 - id: agent-loop
   name: '@se373/agent-loop'
   config:
@@ -147,11 +193,12 @@
     # rather than mounting an agent at startup.
     agents: []
 
-# --- the sandbox and tool plane ------------------------------------------------
+# --- the effect boundary -------------------------------------------------------
 #
-# Upstream's web patch disables every row from here to the end of this block,
-# because a Web session mounts an agent preset that composes its own. We have no
-# preset roster yet, so they stay where the chat tree has them.
+# What a tool runs THROUGH, not the tools themselves. Everything here is
+# host-plane on the same criterion: a row that injects a service, or one whose
+# service a row outside any preset realm has to read, cannot live behind a
+# preset. The model-facing rows moved to `config/agent-presets/`.
 
 - id: subprocess
   name: '@se373/subprocess-local'
@@ -212,28 +259,6 @@
 - id: timeout-policy
   name: '@se373/tool-call-timeout-policy'
 
-- id: tool-bash
-  name: '@se373/tool-bash'
-  disabled: !!js process.platform === 'win32'
-
-- id: tool-fs
-  name: '@se373/tool-fs'
-
-- id: tool-fs-search
-  name: '@se373/tool-fs-search'
-  config:
-    sampleOverCapGlobResults: false
-
-- id: tool-str-replace-editor
-  name: '@se373/tool-str-replace-editor'
-  config:
-    maxOutputChars: 16000
-
-- id: tool-todo
-  name: '@se373/tool-todo'
-  config:
-    allowParallelInProgress: true
-
 # `plan-mode` is deliberately absent. Its whole configuration is the prompt
 # section it injects, and that section is upstream's product writing, not a
 # default we can supply. Mounting it with our own text would put words in the
@@ -241,11 +266,6 @@
 
 - id: code-runtime
   name: '@se373/code-runtime-worker-thread'
-
-# Our own tool: the agent can inspect the runtime it is running inside, from
-# the chat box rather than from a script.
-- id: tool-graph-inspect
-  name: '@se373/tool-graph-inspect'
 
 # Disabled row, kept visible on purpose (invariant I3): one edit connects a
 # third-party MCP server and its tools reach the agent.
@@ -455,6 +475,13 @@
 - id: ui-permission
   name: '@se373/client-ui-permission-presets'
 
+# The preset surfaces: the default-preset row in General settings, the chip on
+# the new-session screen, the label in a running session's header, and the
+# roster section that copies and deletes. It rendered nothing before phase 5
+# because there was no roster for it to read.
+- id: ui-agent-preset
+  name: '@se373/client-ui-agent-preset'
+
 - id: ui-plan
   name: '@se373/client-ui-plan'
 
@@ -480,8 +507,12 @@
 - id: logger-jsonl-invariant
   name: '@se373/logger-jsonl/invariant'
 
-- id: tool-graph-inspect-invariant
-  name: '@se373/tool-graph-inspect/invariant'
+# `@se373/tool-graph-inspect/invariant` is deliberately absent from this tree.
+# It asserts the tool is visible in `ctx.tools.schemas()`, which is true on the
+# host plane and false here: the tool is a PRESET row now, so the global layer
+# is empty and only a joined agent's scope resolves it. The check still runs in
+# `examples/chat/cordis.yml`, where the tool is where it says it is -- which is
+# the point of a check being a config row rather than an import.
 
 - id: board-gateway-invariant
   name: '@se373/board-gateway/invariant'

@@ -1,0 +1,5 @@
+name: Standard
+description: >-
+  The full coding agent: shell, file editing, search, skills, goals, todos,
+  delegation, and context compaction.
+order: 1

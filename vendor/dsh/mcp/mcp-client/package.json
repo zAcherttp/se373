@@ -48,6 +48,7 @@
   },
   "devDependencies": {
     "@se373/attachment": "workspace:^",
+    "@se373/attachment-local": "workspace:^",
     "@se373/invariants": "workspace:^",
     "@se373/llm": "workspace:^",
     "@se373/subprocess": "workspace:^",

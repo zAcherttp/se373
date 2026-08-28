@@ -583,6 +583,15 @@
       "@se373/code-runtime-worker-thread/worker": [
         "./vendor/dsh/code-runtime/code-runtime-worker-thread/src/worker.cjs"
       ],
+      "@se373/command-compact": [
+        "./vendor/dsh/compaction/command-compact/src/index.ts"
+      ],
+      "@se373/command-compact/invariant": [
+        "./vendor/dsh/compaction/command-compact/src/invariant.ts"
+      ],
+      "@se373/command-compact/src/*": [
+        "./vendor/dsh/compaction/command-compact/src/*"
+      ],
       "@se373/compaction": [
         "./vendor/dsh/compaction/compaction/src/index.ts"
       ],
@@ -597,6 +606,33 @@
       ],
       "@se373/compaction/src/*": [
         "./vendor/dsh/compaction/compaction/src/*"
+      ],
+      "@se373/compaction-basic": [
+        "./vendor/dsh/compaction/compaction-basic/src/index.ts"
+      ],
+      "@se373/compaction-basic/invariant": [
+        "./vendor/dsh/compaction/compaction-basic/src/invariant.ts"
+      ],
+      "@se373/compaction-basic/src/*": [
+        "./vendor/dsh/compaction/compaction-basic/src/*"
+      ],
+      "@se373/compaction-tool-result-pruner": [
+        "./vendor/dsh/compaction/compaction-tool-result-pruner/src/index.ts"
+      ],
+      "@se373/compaction-tool-result-pruner/invariant": [
+        "./vendor/dsh/compaction/compaction-tool-result-pruner/src/invariant.ts"
+      ],
+      "@se373/compaction-tool-result-pruner/src/*": [
+        "./vendor/dsh/compaction/compaction-tool-result-pruner/src/*"
+      ],
+      "@se373/agent-instructions": [
+        "./vendor/dsh/context/agent-instructions/src/index.ts"
+      ],
+      "@se373/agent-instructions/invariant": [
+        "./vendor/dsh/context/agent-instructions/src/invariant.ts"
+      ],
+      "@se373/agent-instructions/src/*": [
+        "./vendor/dsh/context/agent-instructions/src/*"
       ],
       "@se373/file-reference": [
         "./vendor/dsh/context/file-reference/src/index.ts"
@@ -841,6 +877,15 @@
       "@se373/tool-str-replace-editor/invariant": [
         "./vendor/dsh/fs/tool-str-replace-editor/src/invariant.ts"
       ],
+      "@se373/command-goal": [
+        "./vendor/dsh/goal/command-goal/src/index.ts"
+      ],
+      "@se373/command-goal/invariant": [
+        "./vendor/dsh/goal/command-goal/src/invariant.ts"
+      ],
+      "@se373/command-goal/src/*": [
+        "./vendor/dsh/goal/command-goal/src/*"
+      ],
       "@se373/goal": [
         "./vendor/dsh/goal/goal/src/index.ts"
       ],
@@ -852,6 +897,24 @@
       ],
       "@se373/goal/src/*": [
         "./vendor/dsh/goal/goal/src/*"
+      ],
+      "@se373/goal-round-driver": [
+        "./vendor/dsh/goal/goal-round-driver/src/index.ts"
+      ],
+      "@se373/goal-round-driver/invariant": [
+        "./vendor/dsh/goal/goal-round-driver/src/invariant.ts"
+      ],
+      "@se373/goal-round-driver/src/*": [
+        "./vendor/dsh/goal/goal-round-driver/src/*"
+      ],
+      "@se373/tool-goal": [
+        "./vendor/dsh/goal/tool-goal/src/index.ts"
+      ],
+      "@se373/tool-goal/invariant": [
+        "./vendor/dsh/goal/tool-goal/src/invariant.ts"
+      ],
+      "@se373/tool-goal/src/*": [
+        "./vendor/dsh/goal/tool-goal/src/*"
       ],
       "@se373/tool-call-timeout-policy": [
         "./vendor/dsh/guard/timeout-policy/src/index.ts"
@@ -1018,6 +1081,24 @@
       "@se373/jobs/src/*": [
         "./vendor/dsh/jobs/jobs/src/*"
       ],
+      "@se373/jobs-local": [
+        "./vendor/dsh/jobs/jobs-local/src/index.ts"
+      ],
+      "@se373/jobs-local/invariant": [
+        "./vendor/dsh/jobs/jobs-local/src/invariant.ts"
+      ],
+      "@se373/jobs-local/src/*": [
+        "./vendor/dsh/jobs/jobs-local/src/*"
+      ],
+      "@se373/tool-jobs": [
+        "./vendor/dsh/jobs/tool-jobs/src/index.ts"
+      ],
+      "@se373/tool-jobs/invariant": [
+        "./vendor/dsh/jobs/tool-jobs/src/invariant.ts"
+      ],
+      "@se373/tool-jobs/src/*": [
+        "./vendor/dsh/jobs/tool-jobs/src/*"
+      ],
       "@se373/llm": [
         "./vendor/dsh/llm/llm/src/index.ts"
       ],
@@ -1098,6 +1179,15 @@
       ],
       "@se373/agent-presets/src/*": [
         "./vendor/dsh/preset/agent-presets/src/*"
+      ],
+      "@se373/persona": [
+        "./vendor/dsh/preset/persona/src/index.ts"
+      ],
+      "@se373/persona/invariant": [
+        "./vendor/dsh/preset/persona/src/invariant.ts"
+      ],
+      "@se373/persona/src/*": [
+        "./vendor/dsh/preset/persona/src/*"
       ],
       "@se373/invariants": [
         "./vendor/dsh/runtime-diagnostics/invariants/src/index.ts"
@@ -1324,6 +1414,24 @@
       "@se373/skill/src/*": [
         "./vendor/dsh/skill/skill/src/*"
       ],
+      "@se373/skill-filesystem": [
+        "./vendor/dsh/skill/skill-filesystem/src/index.ts"
+      ],
+      "@se373/skill-filesystem/invariant": [
+        "./vendor/dsh/skill/skill-filesystem/src/invariant.ts"
+      ],
+      "@se373/skill-filesystem/src/*": [
+        "./vendor/dsh/skill/skill-filesystem/src/*"
+      ],
+      "@se373/tool-skill": [
+        "./vendor/dsh/skill/tool-skill/src/index.ts"
+      ],
+      "@se373/tool-skill/invariant": [
+        "./vendor/dsh/skill/tool-skill/src/invariant.ts"
+      ],
+      "@se373/tool-skill/src/*": [
+        "./vendor/dsh/skill/tool-skill/src/*"
+      ],
       "@se373/spill": [
         "./vendor/dsh/spill/spill/src/index.ts"
       ],
@@ -1386,6 +1494,63 @@
       ],
       "@se373/subagent/src/*": [
         "./vendor/dsh/subagent/subagent/src/*"
+      ],
+      "@se373/subagent-fork-in-process": [
+        "./vendor/dsh/subagent/subagent-fork-in-process/src/index.ts"
+      ],
+      "@se373/subagent-fork-in-process/invariant": [
+        "./vendor/dsh/subagent/subagent-fork-in-process/src/invariant.ts"
+      ],
+      "@se373/subagent-fork-in-process/src/*": [
+        "./vendor/dsh/subagent/subagent-fork-in-process/src/*"
+      ],
+      "@se373/subagent-in-process-driver": [
+        "./vendor/dsh/subagent/subagent-in-process-driver/src/index.ts"
+      ],
+      "@se373/subagent-in-process-driver/invariant": [
+        "./vendor/dsh/subagent/subagent-in-process-driver/src/invariant.ts"
+      ],
+      "@se373/subagent-in-process-driver/src/*": [
+        "./vendor/dsh/subagent/subagent-in-process-driver/src/*"
+      ],
+      "@se373/subagent-spawn-in-process": [
+        "./vendor/dsh/subagent/subagent-spawn-in-process/src/index.ts"
+      ],
+      "@se373/subagent-spawn-in-process/invariant": [
+        "./vendor/dsh/subagent/subagent-spawn-in-process/src/invariant.ts"
+      ],
+      "@se373/subagent-spawn-in-process/src/*": [
+        "./vendor/dsh/subagent/subagent-spawn-in-process/src/*"
+      ],
+      "@se373/tool-subagent": [
+        "./vendor/dsh/subagent/tool-subagent/src/index.ts"
+      ],
+      "@se373/tool-subagent/invariant": [
+        "./vendor/dsh/subagent/tool-subagent/src/invariant.ts"
+      ],
+      "@se373/tool-subagent/src/*": [
+        "./vendor/dsh/subagent/tool-subagent/src/*"
+      ],
+      "@se373/tool-subagent-control": [
+        "./vendor/dsh/subagent/tool-subagent-control/src/index.ts"
+      ],
+      "@se373/tool-subagent-control/invariant": [
+        "./vendor/dsh/subagent/tool-subagent-control/src/invariant.ts"
+      ],
+      "@se373/tool-subagent-control/list-agents": [
+        "./vendor/dsh/subagent/tool-subagent-control/src/list-agents.ts"
+      ],
+      "@se373/tool-subagent-control/src/*": [
+        "./vendor/dsh/subagent/tool-subagent-control/src/*"
+      ],
+      "@se373/tool-subagent-report": [
+        "./vendor/dsh/subagent/tool-subagent-report/src/index.ts"
+      ],
+      "@se373/tool-subagent-report/invariant": [
+        "./vendor/dsh/subagent/tool-subagent-report/src/invariant.ts"
+      ],
+      "@se373/tool-subagent-report/src/*": [
+        "./vendor/dsh/subagent/tool-subagent-report/src/*"
       ],
       "@se373/subprocess": [
         "./vendor/dsh/subprocess/subprocess/src/index.ts"

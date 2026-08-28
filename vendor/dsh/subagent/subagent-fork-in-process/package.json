@@ -1,0 +1,57 @@
+{
+  "name": "@se373/subagent-fork-in-process",
+  "description": "In-process fork subagent backend: runs a child agent seeded with a prefix of the parent's log",
+  "version": "0.1.1-rc.2",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./src/invariant.ts"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zAcherttp/se373.git",
+    "directory": "vendor/dsh/subagent/subagent-fork-in-process"
+  },
+  "se373": {
+    "upstream": {
+      "repo": "deepseek-ai/deepseek-harness",
+      "rev": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e",
+      "path": "packages/subagent/subagent-fork-in-process",
+      "name": "@deepseek-ai/dsh-subagent-fork-in-process"
+    }
+  },
+  "dependencies": {
+    "@se373/schemastery": "workspace:^"
+  },
+  "peerDependencies": {
+    "@se373/agent": "workspace:^",
+    "@se373/invariants": "workspace:^",
+    "@se373/session": "workspace:^",
+    "@se373/subagent": "workspace:^",
+    "@se373/subagent-in-process-driver": "workspace:^",
+    "@se373/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@se373/cordis-plugin-loader": "workspace:^",
+    "@se373/agent": "workspace:^",
+    "@se373/invariants": "workspace:^",
+    "@se373/llm": "workspace:^",
+    "@se373/session": "workspace:^",
+    "@se373/subagent": "workspace:^",
+    "@se373/subagent-in-process-driver": "workspace:^",
+    "@se373/subagent-spawn-in-process": "workspace:^",
+    "@se373/cordis": "workspace:^"
+  }
+}

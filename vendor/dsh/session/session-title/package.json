@@ -57,6 +57,7 @@
     "@se373/invariants": "workspace:^",
     "@se373/llm": "workspace:^",
     "@se373/session": "workspace:^",
+    "@se373/session-persistence-jsonl": "workspace:^",
     "@se373/session-projection": "workspace:^",
     "@se373/cordis": "workspace:^"
   }

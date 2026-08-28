@@ -9,37 +9,46 @@
   ],
   "references": [
     {
-      "path": "../../../../vendor/dsh/core/agent"
+      "path": "../../../cosmokit"
     },
     {
-      "path": "../../../../vendor/dsh/core/system-prompt"
+      "path": "../../../cordis"
     },
     {
-      "path": "../../../../vendor/dsh/core/tools"
+      "path": "../../../schemastery"
     },
     {
-      "path": "../../../../vendor/dsh/interaction/user-approval"
+      "path": "../../llm/llm"
     },
     {
-      "path": "../../../../vendor/dsh/jobs/jobs"
+      "path": "../../core/tools"
     },
     {
-      "path": "../../../../vendor/dsh/llm/llm"
+      "path": "../../core/agent"
     },
     {
-      "path": "../../../../vendor/dsh/runtime-diagnostics/invariants"
+      "path": "../shell"
     },
     {
-      "path": "../../../../vendor/dsh/sandbox/sandbox"
+      "path": "../../jobs/jobs"
     },
     {
-      "path": "../../../../vendor/dsh/sandbox/sandbox-policy"
+      "path": "../../core/system-prompt"
     },
     {
-      "path": "../../../../vendor/dsh/shell/shell"
+      "path": "../shell-env"
     },
     {
-      "path": "../../../../vendor/dsh/shell/shell-env"
+      "path": "../../interaction/user-approval"
+    },
+    {
+      "path": "../../sandbox/sandbox"
+    },
+    {
+      "path": "../../runtime-diagnostics/invariants"
+    },
+    {
+      "path": "../../sandbox/sandbox-policy"
     }
   ]
 }

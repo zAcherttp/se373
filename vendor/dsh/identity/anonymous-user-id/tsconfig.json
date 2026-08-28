@@ -9,13 +9,13 @@
   ],
   "references": [
     {
-      "path": "../../../../vendor/dsh/runtime-diagnostics/invariants"
+      "path": "../../util/brand"
     },
     {
-      "path": "../../../../vendor/dsh/util/brand"
+      "path": "../../util/home-paths"
     },
     {
-      "path": "../../../../vendor/dsh/util/home-paths"
+      "path": "../../runtime-diagnostics/invariants"
     }
   ]
 }

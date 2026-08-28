@@ -76,6 +76,7 @@
     "@se373/llm": "workspace:^",
     "@se373/session": "workspace:^",
     "@se373/session-persistence": "workspace:^",
+    "@se373/session-persistence-jsonl": "workspace:^",
     "@se373/storage": "workspace:^",
     "@se373/storage-domain": "workspace:^",
     "@se373/storage-json": "workspace:^",

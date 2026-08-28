@@ -9,37 +9,46 @@
   ],
   "references": [
     {
-      "path": "../../../../vendor/dsh/attachment/attachment"
+      "path": "../../../cosmokit"
     },
     {
-      "path": "../../../../vendor/dsh/credentials/credentials"
+      "path": "../../../cordis"
     },
     {
-      "path": "../../../../vendor/dsh/identity/anonymous-user-id"
+      "path": "../../../schemastery"
     },
     {
-      "path": "../../../../vendor/dsh/llm/llm"
+      "path": "../llm"
     },
     {
-      "path": "../../../../vendor/dsh/runtime-diagnostics/invariants"
+      "path": "../../attachment/attachment"
     },
     {
-      "path": "../../../../vendor/dsh/settings/settings"
+      "path": "../../util/atomic-write"
     },
     {
-      "path": "../../../../vendor/dsh/util/atomic-write"
+      "path": "../../util/brand"
     },
     {
-      "path": "../../../../vendor/dsh/util/brand"
+      "path": "../../util/home-paths"
     },
     {
-      "path": "../../../../vendor/dsh/util/home-paths"
+      "path": "../../credentials/credentials"
     },
     {
-      "path": "../../../../vendor/dsh/util/launch-environment"
+      "path": "../../util/launch-environment"
     },
     {
-      "path": "../../../../vendor/dsh/util/timeout"
+      "path": "../../settings/settings"
+    },
+    {
+      "path": "../../runtime-diagnostics/invariants"
+    },
+    {
+      "path": "../../util/timeout"
+    },
+    {
+      "path": "../../identity/anonymous-user-id"
     }
   ]
 }

@@ -51,11 +51,8 @@
   },
   "devDependencies": {
     "@se373/agent": "workspace:^",
-    "@se373/agent-loop": "workspace:^",
     "@se373/attachment": "workspace:^",
     "@se373/fs": "workspace:^",
-    "@se373/fs-local": "workspace:^",
-    "@se373/fs-observation-policy": "workspace:^",
     "@se373/invariants": "workspace:^",
     "@se373/llm": "workspace:^",
     "@se373/llm-deepseek": "workspace:^",
