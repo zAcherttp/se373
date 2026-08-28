@@ -508,8 +508,17 @@ We publish nothing, so it is omitted rather than vendored.
   to a `.d.ts`, and then could not find the source file it had been asked
   about. The aggregates extend their face base now.
 
-  What remains for the browser: `tsdown` per client package to produce the
-  `lib/client.js` each manifest names, and the Vite build over the shell.
+  The rest of the browser pipeline followed the same day. `pnpm build` is the
+  whole chain: host `tsc` (now emitting JavaScript as well as declarations,
+  because every UI plugin's tsdown entry is `lib/types/*.js`), the typert
+  codegen, client `tsc`, `tsdown` per client package — **43 `lib/client.js`
+  bundles**, every one through upstream's own purity gate — and Vite over the
+  shell into `apps/web/dist`.
+
+  What remains is not a build problem: a config that boots the web rows and
+  serves that `dist`. `bundle/web-app`'s patch layer is 445 lines over a
+  `dsh-base` layer we do not vendor as a bundle, so the roster has to be
+  transcribed the way `examples/chat/cordis.yml` was.
 - **The Landlock backend is inert.** See "Out-of-tree upstream packages" above.
   On macOS this costs nothing; on Linux it silently narrows which sandbox
   backends can be selected, and nothing in the tree says so at runtime.

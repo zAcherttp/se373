@@ -4,8 +4,9 @@ dist/
 *.log
 .zoo/
 
-# Generated declaration output for the vendored framework. Rebuild with
-# `npx tsc -b tsconfig.vendor.json`.
+# Generated output for the vendored layer: declarations, the JavaScript the
+# browser bundles are built from, the typert face artifacts, and each UI
+# plugin's client.js. Rebuild with `pnpm build:vendor`.
 vendor/*/lib/
 vendor/dsh/*/*/lib/
 *.tsbuildinfo

@@ -10,20 +10,24 @@
   },
   "scripts": {
     "se373": "node --import tsx/esm apps/cli/src/bin.ts",
-    "build:vendor": "tsc -b tsconfig.host.json && node --import tsx/esm scripts/typert-generate.mts && tsc -b tsconfig.client.json",
-    "typecheck": "tsc -b tsconfig.json",
+    "build": "npm run build:vendor && npm run build:web",
+    "build:vendor": "tsc -b tsconfig.host.json && node --import tsx/esm scripts/typert-generate.mts && tsc -b tsconfig.client.json && tsdown --env.DSH_BUILD_FACE client",
+    "build:web": "pnpm --filter @se373/web-frontend run build",
+    "typecheck": "tsc -b tsconfig.json && tsc -b apps/web/tsconfig.json",
     "test": "vitest run",
     "lint": "oxlint ."
   },
   "devDependencies": {
+    "@se373/typert-generator": "workspace:*",
+    "@types/babel__code-frame": "^7.27.0",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^24.0.0",
     "@types/picomatch": "^3.0.2",
-    "@types/babel__code-frame": "^7.27.0",
+    "lightningcss": "^1.33.0",
     "oxlint": "^1.76.0",
+    "tsdown": "^0.22.14",
     "tsx": "^4.22.4",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.8",
-    "@se373/typert-generator": "workspace:*"
+    "vitest": "^4.1.8"
   }
 }

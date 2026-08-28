@@ -5,7 +5,11 @@
   "compilerOptions": {
     "declaration": true,
     "declarationMap": true,
-    "emitDeclarationOnly": true,
+    // JavaScript is emitted alongside the declarations, even though our host
+    // runs from source and never imports it. The browser build needs it: every
+    // UI plugin's tsdown config takes its entries from `lib/types/*.js`, which
+    // is tsc's output, and a declarations-only program leaves rolldown with
+    // nothing to bundle. Upstream emits both for the same reason.
     "composite": true,
     "incremental": true
   }
