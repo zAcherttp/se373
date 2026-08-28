@@ -195,6 +195,37 @@ const LOCAL_MODS = [
       + "          && !isWithin(realPath(packageRoot), join(this.options.root, 'packages'))) continue",
     why: 'our vendored harness lives under vendor/dsh, not packages',
   },
+  {
+    // 11-13 continue the prefix rename into the browser. `SE373_CLIENT_` is the
+    // only prefix either bundler inlines, so a surviving DSH_CLIENT_ read would
+    // not merely be misnamed -- it would silently evaluate to undefined in the
+    // shipped artifact, which is the failure mode a rename is supposed to
+    // prevent.
+    package: '@deepseek-ai/dsh-client-ui-sidebar',
+    file: 'src/client/SidebarRoot.tsx',
+    from: '{process.env.DSH_CLIENT_COMMIT_HASH\n'
+      + '                        ? <span className={css.buildRevision}>{process.env.DSH_CLIENT_COMMIT_HASH}</span>',
+    to: '{process.env.SE373_CLIENT_COMMIT_HASH\n'
+      + '                        ? <span className={css.buildRevision}>{process.env.SE373_CLIENT_COMMIT_HASH}</span>',
+    why: 'only SE373_CLIENT_* reaches the browser; a DSH_ read is silently undefined',
+  },
+  {
+    // Reading our prefix means the profile is never 'official', so DeepSeek's
+    // brand mark stays out of our shell. That is the correct outcome and not a
+    // side effect: their mark on our page would misrepresent whose work it is.
+    package: '@deepseek-ai/dsh-client-ui-brand-official',
+    file: 'src/client/index.ts',
+    from: "if (process.env.DSH_CLIENT_BUILD_PROFILE !== 'official') return",
+    to: "if (process.env.SE373_CLIENT_BUILD_PROFILE !== 'official') return",
+    why: 'only SE373_CLIENT_* reaches the browser; and their brand is not ours to display',
+  },
+  {
+    package: '@deepseek-ai/dsh-client-ui-renderer',
+    file: 'src/client/DocumentTitle.tsx',
+    from: 'const productTitle = process.env.DSH_CLIENT_TITLE ?? DEFAULT_CLIENT_TITLE',
+    to: 'const productTitle = process.env.SE373_CLIENT_TITLE ?? DEFAULT_CLIENT_TITLE',
+    why: 'only SE373_CLIENT_* reaches the browser; a DSH_ read is silently undefined',
+  },
 ]
 
 /**
@@ -304,6 +335,9 @@ function workspaceDeps(manifest, all) {
  * makes codegen refuse to run.
  */
 const BUILT_EXPORT_KEYS = /^\.\/(client|typert|remote)(\/|$)/
+
+/** The generated-face export keys, which also gate whether `files` is kept. */
+const BUILT_FACE_KEYS = ['./typert', './client/typert', './remote']
 
 /**
  * Rewrite an `exports` map from built output to source.
@@ -606,6 +640,13 @@ for (const name of toVendor) {
     repository: { type: 'git', url: 'git+https://github.com/zAcherttp/se373.git', directory: `vendor/dsh/${dir}` },
   }
   if (manifest.dsh) out.dsh = manifest.dsh
+  // `files` is otherwise meaningless here -- nothing is published -- but the
+  // typert generator validates that a package which exports a face also lists
+  // that face's artifacts, and refuses to emit otherwise. Kept only for the
+  // packages that gate on it, so the field stays a statement rather than noise.
+  if (Array.isArray(manifest.files) && BUILT_FACE_KEYS.some(key => manifest.exports?.[key])) {
+    out.files = manifest.files
+  }
   out.se373 = {
     upstream: {
       repo: 'deepseek-ai/deepseek-harness',
@@ -679,11 +720,12 @@ if (existsSync(upstreamLicense)) cpSync(upstreamLicense, join(DEST_ROOT, 'LICENS
  * `api/gateway -> client/connection -> host/apiproxy -> api/remotes` cycle.
  * @param aggregate - upstream's aggregate filename.
  * @param target - our solution filename.
+ * @param base - the compiler base this face's projects use.
  * @param extra - project paths of ours to add, repo-relative.
  * @param note - the comment written at the top of the file.
  * @returns the upstream `<group>/<pkg>` directories this solution covers.
  */
-function writeSolution(aggregate, target, extra, note) {
+function writeSolution(aggregate, target, base, extra, note) {
   const upstream = JSON.parse(
     readFileSync(join(UPSTREAM, aggregate), 'utf8').replace(/^\s*\/\/.*$/gm, ''),
   )
@@ -712,6 +754,7 @@ function writeSolution(aggregate, target, extra, note) {
   writeFileSync(join(REPO, target), [
     '{',
     ...note.map(line => `  // ${line}`),
+    `  "extends": ${JSON.stringify(`./${base}`)},`,
     '  "files": [],',
     '  "references": [',
     [...paths].sort().map(path => `    { "path": ${JSON.stringify(path)} }`).join(',\n'),
@@ -782,7 +825,7 @@ function writePathsFacade() {
 
 writePathsFacade()
 
-const clientCovered = writeSolution('tsconfig.client.json', 'tsconfig.client.json', [], [
+const clientCovered = writeSolution('tsconfig.client.json', 'tsconfig.client.json', 'tsconfig.vendor.client.base.json', [], [
   'Browser-plane solution for the vendored layer. A separate program because',
   'both planes merge cordis `Context` under the same keys with different',
   'services, and one program cannot hold both sides of that merge. It also',
@@ -802,13 +845,18 @@ const hostExtra = [...vendoredDirs]
   .filter(dir => !clientCovered.has(dir))
   .map(dir => `./vendor/dsh/${dir}`)
 
-writeSolution('tsconfig.host.json', 'tsconfig.host.json', hostExtra, [
+writeSolution('tsconfig.host.json', 'tsconfig.host.json', 'tsconfig.vendor.base.json', hostExtra, [
   'Host-plane solution for the vendored layer. Emits declarations only, into',
   "each package's lib/types, which its package.json `types` field names.",
   '',
   'Named for the FACE, not for the layer, because the typert generator reads',
   'the two face aggregates by these exact names. tsconfig.json is our own',
   "packages' program; this one is the vendored code beneath them.",
+  '',
+  'It `extends` the face base even though a solution file compiles nothing.',
+  'The typert generator builds its program from THIS file\'s options, so',
+  'without the source-resolution facade it resolves every package name through',
+  'node_modules to a .d.ts, and then cannot find the source it was asked about.',
   '',
   'Membership mirrors upstream tsconfig.host.json, filtered to what we',
   'vendored. Regenerated by scripts/vendor-dsh.mjs; do not hand-edit.',

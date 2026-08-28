@@ -22,7 +22,7 @@
     "@types/babel__code-frame": "^7.27.0",
     "oxlint": "^1.76.0",
     "tsx": "^4.22.4",
-    "typescript": "^5.9.0",
+    "typescript": "^6.0.3",
     "vitest": "^4.1.8",
     "@se373/typert-generator": "workspace:*"
   }

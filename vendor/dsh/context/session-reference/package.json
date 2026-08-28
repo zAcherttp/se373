@@ -36,6 +36,16 @@
     "url": "git+https://github.com/zAcherttp/se373.git",
     "directory": "vendor/dsh/context/session-reference"
   },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.js",
+    "lib/types/**/*.d.ts",
+    "lib/typert.host.js",
+    "lib/typert.host.d.ts",
+    "lib/typert.remote-client.js",
+    "lib/typert.remote-client.d.ts"
+  ],
   "se373": {
     "upstream": {
       "repo": "deepseek-ai/deepseek-harness",

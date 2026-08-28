@@ -495,23 +495,21 @@ We publish nothing, so it is omitted rather than vendored.
   `exports["./client"]` and `readFileSync`s the result to hash it; a missing
   `lib/client.js` is a fatal activation error, not a degradation. The host spine
   keeps running under `tsx`; the browser half cannot.
-- **The client program does not compile yet, and the blocker is now a
-  TypeScript version skew.** `tsc -b tsconfig.host.json` is clean.
-  `scripts/typert-generate.mts` — the codegen step that writes each package's
-  `lib/typert.host.*` and `lib/typert.remote-client.*`, which `tsc -b
-  tsconfig.client.json` needs — gets as far as building real programs and then
-  **crashes inside the TypeScript checker**
-  (`getSymbolLinks: Cannot read properties of undefined`).
+- ~~**The client program does not compile yet.**~~ **Both programs compile
+  clean as of 2026-08-28**, cold, via `pnpm build:vendor`: host `tsc`, then the
+  typert codegen (14 artifacts across 7 packages), then client `tsc`.
 
-  The cause is visible: our root pins `typescript@^5.9.0`, while
-  `typert/generator` declares `^6.0.3` and resolves its own copy. So a checker
-  from TS 6 is analysing declarations emitted by TS 5.9. Upstream is on 6.0.3
-  throughout. Moving our root to 6.0.3 is the obvious next step and is a change
-  worth making deliberately rather than in passing — it is the compiler for
-  every package we have.
+  The TypeScript version skew recorded here earlier — our `^5.9.0` against
+  `typert/generator`'s `^6.0.3` — was **not** the cause of the generator's
+  checker crash. The root is on 6.0.3 now, matching upstream, and the crash
+  reproduced identically until the real cause was found: our face aggregates
+  carried no `extends`, so the generator built its program without the
+  source-resolution facade, resolved every package name through `node_modules`
+  to a `.d.ts`, and then could not find the source file it had been asked
+  about. The aggregates extend their face base now.
 
-  Everything downstream sits behind this: the client program, `tsdown` per
-  client package, and the Vite build.
+  What remains for the browser: `tsdown` per client package to produce the
+  `lib/client.js` each manifest names, and the Vite build over the shell.
 - **The Landlock backend is inert.** See "Out-of-tree upstream packages" above.
   On macOS this costs nothing; on Linux it silently narrows which sandbox
   backends can be selected, and nothing in the tree says so at runtime.
