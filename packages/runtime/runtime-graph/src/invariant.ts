@@ -21,6 +21,12 @@ import type { InvariantInstaller } from '@se373/invariants'
  * The disabled set is asserted separately because it is the one the design is
  * most emphatic about and the one a well-meaning refactor is most likely to
  * take: you cannot turn on what you cannot see.
+ *
+ * Edges get the same treatment for the same reason. An unsatisfied injection
+ * that is silently dropped rather than marked would leave a node that looks
+ * fully wired and is not — the one failure the edge work exists to make visible
+ * — so the check is that the edge set and the declared injections are the same
+ * set, not that the edges look plausible.
  */
 const check: InvariantInstaller = Object.assign(
   (ctx: Context, fail: (message: string) => never) => {
@@ -33,6 +39,13 @@ const check: InvariantInstaller = Object.assign(
     const missing = configured.filter(entry => !seen.has(entry.id)).map(entry => entry.id)
     if (missing.length > 0) {
       fail(`projection dropped ${missing.length} loader entries: ${missing.join(', ')}`)
+    }
+    for (const node of projected) {
+      const declared = [...node.injects].sort()
+      const edged = node.edges.map(edge => edge.service).sort()
+      if (declared.length !== edged.length || declared.some((name, index) => name !== edged[index])) {
+        fail(`${node.entryId} declares [${declared.join(', ')}] but has edges for [${edged.join(', ')}]`)
+      }
     }
     const disabled = configured.filter(entry => entry.disabled).map(entry => entry.id)
     const shown = projected.filter(node => !node.enabled).map(node => node.entryId)

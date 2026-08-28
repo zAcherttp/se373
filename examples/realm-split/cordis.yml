@@ -1,0 +1,60 @@
+# The realm-split proof: two providers of ONE service name, in two realms.
+#
+# This config exists to falsify a specific mistake. Resolving an injected
+# service name to a provider is realm-dependent, so an edge computed by name
+# alone would draw ONE plausible-looking edge for both halves below, and nothing
+# would report the error -- which is exactly what an A/B comparison of two
+# pipelines publishing the same seam would hit.
+#
+# `alpha` and `beta` each isolate `loggerJsonl`, so each half mounts its own
+# provider under its own symbol, and each half's consumer must resolve to its
+# OWN provider. Two distinct edges, not one.
+#
+# Run:  node --import tsx/esm examples/realm-split/inspect.mts
+
+- id: timer
+  name: '@se373/cordis-plugin-timer'
+
+- id: invariants
+  name: '@se373/invariants'
+
+- id: runtime-graph
+  name: '@se373/runtime-graph'
+
+- id: runtime-graph-invariant
+  name: '@se373/runtime-graph/invariant'
+
+# --- realm alpha -------------------------------------------------------------
+
+- id: alpha
+  name: '@se373/cordis-plugin-group'
+  group: true
+  isolate:
+    loggerJsonl: alpha
+  config:
+    - id: alpha-sink
+      name: '@se373/logger-jsonl'
+      config:
+        dir: !!js dshHomePath('logs/realm-alpha')
+        maxRuns: 1
+        compression: none
+    # The consumer. It injects `loggerJsonl` by name and must reach alpha-sink.
+    - id: alpha-consumer
+      name: ./consumer.ts
+
+# --- realm beta --------------------------------------------------------------
+
+- id: beta
+  name: '@se373/cordis-plugin-group'
+  group: true
+  isolate:
+    loggerJsonl: beta
+  config:
+    - id: beta-sink
+      name: '@se373/logger-jsonl'
+      config:
+        dir: !!js dshHomePath('logs/realm-beta')
+        maxRuns: 1
+        compression: none
+    - id: beta-consumer
+      name: ./consumer.ts

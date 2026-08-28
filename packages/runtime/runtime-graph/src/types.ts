@@ -53,6 +53,95 @@ export const LIFECYCLE_PHASES = ['pending', 'loading', 'active', 'failed', 'unlo
  */
 export type LifecyclePhase = (typeof LIFECYCLE_PHASES)[number] | null
 
+/**
+ * Semantic role: what a package *means* in the architecture.
+ *
+ * Unlike the three axes above this cannot be derived — nothing observable
+ * distinguishes a seam from an ordinary provider — so it is contributed through
+ * the `graph/node` waterfall, and is `null` for every package that contributes
+ * nothing.
+ *
+ * - `seam` — a swappable stage; the thing invariant I3 says is a config-row edit.
+ * - `provider` — publishes a service that is not a seam.
+ * - `core` — infrastructure with no second implementation possible.
+ * - `tool` — registers model-facing tools.
+ */
+export const NODE_ROLES = ['seam', 'provider', 'core', 'tool'] as const
+
+/** Semantic role values; see {@link NODE_ROLES} for the vocabulary. */
+export type NodeRole = (typeof NODE_ROLES)[number]
+
+/**
+ * What a package may contribute about its own node.
+ *
+ * Deliberately tiny, and deliberately *only* the fields the projection cannot
+ * observe. A package may say what it **means**; it may never say what it **is**
+ * — see {@link RuntimeGraphNode} and the merge in `project.ts`.
+ */
+export interface NodeContribution {
+  /** Semantic role — see {@link NodeRole}. */
+  readonly role?: NodeRole
+  /**
+   * Architectural tier. Free-form, because the vocabulary is the architecture
+   * doc's and not this package's; ours reads `L0` (vendored Cordis) through
+   * `L3` (the builder plane).
+   */
+  readonly tier?: string
+  /** Human display label, for a board that cannot show a package specifier. */
+  readonly label?: string
+}
+
+/**
+ * One resolved dependency: a declared service name, and who satisfies it **in
+ * the requesting node's own realm**.
+ *
+ * Resolving a name to a provider is realm-dependent, and the A/B design
+ * deliberately runs two pipelines publishing one service name in two realms. An
+ * edge that ignored realm would collapse both into a single plausible-looking
+ * edge, and nothing would report the mistake.
+ */
+export interface RuntimeGraphEdge {
+  /** The declared service name. */
+  readonly service: string
+  /**
+   * Whether the name reaches a live, active implementation in this node's realm.
+   *
+   * Not derivable from {@link providerEntryId}: services mounted on the root
+   * context — `logger`, `timer`, `loader` itself — satisfy an injection while
+   * belonging to no loader row at all.
+   */
+  readonly satisfied: boolean
+  /** The loader row that provides it, or `null` when unsatisfied or root-provided. */
+  readonly providerEntryId: string | null
+  /** The providing fiber's display name, or `null` when unsatisfied. */
+  readonly providerName: string | null
+}
+
+/**
+ * One observed lifecycle change of a node's root fiber.
+ *
+ * Observed from the runtime's own `internal/status` event, never inferred by
+ * polling: a poll cannot see a transition that began and ended between two
+ * samples, which at boot is most of them.
+ */
+export interface NodeTransition {
+  /** The phase left behind. */
+  readonly from: LifecyclePhase
+  /** The phase entered. */
+  readonly to: LifecyclePhase
+  /** Wall-clock time of the change. */
+  readonly at: number
+  /**
+   * The log's message sequence number at the instant of capture.
+   *
+   * Free to read and impossible to reconstruct afterwards, which is what
+   * decides it: at boot several packages activate inside one millisecond, so
+   * correlating a transition to a log line by timestamp is ambiguous exactly
+   * when the correlation is wanted. Compare against `sn` in the JSONL run log.
+   */
+  readonly sn: number
+}
+
 /** JSON-safe value: what survives the sanitizer applied to resolved config. */
 export type GraphJsonValue =
   | null
@@ -107,11 +196,34 @@ export interface RuntimeGraphNode {
   /** Declared dependency names, merged from the config row and the plugin's static `inject`. */
   readonly injects: readonly string[]
   /**
-   * The subset of {@link injects} that is currently unresolved. This is why a
-   * node sits in `pending`, and it is the one question the board is opened to
-   * ask most often, so it travels with the node rather than behind a second call.
+   * The subset of {@link injects} that this row's own fiber has not resolved.
+   * This is why a node sits in `pending`.
+   *
+   * Distinct from an unsatisfied {@link edges} entry, and legitimately so: this
+   * is the fiber's live view, and an unmounted row has resolved nothing at all,
+   * while its realm may already hold a perfectly good provider. For a mounted
+   * row the two agree.
    */
   readonly unresolvedInjects: readonly string[]
+  /**
+   * One entry per declared injection, resolved in this node's realm — see
+   * {@link RuntimeGraphEdge}. An unsatisfied injection is present and marked,
+   * never omitted: a node hanging on a missing dependency is the main thing
+   * this gets read for.
+   */
+  readonly edges: readonly RuntimeGraphEdge[]
+  /**
+   * Ordered lifecycle history of this node's root fiber, oldest first — see
+   * {@link NodeTransition}. Empty for a row that has not changed state since
+   * the graph service mounted.
+   */
+  readonly transitions: readonly NodeTransition[]
+  /** Contributed semantic role, or `null` for a package that contributes nothing. */
+  readonly role: NodeRole | null
+  /** Contributed architectural tier, or `null`. */
+  readonly tier: string | null
+  /** Contributed display label, or `null`. */
+  readonly label: string | null
   /**
    * Config as the fiber received it — validated and schema-defaulted when the
    * row is mounted, raw from the config file when it is not. Sanitized to JSON:
@@ -146,4 +258,9 @@ export interface RuntimeGraphQuery {
   readonly lifecycle?: readonly LifecyclePhase[]
   /** Keep only rows that are (or are not) effectively enabled. */
   readonly enabled?: boolean
+  /**
+   * Keep only rows with one of these contributed roles. `null` selects untyped
+   * rows — the ones that contributed nothing.
+   */
+  readonly role?: readonly (NodeRole | null)[]
 }

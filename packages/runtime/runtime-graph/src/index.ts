@@ -8,15 +8,18 @@
  * graph cannot drift from the runtime, because there is no second source for it
  * to drift from.
  *
- * The snapshot is point-in-time. No subscription, no polling loop, no history:
- * a live transport is a separate decision (D9), taken when the board needs it.
+ * The snapshot is point-in-time. No subscription, no polling loop: a live
+ * transport is a separate decision (D9), taken when the board needs it. Node
+ * *history* is not point-in-time, and deliberately so — see `transitions.ts`.
  *
  * @module @se373/runtime-graph
  */
 
 import { Context, Service } from '@se373/cordis'
 import type {} from '@se373/cordis-plugin-loader'
+import { contributeNode } from './contribute.ts'
 import { projectTree } from './project.ts'
+import { TransitionRecorder } from './transitions.ts'
 import type {
   RuntimeGraphNode,
   RuntimeGraphQuery,
@@ -24,6 +27,7 @@ import type {
 } from './types.ts'
 
 export * from './types.ts'
+export { contributeNode } from './contribute.ts'
 
 declare module '@se373/cordis' {
   interface Context {
@@ -64,8 +68,17 @@ function descendants(nodes: readonly RuntimeGraphNode[], rootId: string): Runtim
 export class RuntimeGraphService extends Service {
   static inject = ['loader']
 
+  private readonly transitions: TransitionRecorder
+
   constructor(ctx: Context) {
     super(ctx, 'runtimeGraph')
+    // Subscribed in the constructor rather than from `Service.init`, because
+    // every transition that happens before the listener exists is lost for
+    // good — this is the earliest point in the row's own lifetime at which it
+    // can be watching.
+    this.transitions = new TransitionRecorder(ctx)
+    this.transitions.watch()
+    contributeNode(ctx, { role: 'core', tier: 'L2', label: 'Runtime graph' })
   }
 
   /**
@@ -78,7 +91,8 @@ export class RuntimeGraphService extends Service {
    * @returns the snapshot.
    */
   snapshot(query: RuntimeGraphQuery = {}): RuntimeGraphSnapshot {
-    const all = projectTree(this.ctx)
+    const all = projectTree(this.ctx, this.transitions)
+    this.transitions.prune(new Set(all.map(node => node.entryId)))
     let nodes: readonly RuntimeGraphNode[] = all
     if (query.entryId !== undefined) {
       nodes = descendants(nodes, query.entryId)
@@ -89,6 +103,10 @@ export class RuntimeGraphService extends Service {
     }
     if (query.enabled !== undefined) {
       nodes = nodes.filter(node => node.enabled === query.enabled)
+    }
+    if (query.role !== undefined) {
+      const wanted = new Set(query.role)
+      nodes = nodes.filter(node => wanted.has(node.role))
     }
     return { capturedAt: Date.now(), nodes, totalNodes: all.length }
   }

@@ -13,33 +13,30 @@ import type { Fiber } from '@se373/cordis'
 // Type-only: contributes `Fiber.entry` and `Context.loader` to the surface.
 import type {} from '@se373/cordis-plugin-loader'
 import type { Entry } from '@se373/cordis-plugin-loader'
+import { owningEntry } from './attribute.ts'
+import { phaseOf } from './lifecycle.ts'
+import type { TransitionRecorder } from './transitions.ts'
 import type {
   FunctionalKind,
   GraphJsonValue,
-  LifecyclePhase,
+  NodeRole,
+  RuntimeGraphEdge,
   RuntimeGraphNode,
   StructuralKind,
 } from './types.ts'
-
-/**
- * Runtime mirror of Cordis's `FiberState`. It is a `const enum`, so it has no
- * runtime object to import across a package boundary; upstream's
- * `plugin-inventory` mirrors it the same way, and the two tables must agree.
- */
-const LIFECYCLE: readonly LifecyclePhase[] = [
-  'pending', // FiberState.PENDING
-  'loading', // FiberState.LOADING
-  'active', // FiberState.ACTIVE
-  'failed', // FiberState.FAILED
-  null, // FiberState.DISPOSED — no live root fiber, same as never mounted
-  'unloading', // FiberState.UNLOADING
-]
+import { NODE_ROLES } from './types.ts'
 
 /** The effect label `ctx.tools.register()` attaches to its disposer. */
 const TOOL_REGISTER_LABEL = 'tools.register()'
 
 /** Guard against a config object that cycles or nests without bound. */
 const MAX_CONFIG_DEPTH = 12
+
+/** Cordis's service-implementation record, as much of it as the projection reads. */
+interface Impl {
+  name: string
+  fiber: Fiber
+}
 
 /**
  * Reduce an arbitrary config value to something that survives JSON.
@@ -91,25 +88,6 @@ function sanitize(value: unknown, seen: Set<object>, depth = MAX_CONFIG_DEPTH): 
 }
 
 /**
- * Walk up from any fiber to the loader entry that owns it.
- *
- * A plugin that publishes its service from a child fiber still belongs to the
- * row the user wrote, so attribution has to climb rather than read `fiber.entry`
- * directly.
- * @param fiber - the fiber to attribute.
- * @returns the owning entry, or `undefined` for a fiber outside the loader tree.
- */
-function owningEntry(fiber: Fiber): Entry | undefined {
-  let current: Fiber = fiber
-  for (;;) {
-    if (current.entry) return current.entry
-    const next = current.parent.fiber
-    if (next === current) return undefined
-    current = next
-  }
-}
-
-/**
  * Every service name this context resolves differently from the root context.
  *
  * This is the realm, expressed as one opaque string. `fiber.inject` yields a
@@ -133,6 +111,43 @@ function realmOf(ctx: Context): string {
   }
   if (differing.length === 0) return 'root'
   return differing.sort().join(',')
+}
+
+/**
+ * Resolve one declared injection the way the requesting row itself would.
+ *
+ * This is the whole realm-awareness argument in three lines: the service name
+ * is turned into a symbol **through the requesting context's own isolate map**,
+ * and only then looked up. Two rows in two realms declaring the same name reach
+ * two different symbols and therefore two different providers, which is exactly
+ * what an A/B comparison needs and exactly what a name-keyed lookup would erase.
+ * @param entry - the row doing the injecting.
+ * @param store - the process-wide service store.
+ * @param name - the declared service name.
+ * @returns the edge, satisfied or not.
+ */
+function resolveEdge(
+  entry: Entry,
+  store: Record<symbol, Impl | undefined>,
+  name: string,
+): RuntimeGraphEdge {
+  const isolate = entry.ctx[Context.isolate] as Record<string, symbol | undefined>
+  const key = isolate[name]
+  const impl = key === undefined ? undefined : store[key]
+  // Matches `ReflectService._getImpl(name, true)`: a provider that exists but is
+  // not ACTIVE does not satisfy anyone, which is why a dependent sits pending
+  // while its provider is still loading.
+  if (impl === undefined || phaseOf(impl.fiber.state) !== 'active') {
+    return { service: name, satisfied: false, providerEntryId: null, providerName: null }
+  }
+  return {
+    service: name,
+    satisfied: true,
+    // Null here means root-provided, not unsatisfied — `logger`, `timer` and
+    // the loader itself belong to no row.
+    providerEntryId: owningEntry(impl.fiber)?.id ?? null,
+    providerName: impl.fiber.name,
+  }
 }
 
 /**
@@ -172,12 +187,11 @@ function structuralOf(entry: Entry): StructuralKind {
  * Scanning `ctx.reflect.store` per entry would be quadratic; the tree is ~200
  * rows and the store is comparable, so one pass up front keeps a snapshot cheap
  * enough to take on every tool call.
- * @param ctx - any context in the tree; the reflect store is process-wide.
+ * @param store - the process-wide service store.
  * @returns entry id → service names that entry publishes.
  */
-function liveProvidesByEntry(ctx: Context): Map<string, string[]> {
+function liveProvidesByEntry(store: Record<symbol, Impl | undefined>): Map<string, string[]> {
   const index = new Map<string, string[]>()
-  const store = ctx.reflect.store as Record<symbol, { name: string; fiber: Fiber } | undefined>
   for (const key of Reflect.ownKeys(store)) {
     if (typeof key !== 'symbol') continue
     const impl = store[key]
@@ -191,13 +205,42 @@ function liveProvidesByEntry(ctx: Context): Map<string, string[]> {
   return index
 }
 
+/** The only fields the `graph/node` waterfall may set. */
+type Semantics = Pick<RuntimeGraphNode, 'role' | 'tier' | 'label'>
+
+/**
+ * Take only what a package is allowed to say.
+ *
+ * The acceptance rule is "a package may say what it means, never what it is",
+ * and this is where that stops being a convention. Rather than merging the
+ * waterfall's result and hoping no listener overwrote `lifecycle`, the three
+ * semantic fields are picked out and everything else is discarded — so a
+ * misbehaving listener cannot corrupt the projection even deliberately.
+ * @param contributed - whatever the waterfall returned.
+ * @returns the contribution, with anything unrecognised dropped.
+ */
+function pickContribution(contributed: RuntimeGraphNode): Semantics {
+  return {
+    role: NODE_ROLES.includes(contributed.role as NodeRole) ? contributed.role : null,
+    tier: typeof contributed.tier === 'string' ? contributed.tier : null,
+    label: typeof contributed.label === 'string' ? contributed.label : null,
+  }
+}
+
 /**
  * Project one loader entry.
  * @param entry - the loader row to project.
  * @param live - the per-snapshot live-service index.
- * @returns the complete node.
+ * @param store - the process-wide service store.
+ * @param transitions - the lifecycle history recorder, when one is running.
+ * @returns the complete node, before the waterfall runs.
  */
-function projectEntry(entry: Entry, live: Map<string, string[]>): RuntimeGraphNode {
+function projectEntry(
+  entry: Entry,
+  live: Map<string, string[]>,
+  store: Record<symbol, Impl | undefined>,
+  transitions: TransitionRecorder | undefined,
+): RuntimeGraphNode {
   const fiber = entry.fiber
   const enabled = !entry.disabled
   const mounted = fiber !== undefined && fiber.uid !== null
@@ -233,12 +276,17 @@ function projectEntry(entry: Entry, live: Map<string, string[]>): RuntimeGraphNo
     realm: realmOf(entry.ctx),
     structural: structuralOf(entry),
     functional,
-    lifecycle: fiber === undefined ? null : LIFECYCLE[fiber.state] ?? null,
+    lifecycle: fiber === undefined ? null : phaseOf(fiber.state),
     enabled,
     mounted,
     provides: [...provides].sort(),
     injects: injects.sort(),
     unresolvedInjects: [...unresolvedInjects].sort(),
+    edges: injects.map(name => resolveEdge(entry, store, name)),
+    transitions: transitions?.get(entry.id) ?? [],
+    role: null,
+    tier: null,
+    label: null,
     config: sanitize(mounted ? fiber?.config ?? entry.options.config : entry.options.config, new Set()),
   }
 }
@@ -246,13 +294,19 @@ function projectEntry(entry: Entry, live: Map<string, string[]>): RuntimeGraphNo
 /**
  * Project the whole loader tree, in loader order.
  * @param ctx - a context with `ctx.loader` available.
+ * @param transitions - the lifecycle history recorder, when one is running.
  * @returns one node per configured entry, disabled rows included.
  */
-export function projectTree(ctx: Context): RuntimeGraphNode[] {
-  const live = liveProvidesByEntry(ctx)
+export function projectTree(ctx: Context, transitions?: TransitionRecorder): RuntimeGraphNode[] {
+  const store = ctx.reflect.store as Record<symbol, Impl | undefined>
+  const live = liveProvidesByEntry(store)
   const nodes: RuntimeGraphNode[] = []
   for (const entry of ctx.loader.entries()) {
-    nodes.push(projectEntry(entry, live))
+    const derived = projectEntry(entry, live, store, transitions)
+    // The waterfall is offered every node. A package with nothing to say never
+    // registered a listener, and the chain collapses to `next()`.
+    const contributed = ctx.waterfall('graph/node', derived, () => derived)
+    nodes.push({ ...derived, ...pickContribution(contributed) })
   }
   return nodes
 }

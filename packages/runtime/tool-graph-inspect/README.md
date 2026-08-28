@@ -36,6 +36,7 @@ row you can disable, not an import you have to delete.
 | `entry_id` | keep only that row and everything beneath it |
 | `lifecycle` | keep only these phases; `none` selects rows with no live instance |
 | `enabled` | keep only rows that are, or are not, effectively enabled |
+| `role` | keep only these contributed roles; `untyped` selects rows that contribute nothing |
 
 An unknown `entry_id` is an error naming the remedy, not an empty report — an
 empty report reads as "nothing is running there", which is a different and wrong
@@ -47,11 +48,19 @@ travels with every narrowed report so the model can tell how much it did not ask
 for.
 
 **Rendered content** — two shapes, chosen by result size rather than by a flag.
-One matching row renders as a full detail block including its resolved config; a
-multi-row result renders as a table plus two derived sections — rows waiting on
-unresolved dependencies, and rows resolving in a non-root isolation realm. A
-model surveying 190 rows does not want 190 configs; a model that asked about one
-component does.
+A single matching row renders as a full detail block: its axes, its contributed
+semantics, one line per dependency naming who satisfies it, its lifecycle
+transitions, and its resolved config. A multi-row result renders as a table plus
+two derived sections — injections nothing satisfies in the requesting row's own
+realm, and rows resolving in a non-root realm. A model surveying 190 rows does
+not want 190 configs; a model that asked about one component does.
+
+The transition list is **labelled as transitions on every rendering**, not just
+in the schema. A node's history and the log can legitimately disagree — the log
+is level-filtered and its ring overflows, the transitions are neither — and an
+unlabelled list of timestamped state changes sitting next to a log reads as
+invented history. Each line carries `sn`, the log sequence watermark, which is
+what makes "what else was happening at that moment" answerable.
 
 ## Known Limitations and Deferred Work
 
@@ -64,6 +73,12 @@ component does.
   so a model surveying many rows has to ask again for a specific one. The
   canonical value carries every config either way, so a programmatic consumer
   loses nothing.
-- **Inherits every limitation of the projection**, including no edges, no
-  semantic roles, and no failure reason on a `failed` row. See
+- **The `role` filter is thin.** It works, but almost nothing contributes a role
+  yet: the vendored rows say nothing, so `role: ['seam']` is not the useful
+  default view it is meant to become.
+- **Transitions are rendered in full, uncapped by the renderer.** The projection
+  caps them at 32 per row, so a detail block for a row that has been hot-reloaded
+  all afternoon is long. Narrowing is by row, not by transition.
+- **Inherits every limitation of the projection**, including no failure reason
+  on a `failed` row and no history from before the graph row mounted. See
   [`@se373/runtime-graph`](../runtime-graph/README.md).
