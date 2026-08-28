@@ -14,6 +14,29 @@ The first screen asks for a DeepSeek API key; the key is stored by
 `credentials-local` under `$SE373_HOME` (default `~/.se373`), never in the repo.
 `Configure later` gets you a working UI with no model behind it.
 
+## Where your data goes
+
+Everything lands under `$SE373_HOME` (default `~/.se373`): the API key via
+`credentials-local`, one directory per session under `sessions/`, the workspace
+registry under `storages/`, and this run's log under `logs/`.
+
+Nothing prunes sessions, and that is upstream's policy rather than an
+oversight — a session is your record of what happened. To clear some out:
+
+```bash
+pnpm clean:sessions                 # list what is there, delete nothing
+pnpm clean:sessions --older-than 7  # narrow to sessions older than a week
+pnpm clean:sessions --yes           # actually delete, and repair the registry
+```
+
+The repair half matters: the workspace store keeps its own list of session ids,
+and an id whose log you deleted by hand is a ghost row in the sidebar.
+
+**Demos and specs never write here.** They call
+[`useEphemeralHome`](../../scripts/ephemeral-home.ts), which points
+`$SE373_HOME` at a temporary directory that goes away with the process — so an
+automated run cannot leave sessions that look like yours afterwards.
+
 ## What is in the tree
 
 108 rows, of which 107 are live and one — `mcp-client` — is deliberately

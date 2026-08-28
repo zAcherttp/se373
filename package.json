@@ -13,11 +13,13 @@
     "build": "npm run build:vendor && npm run build:web",
     "build:vendor": "tsc -b tsconfig.host.json && node --import tsx/esm scripts/typert-generate.mts && tsc -b tsconfig.client.json && tsdown --env.DSH_BUILD_FACE client",
     "build:web": "pnpm --filter @se373/web-frontend run build",
+    "clean:sessions": "node --import tsx/esm scripts/clean-sessions.ts",
     "typecheck": "tsc -b tsconfig.json && tsc -b apps/web/tsconfig.json",
     "test": "vitest run",
     "lint": "oxlint ."
   },
   "devDependencies": {
+    "@se373/home-paths": "workspace:*",
     "@se373/typert-generator": "workspace:*",
     "@types/babel__code-frame": "^7.27.0",
     "@types/js-yaml": "^4.0.9",

@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      '@se373/home-paths':
+        specifier: workspace:*
+        version: link:vendor/dsh/util/home-paths
       '@se373/typert-generator':
         specifier: workspace:*
         version: link:vendor/dsh/typert/generator

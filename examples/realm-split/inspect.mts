@@ -9,7 +9,12 @@
 
 import { resolve } from 'node:path'
 import { boot } from '../../apps/cli/src/boot.ts'
+import { useEphemeralHome } from '../../scripts/ephemeral-home.ts'
 import { renderSnapshot } from '../../packages/runtime/tool-graph-inspect/src/render.ts'
+
+// The two sinks below write real run logs; they get a throwaway home so a proof
+// run leaves nothing behind in the user's.
+useEphemeralHome('realm-split')
 
 const tree = await boot({
   configFile: resolve(import.meta.dirname, 'cordis.yml'),

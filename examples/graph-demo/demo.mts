@@ -14,6 +14,11 @@
 import { resolve } from 'node:path'
 import { startMockLlmServer } from '@se373/llm-mock-server'
 import { boot } from '../../apps/cli/src/boot.ts'
+import { useEphemeralHome } from '../../scripts/ephemeral-home.ts'
+
+// This is a demo, not somebody's work: it gets its own throwaway home so the
+// session it writes does not accumulate in the user's real one.
+useEphemeralHome('graph-demo')
 
 // A one-shot run has nobody to ask, so `ask` would hang on the first tool call.
 process.env.SE373_PERMISSION_MODE = 'danger-full-access'

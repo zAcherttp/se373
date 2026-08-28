@@ -15,6 +15,13 @@ import { startMockLlmServer } from '@se373/llm-mock-server'
 import type { MockLlmServer } from '@se373/llm-mock-server'
 import { boot } from '../src/boot.ts'
 import type { BootedTree } from '../src/boot.ts'
+import { useEphemeralHome } from '../../../scripts/ephemeral-home.ts'
+
+// The shipping config persists every session it runs. A spec is not somebody's
+// work, so it gets a throwaway home: without this, running the suite leaves
+// session logs in the developer's real one, indistinguishable afterwards from
+// sessions they might want back.
+useEphemeralHome('spine-spec')
 
 const CONFIG = resolve(fileURLToPath(import.meta.url), '../../../..', 'examples/chat/cordis.yml')
 
