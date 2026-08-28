@@ -17,15 +17,15 @@
     },
     "./types": {
       "types": "./lib/types/types.d.ts",
-      "default": "./src/types/types.ts"
+      "default": "./src/types.ts"
     },
     "./brand": {
       "types": "./lib/types/brand.d.ts",
-      "default": "./src/types/brand.ts"
+      "default": "./src/brand.ts"
     },
     "./message": {
       "types": "./lib/types/message.d.ts",
-      "default": "./src/types/message.ts"
+      "default": "./src/message.ts"
     },
     "./src/*": "./src/*",
     "./package.json": "./package.json"

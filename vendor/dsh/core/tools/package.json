@@ -17,11 +17,11 @@
     },
     "./types": {
       "types": "./lib/types/types.d.ts",
-      "default": "./src/types/types.ts"
+      "default": "./src/types.ts"
     },
     "./presentation": {
       "types": "./lib/types/presentation.d.ts",
-      "default": "./src/types/presentation.ts"
+      "default": "./src/presentation.ts"
     },
     "./src/*": "./src/*",
     "./package.json": "./package.json"

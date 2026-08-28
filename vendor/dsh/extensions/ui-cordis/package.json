@@ -1,0 +1,82 @@
+{
+  "name": "@se373/client-ui-cordis",
+  "description": "Cordis dynamic-plugin definition card: the keyed cordis_define tool row with its run/stop switch",
+  "version": "0.1.1-rc.2",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./src/invariant.ts"
+    },
+    "./client": {
+      "types": "./lib/types/client/index.d.ts",
+      "default": "./lib/client.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zAcherttp/se373.git",
+    "directory": "vendor/dsh/extensions/ui-cordis"
+  },
+  "dsh": {
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-connection",
+        "@deepseek-ai/dsh-cordis-client-runner",
+        "@deepseek-ai/dsh-api-remotes",
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-input-trigger",
+        "@deepseek-ai/dsh-client-ui-tool",
+        "@deepseek-ai/dsh-client-ui-sidebar"
+      ],
+      "platform": "web"
+    }
+  },
+  "se373": {
+    "upstream": {
+      "repo": "deepseek-ai/deepseek-harness",
+      "rev": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e",
+      "path": "packages/extensions/ui-cordis",
+      "name": "@deepseek-ai/dsh-client-ui-cordis"
+    }
+  },
+  "peerDependencies": {
+    "@se373/api-remotes": "workspace:^",
+    "@se373/client-connection": "workspace:^",
+    "@se373/cordis-client-runner": "workspace:^",
+    "@se373/client-locale": "workspace:^",
+    "@se373/client-runtime": "workspace:^",
+    "@se373/client-ui-sidebar": "workspace:^",
+    "@se373/client-ui-input-trigger": "workspace:^",
+    "@se373/client-ui-tool": "workspace:^",
+    "@se373/invariants": "workspace:^",
+    "@se373/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@se373/api-remotes": "workspace:^",
+    "@se373/client-connection": "workspace:^",
+    "@se373/cordis-client-runner": "workspace:^",
+    "@se373/client-locale": "workspace:^",
+    "@se373/client-runtime": "workspace:^",
+    "@se373/client-ui-primitives": "workspace:^",
+    "@se373/client-ui-sidebar": "workspace:^",
+    "@se373/client-ui-input-trigger": "workspace:^",
+    "@se373/client-ui-slots": "workspace:^",
+    "@se373/client-ui-tool": "workspace:^",
+    "@se373/invariants": "workspace:^",
+    "@types/react": "~18.3.1",
+    "@se373/cordis": "workspace:^",
+    "react": "^18.2.0"
+  }
+}

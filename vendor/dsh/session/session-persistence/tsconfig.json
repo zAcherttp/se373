@@ -9,16 +9,19 @@
   ],
   "references": [
     {
-      "path": "../../../../vendor/dsh/core/session"
+      "path": "../../../cosmokit"
     },
     {
-      "path": "../../../../vendor/dsh/runtime-diagnostics/invariants"
+      "path": "../../../cordis"
     },
     {
-      "path": "../../../../vendor/dsh/util/brand"
+      "path": "../../util/brand"
     },
     {
-      "path": "../../../../vendor/dsh/util/timeout"
+      "path": "../../core/session"
+    },
+    {
+      "path": "../../runtime-diagnostics/invariants"
     }
   ]
 }

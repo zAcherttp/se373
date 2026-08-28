@@ -9,16 +9,22 @@
   ],
   "references": [
     {
-      "path": "../../../../vendor/dsh/core/agent"
+      "path": "../../../cosmokit"
     },
     {
-      "path": "../../../../vendor/dsh/core/session"
+      "path": "../../../cordis"
     },
     {
-      "path": "../../../../vendor/dsh/runtime-diagnostics/invariants"
+      "path": "../../util/brand"
     },
     {
-      "path": "../../../../vendor/dsh/util/brand"
+      "path": "../../core/agent"
+    },
+    {
+      "path": "../../core/session"
+    },
+    {
+      "path": "../../runtime-diagnostics/invariants"
     }
   ]
 }

@@ -1,0 +1,39 @@
+{
+  "extends": "../../../../tsconfig.vendor.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib/types"
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../../../cosmokit"
+    },
+    {
+      "path": "../../../cordis"
+    },
+    {
+      "path": "../../../schemastery"
+    },
+    {
+      "path": "../../core/session"
+    },
+    {
+      "path": "../session-persistence"
+    },
+    {
+      "path": "../session-projection"
+    },
+    {
+      "path": "../../storage/storage"
+    },
+    {
+      "path": "../../storage/storage-domain"
+    },
+    {
+      "path": "../../runtime-diagnostics/invariants"
+    }
+  ]
+}

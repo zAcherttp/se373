@@ -9,22 +9,28 @@
   ],
   "references": [
     {
-      "path": "../../../../vendor/dsh/core/scope"
+      "path": "../../../cosmokit"
     },
     {
-      "path": "../../../../vendor/dsh/core/session"
+      "path": "../../../cordis"
     },
     {
-      "path": "../../../../vendor/dsh/core/system-prompt"
+      "path": "../scope"
     },
     {
-      "path": "../../../../vendor/dsh/llm/llm"
+      "path": "../../llm/llm"
     },
     {
-      "path": "../../../../vendor/dsh/runtime-diagnostics/invariants"
+      "path": "../session"
     },
     {
-      "path": "../../../../vendor/dsh/typert/protocol"
+      "path": "../system-prompt"
+    },
+    {
+      "path": "../../runtime-diagnostics/invariants"
+    },
+    {
+      "path": "../../typert/protocol"
     }
   ]
 }

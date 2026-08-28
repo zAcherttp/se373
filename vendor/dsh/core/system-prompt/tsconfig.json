@@ -9,13 +9,22 @@
   ],
   "references": [
     {
-      "path": "../../../../vendor/dsh/core/scope"
+      "path": "../../../cosmokit"
     },
     {
-      "path": "../../../../vendor/dsh/llm/llm"
+      "path": "../../../cordis"
     },
     {
-      "path": "../../../../vendor/dsh/runtime-diagnostics/invariants"
+      "path": "../../../schemastery"
+    },
+    {
+      "path": "../../llm/llm"
+    },
+    {
+      "path": "../scope"
+    },
+    {
+      "path": "../../runtime-diagnostics/invariants"
     }
   ]
 }

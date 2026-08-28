@@ -1,0 +1,80 @@
+{
+  "name": "@se373/subagent",
+  "description": "Abstract subagent seam (ctx.subagents): named-provider registry for delegating to child agents",
+  "version": "0.1.1-rc.2",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./src/invariant.ts"
+    },
+    "./client": {
+      "types": "./lib/types/client.d.ts",
+      "default": "./lib/types/client.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zAcherttp/se373.git",
+    "directory": "vendor/dsh/subagent/subagent"
+  },
+  "se373": {
+    "upstream": {
+      "repo": "deepseek-ai/deepseek-harness",
+      "rev": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e",
+      "path": "packages/subagent/subagent",
+      "name": "@deepseek-ai/dsh-subagent"
+    }
+  },
+  "dependencies": {
+    "zod": "^4.4.3"
+  },
+  "peerDependencies": {
+    "@se373/agent": "workspace:^",
+    "@se373/agent-presets": "workspace:^",
+    "@se373/brand": "workspace:^",
+    "@se373/invariants": "workspace:^",
+    "@se373/llm": "workspace:^",
+    "@se373/sandbox": "workspace:^",
+    "@se373/sandbox-policy": "workspace:^",
+    "@se373/scope": "workspace:^",
+    "@se373/session": "workspace:^",
+    "@se373/session-persistence": "workspace:^",
+    "@se373/session-projection": "workspace:^",
+    "@se373/session-projection-cache": "workspace:^",
+    "@se373/jobs": "workspace:^",
+    "@se373/tools": "workspace:^",
+    "@se373/user-approval": "workspace:^",
+    "@se373/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@se373/agent": "workspace:^",
+    "@se373/agent-presets": "workspace:^",
+    "@se373/brand": "workspace:^",
+    "@se373/invariants": "workspace:^",
+    "@se373/llm": "workspace:^",
+    "@se373/sandbox": "workspace:^",
+    "@se373/sandbox-policy": "workspace:^",
+    "@se373/scope": "workspace:^",
+    "@se373/session": "workspace:^",
+    "@se373/session-persistence": "workspace:^",
+    "@se373/session-projection": "workspace:^",
+    "@se373/session-projection-cache": "workspace:^",
+    "@se373/storage": "workspace:^",
+    "@se373/storage-domain": "workspace:^",
+    "@se373/jobs": "workspace:^",
+    "@se373/tools": "workspace:^",
+    "@se373/user-approval": "workspace:^",
+    "@se373/cordis": "workspace:^"
+  }
+}

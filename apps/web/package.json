@@ -1,0 +1,31 @@
+{
+  "name": "@se373/web-frontend",
+  "description": "The browser shell: a Vite build over @se373/client-web, whose dist/ the host serves",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "vite build",
+    "watch": "vite build --watch --no-emptyOutDir"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@se373/client-modules": "workspace:*",
+    "@se373/client-ui-primitives": "workspace:*",
+    "@se373/client-ui-slots": "workspace:*",
+    "@se373/client-web": "workspace:*",
+    "@se373/cmdline": "workspace:*",
+    "@se373/cordis-plugin-group": "workspace:*",
+    "@types/react": "~18.3.1",
+    "@types/react-dom": "~18.3.0",
+    "@vitejs/plugin-react": "^4.0.0",
+    "fflate": "^0.8.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "vite": "^6.0.0"
+  }
+}

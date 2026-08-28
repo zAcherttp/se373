@@ -6,5 +6,9 @@
   "compilerOptions": {
     "noEmit": true
   },
-  "include": ["packages/*/*/src", "packages/*/*/tests", "apps/*/src", "apps/*/tests"]
+  "include": ["packages/*/*/src", "packages/*/*/tests", "apps/*/src", "apps/*/tests"],
+  // The browser half is its own program (apps/web/tsconfig.json). The host and
+  // client planes both merge cordis `Context` under the same keys with
+  // different services, so one program cannot hold both sides of that merge.
+  "exclude": ["apps/web"]
 }

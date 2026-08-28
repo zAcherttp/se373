@@ -9,10 +9,19 @@
   ],
   "references": [
     {
-      "path": "../../../../vendor/dsh/runtime-diagnostics/invariants"
+      "path": "../../../cosmokit"
     },
     {
-      "path": "../../../../vendor/dsh/util/brand"
+      "path": "../../../cordis"
+    },
+    {
+      "path": "../../../schemastery"
+    },
+    {
+      "path": "../../util/brand"
+    },
+    {
+      "path": "../../runtime-diagnostics/invariants"
     }
   ]
 }

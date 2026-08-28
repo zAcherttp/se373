@@ -9,13 +9,19 @@
   ],
   "references": [
     {
-      "path": "../../../../vendor/dsh/core/session"
+      "path": "../../../cosmokit"
     },
     {
-      "path": "../../../../vendor/dsh/llm/llm"
+      "path": "../../../cordis"
     },
     {
-      "path": "../../../../vendor/dsh/runtime-diagnostics/invariants"
+      "path": "../../llm/llm"
+    },
+    {
+      "path": "../../core/session"
+    },
+    {
+      "path": "../../runtime-diagnostics/invariants"
     }
   ]
 }

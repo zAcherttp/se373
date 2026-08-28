@@ -9,16 +9,22 @@
   ],
   "references": [
     {
-      "path": "../../../../vendor/dsh/runtime-diagnostics/invariants"
+      "path": "../../../cosmokit"
     },
     {
-      "path": "../../../../vendor/dsh/sandbox/sandbox"
+      "path": "../../../cordis"
     },
     {
-      "path": "../../../../vendor/dsh/settings/settings"
+      "path": "../../subprocess/subprocess"
     },
     {
-      "path": "../../../../vendor/dsh/subprocess/subprocess"
+      "path": "../../sandbox/sandbox"
+    },
+    {
+      "path": "../../settings/settings"
+    },
+    {
+      "path": "../../runtime-diagnostics/invariants"
     }
   ]
 }

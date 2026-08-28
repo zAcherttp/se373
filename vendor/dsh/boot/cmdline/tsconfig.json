@@ -9,7 +9,16 @@
   ],
   "references": [
     {
-      "path": "../../../../vendor/dsh/runtime-diagnostics/invariants"
+      "path": "../../../cordis"
+    },
+    {
+      "path": "../../../include"
+    },
+    {
+      "path": "../../../loader"
+    },
+    {
+      "path": "../../runtime-diagnostics/invariants"
     }
   ]
 }

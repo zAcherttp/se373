@@ -1,0 +1,30 @@
+{
+  "extends": "../../../../tsconfig.vendor.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib/types"
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../../../cosmokit"
+    },
+    {
+      "path": "../../../cordis"
+    },
+    {
+      "path": "../../../schemastery"
+    },
+    {
+      "path": "../../core/scope"
+    },
+    {
+      "path": "../../llm/llm"
+    },
+    {
+      "path": "../../runtime-diagnostics/invariants"
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "name": "@se373/message-feedback",
+  "description": "Lifecycle-bound per-message rating and note sidecar for the DeepSeek Harness",
+  "version": "0.1.1-rc.2",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./src/invariant.ts"
+    },
+    "./types": {
+      "types": "./lib/types/types.d.ts",
+      "default": "./src/types.ts"
+    },
+    "./typert": {
+      "types": "./lib/types/typert.host.d.ts",
+      "default": "./src/typert.host.ts"
+    },
+    "./remote": {
+      "types": "./lib/types/typert.remote-client.d.ts",
+      "default": "./src/typert.remote-client.ts"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zAcherttp/se373.git",
+    "directory": "vendor/dsh/feedback/message-feedback"
+  },
+  "se373": {
+    "upstream": {
+      "repo": "deepseek-ai/deepseek-harness",
+      "rev": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e",
+      "path": "packages/feedback/message-feedback",
+      "name": "@deepseek-ai/dsh-message-feedback"
+    }
+  },
+  "dependencies": {
+    "@se373/schemastery": "workspace:^",
+    "zod": "^4.4.3"
+  },
+  "peerDependencies": {
+    "@se373/brand": "workspace:^",
+    "@se373/invariants": "workspace:^",
+    "@se373/llm": "workspace:^",
+    "@se373/session": "workspace:^",
+    "@se373/session-persistence": "workspace:^",
+    "@se373/storage-domain": "workspace:^",
+    "@se373/typert-protocol": "workspace:^",
+    "@se373/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@se373/cordis-plugin-include": "workspace:^",
+    "@se373/cordis-plugin-loader": "workspace:^",
+    "@se373/brand": "workspace:^",
+    "@se373/invariants": "workspace:^",
+    "@se373/llm": "workspace:^",
+    "@se373/session": "workspace:^",
+    "@se373/session-persistence": "workspace:^",
+    "@se373/storage": "workspace:^",
+    "@se373/storage-domain": "workspace:^",
+    "@se373/storage-json": "workspace:^",
+    "@se373/typert-protocol": "workspace:^",
+    "@se373/cordis": "workspace:^"
+  }
+}

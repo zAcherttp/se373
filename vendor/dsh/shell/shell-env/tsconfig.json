@@ -9,19 +9,28 @@
   ],
   "references": [
     {
-      "path": "../../../../vendor/dsh/core/tools"
+      "path": "../../../cosmokit"
     },
     {
-      "path": "../../../../vendor/dsh/runtime-diagnostics/invariants"
+      "path": "../../../cordis"
     },
     {
-      "path": "../../../../vendor/dsh/session/session-persistence"
+      "path": "../../../schemastery"
     },
     {
-      "path": "../../../../vendor/dsh/shell/shell"
+      "path": "../shell"
     },
     {
-      "path": "../../../../vendor/dsh/util/home-paths"
+      "path": "../../util/home-paths"
+    },
+    {
+      "path": "../../core/tools"
+    },
+    {
+      "path": "../../session/session-persistence"
+    },
+    {
+      "path": "../../runtime-diagnostics/invariants"
     }
   ]
 }

@@ -1,0 +1,24 @@
+{
+  "extends": "../../../../tsconfig.vendor.client.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib/types"
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../../runtime-diagnostics/invariants"
+    },
+    {
+      "path": "../ui-slots"
+    },
+    {
+      "path": "../runtime"
+    },
+    {
+      "path": "../ui-workspace"
+    }
+  ]
+}

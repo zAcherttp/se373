@@ -9,19 +9,28 @@
   ],
   "references": [
     {
-      "path": "../../../../vendor/dsh/core/agent"
+      "path": "../../../cosmokit"
     },
     {
-      "path": "../../../../vendor/dsh/core/session"
+      "path": "../../../cordis"
     },
     {
-      "path": "../../../../vendor/dsh/core/system-prompt"
+      "path": "../../../schemastery"
     },
     {
-      "path": "../../../../vendor/dsh/runtime-diagnostics/invariants"
+      "path": "../../core/agent"
     },
     {
-      "path": "../../../../vendor/dsh/sandbox/sandbox"
+      "path": "../sandbox"
+    },
+    {
+      "path": "../../core/session"
+    },
+    {
+      "path": "../../core/system-prompt"
+    },
+    {
+      "path": "../../runtime-diagnostics/invariants"
     }
   ]
 }

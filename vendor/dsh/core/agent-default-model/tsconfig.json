@@ -9,16 +9,22 @@
   ],
   "references": [
     {
-      "path": "../../../../vendor/dsh/core/agent"
+      "path": "../../../cordis"
     },
     {
-      "path": "../../../../vendor/dsh/llm/llm"
+      "path": "../../../schemastery"
     },
     {
-      "path": "../../../../vendor/dsh/runtime-diagnostics/invariants"
+      "path": "../agent"
     },
     {
-      "path": "../../../../vendor/dsh/settings/settings"
+      "path": "../../llm/llm"
+    },
+    {
+      "path": "../../settings/settings"
+    },
+    {
+      "path": "../../runtime-diagnostics/invariants"
     }
   ]
 }

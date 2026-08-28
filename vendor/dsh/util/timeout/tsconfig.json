@@ -9,7 +9,7 @@
   ],
   "references": [
     {
-      "path": "../../../../vendor/dsh/runtime-diagnostics/invariants"
+      "path": "../../runtime-diagnostics/invariants"
     }
   ]
 }

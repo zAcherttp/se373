@@ -17,11 +17,11 @@
     },
     "./types": {
       "types": "./lib/types/types.d.ts",
-      "default": "./src/types/types.ts"
+      "default": "./src/types.ts"
     },
     "./client": {
       "types": "./lib/types/client.d.ts",
-      "default": "./src/types/client.ts"
+      "default": "./lib/types/client.js"
     },
     "./src/*": "./src/*",
     "./package.json": "./package.json"

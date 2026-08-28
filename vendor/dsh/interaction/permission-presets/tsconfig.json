@@ -9,31 +9,40 @@
   ],
   "references": [
     {
-      "path": "../../../../vendor/dsh/core/session"
+      "path": "../../../cosmokit"
     },
     {
-      "path": "../../../../vendor/dsh/interaction/commands"
+      "path": "../../../cordis"
     },
     {
-      "path": "../../../../vendor/dsh/interaction/user-approval"
+      "path": "../../../schemastery"
     },
     {
-      "path": "../../../../vendor/dsh/runtime-diagnostics/invariants"
+      "path": "../../core/session"
     },
     {
-      "path": "../../../../vendor/dsh/sandbox/sandbox"
+      "path": "../../sandbox/sandbox"
     },
     {
-      "path": "../../../../vendor/dsh/sandbox/sandbox-policy"
+      "path": "../../sandbox/sandbox-policy"
     },
     {
-      "path": "../../../../vendor/dsh/session/session-projection"
+      "path": "../../shell/shell"
     },
     {
-      "path": "../../../../vendor/dsh/settings/settings"
+      "path": "../user-approval"
     },
     {
-      "path": "../../../../vendor/dsh/shell/shell"
+      "path": "../../runtime-diagnostics/invariants"
+    },
+    {
+      "path": "../../session/session-projection"
+    },
+    {
+      "path": "../../settings/settings"
+    },
+    {
+      "path": "../commands"
     }
   ]
 }

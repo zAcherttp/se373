@@ -1,0 +1,20 @@
+{
+  // Browser-plane compiler shape for vendored code: React JSX and the DOM
+  // library, and — unlike the host base — real JavaScript output.
+  //
+  // The host half runs from source under `tsx`, so declarations are all it
+  // needs. The browser half cannot: `client-modules` resolves each plugin's
+  // `./client` export, reads the file off disk to hash it, and serves those
+  // bytes to a browser. So this program emits JS into `lib/types`, and tsdown
+  // bundles that into the `lib/client.js` the manifest names.
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": true,
+    "composite": true,
+    "incremental": true,
+    "jsx": "react-jsx",
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
+    "types": []
+  }
+}

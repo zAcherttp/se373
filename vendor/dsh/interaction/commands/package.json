@@ -17,11 +17,11 @@
     },
     "./types": {
       "types": "./lib/types/types.d.ts",
-      "default": "./src/types/types.ts"
+      "default": "./src/types.ts"
     },
     "./brand": {
       "types": "./lib/types/brand.d.ts",
-      "default": "./src/types/brand.ts"
+      "default": "./src/brand.ts"
     },
     "./typert": {
       "types": "./lib/types/typert.host.d.ts",

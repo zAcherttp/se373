@@ -1,0 +1,39 @@
+{
+  "extends": "../../../../tsconfig.vendor.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib/types"
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../../../cordis"
+    },
+    {
+      "path": "../../../loader"
+    },
+    {
+      "path": "../../../include"
+    },
+    {
+      "path": "../../../group"
+    },
+    {
+      "path": "../../../hmr"
+    },
+    {
+      "path": "../../runtime-diagnostics/invariants"
+    },
+    {
+      "path": "../../core/system-prompt"
+    },
+    {
+      "path": "../../util/launch-environment"
+    },
+    {
+      "path": "../../util/home-paths"
+    }
+  ]
+}

@@ -7,5 +7,15 @@
   "include": [
     "src"
   ],
-  "references": []
+  "references": [
+    {
+      "path": "../../../cosmokit"
+    },
+    {
+      "path": "../../../cordis"
+    },
+    {
+      "path": "../../../schemastery"
+    }
+  ]
 }

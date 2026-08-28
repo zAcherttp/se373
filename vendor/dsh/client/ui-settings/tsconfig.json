@@ -1,0 +1,33 @@
+{
+  "extends": "../../../../tsconfig.vendor.client.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib/types"
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../../../cordis"
+    },
+    {
+      "path": "../ui-slots"
+    },
+    {
+      "path": "../runtime"
+    },
+    {
+      "path": "../../../schemastery"
+    },
+    {
+      "path": "../../api/remotes/tsconfig.client.json"
+    },
+    {
+      "path": "../../settings/settings"
+    },
+    {
+      "path": "../../runtime-diagnostics/invariants"
+    }
+  ]
+}

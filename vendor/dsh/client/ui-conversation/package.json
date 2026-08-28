@@ -1,0 +1,111 @@
+{
+  "name": "@se373/client-ui-conversation",
+  "description": "Conversation domain: skeleton, ordered chat flow, composer with the Host-backed busy-Enter preference, and details host",
+  "version": "0.1.1-rc.2",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./src/invariant.ts"
+    },
+    "./client": {
+      "types": "./lib/types/client/index.d.ts",
+      "default": "./lib/client.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zAcherttp/se373.git",
+    "directory": "vendor/dsh/client/ui-conversation"
+  },
+  "dsh": {
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-connection",
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-api-remotes",
+        "@deepseek-ai/dsh-client-ui-layout"
+      ],
+      "platform": "web"
+    }
+  },
+  "se373": {
+    "upstream": {
+      "repo": "deepseek-ai/deepseek-harness",
+      "rev": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e",
+      "path": "packages/client/ui-conversation",
+      "name": "@deepseek-ai/dsh-client-ui-conversation"
+    }
+  },
+  "dependencies": {
+    "clsx": "^2.0.0",
+    "@se373/schemastery": "workspace:^"
+  },
+  "peerDependencies": {
+    "@se373/cordis": "workspace:^",
+    "@se373/agent": "workspace:^",
+    "@se373/api-remotes": "workspace:^",
+    "@se373/attachment": "workspace:^",
+    "@se373/brand": "workspace:^",
+    "@se373/client-connection": "workspace:^",
+    "@se373/client-locale": "workspace:^",
+    "@se373/client-runtime": "workspace:^",
+    "@se373/client-ui-settings": "workspace:^",
+    "@se373/client-ui-input-trigger": "workspace:^",
+    "@se373/commands": "workspace:^",
+    "@se373/compaction": "workspace:^",
+    "@se373/invariants": "workspace:^",
+    "@se373/llm-retry": "workspace:^",
+    "@se373/session-stats": "workspace:^",
+    "@se373/token-meter": "workspace:^",
+    "@se373/tools": "workspace:^",
+    "@se373/settings": "workspace:^",
+    "@se373/client-ui-layout": "workspace:^",
+    "@se373/goal": "workspace:^",
+    "@se373/permission-presets": "workspace:^",
+    "@se373/plan-mode": "workspace:^",
+    "@se373/tool-todo": "workspace:^"
+  },
+  "devDependencies": {
+    "@se373/cordis": "workspace:^",
+    "@se373/agent": "workspace:^",
+    "@se373/api-remotes": "workspace:^",
+    "@se373/attachment": "workspace:^",
+    "@se373/brand": "workspace:^",
+    "@se373/client-connection": "workspace:^",
+    "@se373/client-locale": "workspace:^",
+    "@se373/client-runtime": "workspace:^",
+    "@se373/client-ui-layout": "workspace:^",
+    "@se373/client-ui-primitives": "workspace:^",
+    "@se373/client-ui-settings": "workspace:^",
+    "@se373/client-ui-input-trigger": "workspace:^",
+    "@se373/client-ui-slots": "workspace:^",
+    "@se373/commands": "workspace:^",
+    "@se373/compaction": "workspace:^",
+    "@se373/goal": "workspace:^",
+    "@se373/invariants": "workspace:^",
+    "@se373/llm-retry": "workspace:^",
+    "@se373/permission-presets": "workspace:^",
+    "@se373/plan-mode": "workspace:^",
+    "@se373/session-projection": "workspace:^",
+    "@se373/session-stats": "workspace:^",
+    "@se373/token-meter": "workspace:^",
+    "@se373/tool-todo": "workspace:^",
+    "@se373/tools": "workspace:^",
+    "@types/react": "~18.3.1",
+    "react": "^18.2.0",
+    "@se373/settings": "workspace:^"
+  }
+}

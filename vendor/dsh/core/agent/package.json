@@ -17,7 +17,7 @@
     },
     "./types": {
       "types": "./lib/types/types.d.ts",
-      "default": "./src/types/types.ts"
+      "default": "./src/types.ts"
     },
     "./src/*": "./src/*",
     "./package.json": "./package.json"
@@ -52,6 +52,7 @@
     "@se373/session": "workspace:^",
     "@se373/system-prompt": "workspace:^",
     "@se373/typert-protocol": "workspace:^",
+    "@se373/typert-registry": "workspace:^",
     "@se373/cordis": "workspace:^"
   }
 }

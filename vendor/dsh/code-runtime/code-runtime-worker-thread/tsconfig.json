@@ -9,16 +9,25 @@
   ],
   "references": [
     {
-      "path": "../../../../vendor/dsh/code-runtime/code-runtime"
+      "path": "../../core/session"
     },
     {
-      "path": "../../../../vendor/dsh/core/session"
+      "path": "../../../cosmokit"
     },
     {
-      "path": "../../../../vendor/dsh/runtime-diagnostics/invariants"
+      "path": "../../../cordis"
     },
     {
-      "path": "../../../../vendor/dsh/util/timeout"
+      "path": "../../../schemastery"
+    },
+    {
+      "path": "../code-runtime"
+    },
+    {
+      "path": "../../runtime-diagnostics/invariants"
+    },
+    {
+      "path": "../../util/timeout"
     }
   ]
 }

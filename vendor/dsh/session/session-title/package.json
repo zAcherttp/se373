@@ -1,0 +1,63 @@
+{
+  "name": "@se373/session-title",
+  "description": "Log-backed session title service and provider registry for the DeepSeek Harness",
+  "version": "0.1.1-rc.2",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./src/invariant.ts"
+    },
+    "./types": {
+      "types": "./lib/types/types.d.ts",
+      "default": "./src/types.ts"
+    },
+    "./client": {
+      "types": "./lib/types/client.d.ts",
+      "default": "./lib/types/client.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zAcherttp/se373.git",
+    "directory": "vendor/dsh/session/session-title"
+  },
+  "se373": {
+    "upstream": {
+      "repo": "deepseek-ai/deepseek-harness",
+      "rev": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e",
+      "path": "packages/session/session-title",
+      "name": "@deepseek-ai/dsh-session-title"
+    }
+  },
+  "dependencies": {
+    "@se373/schemastery": "workspace:^",
+    "zod": "^4.4.3"
+  },
+  "peerDependencies": {
+    "@se373/brand": "workspace:^",
+    "@se373/invariants": "workspace:^",
+    "@se373/llm": "workspace:^",
+    "@se373/session": "workspace:^",
+    "@se373/session-projection": "workspace:^",
+    "@se373/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@se373/brand": "workspace:^",
+    "@se373/invariants": "workspace:^",
+    "@se373/llm": "workspace:^",
+    "@se373/session": "workspace:^",
+    "@se373/session-projection": "workspace:^",
+    "@se373/cordis": "workspace:^"
+  }
+}

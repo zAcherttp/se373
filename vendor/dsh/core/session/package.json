@@ -17,13 +17,13 @@
     },
     "./types": {
       "types": "./lib/types/types.d.ts",
-      "default": "./src/types/types.ts"
+      "default": "./src/types.ts"
     },
     "./src/*": "./src/*",
     "./package.json": "./package.json",
     "./surface": {
       "types": "./lib/types/surface.d.ts",
-      "default": "./src/types/surface.ts"
+      "default": "./src/surface.ts"
     }
   },
   "license": "MIT",
@@ -54,6 +54,7 @@
     "@se373/llm": "workspace:^",
     "@se373/scope": "workspace:^",
     "@se373/typert-protocol": "workspace:^",
+    "@se373/typert-registry": "workspace:^",
     "@se373/cordis": "workspace:^"
   }
 }

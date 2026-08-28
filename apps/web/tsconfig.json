@@ -1,0 +1,18 @@
+{
+  // The browser half. Its own program, because the host and client planes both
+  // merge cordis `Context` under the same keys with different services, and one
+  // TypeScript program cannot hold both sides of that merge.
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "lib/types",
+    "jsx": "react-jsx",
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
+    "types": ["node"]
+  },
+  "include": ["src"],
+  "references": [
+    { "path": "../../vendor/dsh/client/web" },
+    { "path": "../../vendor/dsh/client/modules" }
+  ]
+}
