@@ -44,6 +44,7 @@
     "@se373/runtime-graph": "workspace:*",
     "@se373/tool-graph-inspect": "workspace:*",
     "@se373/logger-jsonl": "workspace:*",
-    "@se373/mcp-client": "workspace:*"
+    "@se373/mcp-client": "workspace:*",
+    "@se373/llm-mock-server": "workspace:*"
   }
 }

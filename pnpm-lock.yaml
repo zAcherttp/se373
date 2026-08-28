@@ -123,6 +123,9 @@ importers:
       '@se373/llm-deepseek':
         specifier: workspace:*
         version: link:../vendor/dsh/llm/llm-deepseek
+      '@se373/llm-mock-server':
+        specifier: workspace:*
+        version: link:../vendor/dsh/test-support/llm-mock-server
       '@se373/llm-retry':
         specifier: workspace:*
         version: link:../vendor/dsh/llm/llm-retry
