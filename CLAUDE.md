@@ -125,12 +125,15 @@ formality.
 
 ## Immediate next steps
 
-1. **Start phase 4** (web plane) — the risk spike, and now the only thing
-   between here and the user being able to drive this themselves. 78 new
-   packages plus a build workstream; it is what turns approval's `ask` from a
-   hang into a prompt, and what gives the graph a board instead of a tool call.
-   Take the build first, not the board: it is the part that can fail in a way
-   no amount of design prevents.
+1. **Start phase 5** (multi-agent) — `ctx.agentPresets` and
+   `subagent-spawn-in-process`. It is also what the web tree is waiting for:
+   upstream's web patch disables every model-facing tool row because each
+   session mounts a *preset* that composes its own, and ours keeps them on the
+   host plane only because there is no roster yet. Phase 5 is what lets
+   `examples/web/cordis.yml` stop diverging there.
+2. **Re-read the testing decision.** "Not a priority until the web plane" was
+   the standing call; the web plane has arrived. Two specs is thin for 146
+   vendored packages, a four-stage build and a browser.
 3. ~~Name the project~~ — settled: `@se373/*`.
 4. ~~Write `docs/PORTING.md`~~ — done.
 5. ~~Get the milestone dates~~ — **dropped 2026-08-27.** The user's call: phases are what we can go back to and reproduce, and otherwise we go at our own pace. Still worth confirming in week 1 whether solo is permitted.
@@ -143,12 +146,15 @@ formality.
 10. ~~Start phase 3.5~~ — shipped, tagged `phase-3.5`. 60 vendored plus our
     first three own packages. The agent inspects its own runtime, every run
     leaves a durable log, and `mcp-client` sits there disabled. D10 closed.
+11. ~~Start phase 4~~ — shipped, tagged `phase-4`. 146 vendored, a four-stage
+    build, 44 browser bundles, and a real turn driven through it by hand. D9
+    deferred rather than closed.
 
 ## Risks being tracked
 
-- **Phase 4 (web plane) is the risk spike, and solo makes it worse.** 78 new packages *and* a build pipeline — two TypeScript programs, `tsdown` per client package, Vite, a watcher — because `client-modules` reads `lib/client.js` off disk and there is no source path to the browser. If the semester slips, it slips there. The board is committed, so the old fallback (a terminal renderer) is off the table; what survives instead is that phase 3.5 landed the projection first, so a late phase 4 costs the *view*, not the data — that mitigation is now banked rather than planned.
-- **The vendor build already fails, and phase 4 is where that starts mattering.** `npx tsc -b tsconfig.host.json` exits `2` with ~447 errors — 236 in `vendor/schemastery`, 25 in `vendor/loader`, none of ours — and emits anyway, which is why nothing has broken: it is a declaration build whose output only feeds `paths`. A client build the browser actually loads may not be so forgiving. Find out early rather than at the end of the phase.
-- **Nothing has been driven by a human yet.** Every check so far is either headless or mock-driven; there is no API key on this machine and no UI to paste one into. Phase 4 is the first time the system meets a user, and first contact usually finds things no amount of hand-verification does.
+- ~~**Phase 4 is the risk spike**~~, ~~**the vendor build already fails**~~, ~~**nothing has been driven by a human yet**~~ — **all three retired 2026-08-28.** Phase 4 shipped; the vendor build exits `0` on upstream's own tsconfigs; a real turn has been driven through the browser by hand. What the phase actually taught is worth keeping: the hard parts were configuration the upstream tree had already solved, and the fix each time was to vendor upstream's answer rather than derive our own.
+- **The build is now load-bearing and has no test.** Four stages plus Vite, and a break in any of them is a browser that does not boot. Nothing checks it but running it.
+- **The web tree diverges from upstream's patch in one place, and phase 5 is the resolution.** Model-facing tool rows sit on the host plane because we have no agent-preset roster. Until then the divergence is documented rather than fixed, and every phase that adds a tool row widens it.
 - Model-authored UI is a demo cliff — keep a deterministic fallback for anything shown live.
 - **Solo changes the scope calculus, not the schedule.** Six *recipes* ship and the block vocabulary must span all six, but only two archetypes get built out — the generality is the claim, the demos are evidence for it. Cut breadth before depth.
 - **D9 is what this design opened, and it is now smaller than it was.** The runtime graph still has no push transport upstream (`pluginInventory.list()` is poll-only), but node transitions are recorded as they happen rather than sampled, so a polling board is a latency compromise and not a lossy one. ~~D10~~ closed 2026-08-28: the third-party MCP path works, no fallback server needed.

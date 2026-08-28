@@ -469,10 +469,12 @@ We publish nothing, so it is omitted rather than vendored.
 
 ## Known Limitations and Deferred Work
 
-- **142 of the 187 in-scope packages are vendored** (phases 2, 3, 3.5 and 4:
+- **146 of the 187 in-scope packages are vendored** (phases 2, 3, 3.5 and 4:
   the chat closure, the tool and sandbox closure, the mock LLM server, the
-  Landlock seam, `mcp-client`, and the whole `bundle/web-app` closure plus the
-  four shell-side seeds `apps/web` links statically).
+  Landlock seam, `mcp-client`, the whole `bundle/web-app` closure, the four
+  shell-side seeds `apps/web` links statically, and two the transcription found
+  it could not do without — `session-query-sqlite` and `attachment-local`, both
+  *injected* by `host-apiproxy`).
   `scripts/vendor-dsh.mjs` is the mechanism, so widening is a seed-list edit
   rather than new work.
 - **`mcp-client` cost one package, not the two that were budgeted.**
@@ -481,11 +483,14 @@ We publish nothing, so it is omitted rather than vendored.
   re-vendor of the other fourteen packages in its closure produced a byte-identical
   tree, which is the first independent evidence that the script is idempotent.
 - ~~**Phase 4 takes `bundle/web-app` whole: 78 more packages, 60 → 138.**~~
-  **Measured 2026-08-28: 142, not 138.** The prediction was four short because
-  `apps/web` links four packages statically that no runtime closure reaches —
+  **Measured 2026-08-28: 146, not 138.** Four short because `apps/web` links
+  packages statically that no runtime closure reaches —
   `client-ui-primitives`, `client-ui-slots`, `client-web` and `pwsh-local` are
   devDependencies of the Vite app, so a dependency walk from `web-app` alone
-  misses them. Original note, 2026-08-27: Two smaller tiers were considered and rejected — a page with no
+  misses them. Four more because two rows upstream calls optional are not:
+  `host-apiproxy` *injects* `sessionQuery` and `attachments`, and without a
+  provider for either the gateway sits pending and every `/api` route 404s.
+  Original note, 2026-08-27: Two smaller tiers were considered and rejected — a page with no
   host RPC (3 new packages) and the `/api` transport without dsh's UI (27) — on
   the grounds that dsh's chat view is 14,904 lines we would otherwise
   reimplement, and that typert arrives with the transport whether we use it or

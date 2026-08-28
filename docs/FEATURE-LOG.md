@@ -339,3 +339,76 @@ demo — and one more vendored, 60 total:
   private to the fiber. The transitions show the path in; the log says why.
 - **Nothing renders any of this.** No board, no log dock, no browser at all —
   that is phase 4, and it is the risk spike.
+
+---
+
+## phase-4 — Your chat box, and the board beside it
+
+**2026-08-28** · **Commit** `16639d0` · **Tag** `phase-4`
+
+**Roadmap** — Topic 6 (*Human-in-the-loop*) becomes real: approval is `ask` and
+there is finally somebody to ask. Topic 3 (*Multi-turn Conversation*) arrives
+with dsh's session surface. Infrastructure otherwise — this is the phase that
+turns a headless spine into something a person can drive.
+**Phase** — §13 phase 4, "Web plane".
+
+**Demonstrable**
+
+A browser. Open the URL it prints, paste a DeepSeek key when it asks, and talk
+to the agent; the board is the pill in the bottom-right corner.
+
+```bash
+pnpm install
+pnpm build
+pnpm se373 examples/web/cordis.yml
+```
+
+`pnpm build` is not optional here and never will be: the host runs from source
+under `tsx`, and the browser cannot. It is a four-stage chain — host `tsc`, the
+typert codegen, client `tsc`, then `tsdown` per client package — plus Vite over
+the shell.
+
+Run from a clean checkout at this tag: install, cold build, boot, and the shell
+came up with the board reporting `112 rows · 111 active · 1 disabled`.
+
+**A real turn has been driven through it**, by the repository's owner, with a
+real key. That is the first time anything in this project has been used rather
+than verified — every earlier phase was headless or mock-driven.
+
+**Packages**
+
+86 more vendored, 146 total, plus the four shell-side seeds `apps/web` links
+statically. Two of ours are new, and they are the first packages of ours to be
+first class in the vendored client plane:
+
+| Package | What it does |
+|---|---|
+| `bundle/web-app` closure (vendored) | dsh's browser surface: the transport, the host rows, and the whole `dsh.client` roster |
+| `@se373/web-frontend` (`apps/web`, ours) | the Vite shell over `@se373/client-web`. Ours because it is an application, not a plugin — and because its branding is not upstream's to lend |
+| `@se373/board-gateway` | `ctx.runtimeGraph` as a Remote namespace, behind the `/api` browser-trust fence |
+| `@se373/client-ui-board` | the board, in the shell's frame-wide overlay seat |
+| `session-query-sqlite`, `attachment-local` | not optional despite upstream calling them so: `host-apiproxy` *injects* both, and without either the whole gateway sits pending and every `/api` route 404s |
+
+44 `lib/client.js` browser bundles are produced, 43 of them upstream's and one
+ours — and ours passed upstream's own bundle-purity gate, which is the real
+evidence the rescope did not break the client module edges.
+
+**Not yet**
+
+- **No push transport (D9).** The board reads on open and on `Refresh`. Phase 4
+  narrowed the decision rather than making it: transitions travel with the
+  payload, so a polling consumer recovers the history it slept through, which
+  makes this a latency question rather than a correctness one.
+- **The board is a panel, not a canvas.** No node-and-edge drawing. The list
+  answers what is running, what failed and why one is stuck; the drawing is for
+  when there is something it explains that the list does not.
+- **Tools are on the host plane, not behind agent presets.** Upstream's web
+  patch disables every model-facing tool row because each session mounts a
+  preset that composes its own. We ship no preset roster yet — that is phase 5 —
+  so they stay where the chat tree has them.
+- **Several base rows are absent because their implementations are not
+  vendored**: background jobs, subagent spawning, compaction, web search, skills
+  on disk, `plan-mode`. Each is a seed-list edit, not a design question.
+- **Still no board-side tests.** The standing decision was to hold testing until
+  the web plane; the web plane has now arrived, so that decision is due for
+  re-reading rather than renewal.

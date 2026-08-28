@@ -750,8 +750,8 @@ Status is the git tag, not a judgement: a phase is shipped when
 | 2 | Agent spine | **headless chat in terminal** | `ctx.sessions`, `ctx.llm`, minimal turn loop | ✅ `phase-2` |
 | 3 | Tools | **it can do work** | `ctx.tools`, guard pipeline, `fs` + `bash` | ✅ `phase-3` |
 | **3.5** | **Runtime graph** | **the agent can inspect its own runtime** | `ctx.runtimeGraph`, the `graph_inspect` tool, the JSONL app-log sink, `mcp-client` as a disabled row | ✅ `phase-3.5` |
-| 4 | Web plane | **your chat box, and the board beside it** | the build pipeline, dsh's shell and chat roster, our board plugin, a push transport for the graph | ← next |
-| 5 | Multi-agent | **subagents run** | `ctx.agentPresets`, `subagent-spawn-in-process` | |
+| 4 | Web plane | **your chat box, and the board beside it** | the build pipeline, dsh's shell and chat roster, our board plugin, a push transport for the graph | ✅ `phase-4` (D9 deferred) |
+| 5 | Multi-agent | **subagents run** | `ctx.agentPresets`, `subagent-spawn-in-process` | ← next |
 | 6a | **Embedding seam** | vectors exist | `ctx.embedder` + ONNX local, `sqlite-vec` at 384 dims | |
 | 6b | Knowledge plane | **knowledge agent answers** | remaining L3 seams, ingest events | |
 | 6c | Builder plane | **recipe → working agent** | `ctx.blocks` as a repository, `ctx.builder`, the cookbook | |
@@ -759,9 +759,9 @@ Status is the git tag, not a judgement: a phase is shipped when
 | 7 | Export | **installable plugin + MCP server** | `ctx.promotion`, MCP codegen | |
 | 8 | Eval / A/B | **compare view** | `ctx.retrievalEval`, isolate realms | |
 
-**Risk spike: phase 4.** 78 new packages *plus* a second TypeScript program, `tsdown` per client package, a Vite build, and a watcher. The `tsx`-from-source posture does not survive contact with the browser: `client-modules` reads `lib/client.js` off disk and fails loud when it is absent. Budget the build as a workstream, not a footnote.
+~~**Risk spike: phase 4.**~~ **Retired 2026-08-28.** The estimate was right about the shape and wrong about where the difficulty sat. 86 packages rather than 78, and the build was indeed a workstream — four stages plus Vite — but nothing in it was novel: the hard parts were all *configuration* the upstream tree already solved, and the fix each time was to vendor upstream's answer rather than derive our own. Two examples, both recorded in `docs/PORTING.md` §3: package tsconfigs are now copied instead of generated, because upstream's host/client split is curated to keep `tsc -b` acyclic and deriving it produced a real cycle; and the vendored layer gained a source-resolution facade, because without one a class reached through two paths is not assignable to itself.
 
-Phase 3.5 sharpened that: `npx tsc -b tsconfig.host.json` already exits `2` with ~447 errors in vendored sources while still emitting the declarations our program needs. That is survivable for a declaration build nothing executes. It is *not* survivable for a build whose output the browser loads, so phase 4's first task is finding out which of those two the client build is.
+The ~447-error vendor build turned out to be a symptom of the same thing and went to zero on upstream's own tsconfigs. What actually cost time was none of the above: it was three loader rows the transcription could not predict, and the runtime graph found all three in one snapshot.
 
 **Sequencing notes.**
 
