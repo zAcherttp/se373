@@ -751,8 +751,8 @@ Status is the git tag, not a judgement: a phase is shipped when
 | 3 | Tools | **it can do work** | `ctx.tools`, guard pipeline, `fs` + `bash` | ✅ `phase-3` |
 | **3.5** | **Runtime graph** | **the agent can inspect its own runtime** | `ctx.runtimeGraph`, the `graph_inspect` tool, the JSONL app-log sink, `mcp-client` as a disabled row | ✅ `phase-3.5` |
 | 4 | Web plane | **your chat box, and the board beside it** | the build pipeline, dsh's shell and chat roster, our board plugin, a push transport for the graph | ✅ `phase-4` (D9 deferred) |
-| 5 | Multi-agent | **subagents run** | `ctx.agentPresets`, `subagent-spawn-in-process` | ← next |
-| 6a | **Embedding seam** | vectors exist | `ctx.embedder` + ONNX local, `sqlite-vec` at 384 dims | |
+| 5 | Multi-agent | **subagents run** | `ctx.agentPresets`, `subagent-spawn-in-process` | ✅ `phase-5` |
+| 6a | **Embedding seam** | vectors exist | `ctx.embedder` + ONNX local, `sqlite-vec` at 384 dims | ← next |
 | 6b | Knowledge plane | **knowledge agent answers** | remaining L3 seams, ingest events | |
 | 6c | Builder plane | **recipe → working agent** | `ctx.blocks` as a repository, `ctx.builder`, the cookbook | |
 | 6d | **Authoring** | **agent forks a block and it hot-swaps in** | fork namespace, gated install, conformance suites, staging→HMR | |

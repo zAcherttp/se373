@@ -412,3 +412,70 @@ evidence the rescope did not break the client module edges.
 - **Still no board-side tests.** The standing decision was to hold testing until
   the web plane; the web plane has now arrived, so that decision is due for
   re-reading rather than renewal.
+
+---
+
+## phase-5 — Subagents run
+
+**2026-08-28** · **Commit** `f0a0b68` · **Tag** `phase-5`
+
+**Roadmap** — Topic 7 (*Multi-Agent Systems*): one agent delegates to another,
+each composed from a named, versioned composition rather than from process-wide
+configuration.
+**Phase** — §13 phase 5, "Multi-agent".
+
+**Demonstrable**
+
+```bash
+pnpm build
+node --import tsx/esm examples/subagent-demo/demo.mts
+```
+
+Exits `0`; no API key. Run from a clean checkout at this tag:
+
+```
+preset  standard
+children: 1
+  2c77a49c-…  mode=one-shot activity=inactive label="count the runtime rows"
+parent transcript: 36 events
+  tool/call    subagent
+  tool/result  "Delegated and done."
+```
+
+The `label` is the description the parent's own tool call carried, so it is
+evidence the delegation reached the child rather than a coincidence of naming.
+
+**Packages**
+
+Four more vendored, 150 total: the delegation backends, the jobs implementation,
+skills on disk, and the compaction stack. Nothing of ours is new — phase 5 is
+composition, not code.
+
+| | |
+|---|---|
+| `config/agent-presets/standard` | dsh's own preset, transcribed and restricted to what we vendor. 22 tools |
+| `config/agent-presets/inspect` | ours. 7 tools, no shell, no delegation, a read-only filesystem realm of its own |
+| `examples/subagent-demo` | the demonstrable, over `/api` |
+
+**The finding worth keeping.** Writing `inspect` caught a false claim of mine
+before it shipped: its persona said it could not edit files, and the composed
+catalog said otherwise, because `tool-fs` registers `read`, `write` and `edit`
+as one suite with no read-only switch. Two mechanisms were being conflated —
+*absent* (not composed, so not in the catalog, nothing to call) and *denied* (in
+the catalog, refused at the boundary). The preset now uses both deliberately and
+its persona says which is which, because an agent told it cannot do something it
+can see in its own catalog will try anyway.
+
+**Not yet**
+
+- **Presets are a web-plane feature here.** The gateway composes an agent from a
+  preset at session creation; `examples/chat/cordis.yml` builds its agent
+  through the headless runner instead, so that tree keeps host-plane tools.
+- **One child, one shot.** `subagent_fork`, background mode, `list_agents` and
+  `interrupt_agent` are composed in `standard` and none is exercised.
+- **The child's own transcript is not read back.** The gateway serves the
+  sessions a client owns, and a subagent belongs to its parent.
+- **`plan-mode` is still absent from both presets**, for the same reason as
+  before: its whole configuration is upstream's product writing.
+- **Still two specs.** The standing decision to hold testing until the web plane
+  has now outlived its condition twice.
