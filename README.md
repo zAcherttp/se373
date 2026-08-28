@@ -43,7 +43,7 @@ Requires Node ≥ 24 and pnpm.
 
 ```bash
 pnpm install
-npx tsc -b tsconfig.vendor.json    # build vendored framework declarations, once
+npx tsc -b tsconfig.host.json    # build vendored framework declarations, once
 pnpm se373
 ```
 

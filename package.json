@@ -10,6 +10,7 @@
   },
   "scripts": {
     "se373": "node --import tsx/esm apps/cli/src/bin.ts",
+    "build:vendor": "tsc -b tsconfig.host.json && node --import tsx/esm scripts/typert-generate.mts && tsc -b tsconfig.client.json",
     "typecheck": "tsc -b tsconfig.json",
     "test": "vitest run",
     "lint": "oxlint ."
@@ -22,6 +23,7 @@
     "oxlint": "^1.76.0",
     "tsx": "^4.22.4",
     "typescript": "^5.9.0",
-    "vitest": "^4.1.8"
+    "vitest": "^4.1.8",
+    "@se373/typert-generator": "workspace:*"
   }
 }

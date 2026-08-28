@@ -761,7 +761,7 @@ Status is the git tag, not a judgement: a phase is shipped when
 
 **Risk spike: phase 4.** 78 new packages *plus* a second TypeScript program, `tsdown` per client package, a Vite build, and a watcher. The `tsx`-from-source posture does not survive contact with the browser: `client-modules` reads `lib/client.js` off disk and fails loud when it is absent. Budget the build as a workstream, not a footnote.
 
-Phase 3.5 sharpened that: `npx tsc -b tsconfig.vendor.json` already exits `2` with ~447 errors in vendored sources while still emitting the declarations our program needs. That is survivable for a declaration build nothing executes. It is *not* survivable for a build whose output the browser loads, so phase 4's first task is finding out which of those two the client build is.
+Phase 3.5 sharpened that: `npx tsc -b tsconfig.host.json` already exits `2` with ~447 errors in vendored sources while still emitting the declarations our program needs. That is survivable for a declaration build nothing executes. It is *not* survivable for a build whose output the browser loads, so phase 4's first task is finding out which of those two the client build is.
 
 **Sequencing notes.**
 

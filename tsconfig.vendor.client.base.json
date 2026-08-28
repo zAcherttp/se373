@@ -7,7 +7,7 @@
   // `./client` export, reads the file off disk to hash it, and serves those
   // bytes to a browser. So this program emits JS into `lib/types`, and tsdown
   // bundles that into the `lib/client.js` the manifest names.
-  "extends": "./tsconfig.base.json",
+  "extends": ["./tsconfig.base.json", "./tsconfig.vendor.paths.json"],
   "compilerOptions": {
     "declaration": true,
     "declarationMap": true,
@@ -15,6 +15,10 @@
     "incremental": true,
     "jsx": "react-jsx",
     "lib": ["ES2024", "DOM", "DOM.Iterable"],
-    "types": []
+    // No Node types: this code runs in a browser. `process.env` is not absent
+    // though — it is inlined by the bundlers, so it gets an ambient declaration
+    // narrowed to exactly what they are allowed to inline.
+    "typeRoots": ["./scripts/types", "./node_modules/@types"],
+    "types": ["client-build-environment"]
   }
 }

@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      '@se373/typert-generator':
+        specifier: workspace:*
+        version: link:vendor/dsh/typert/generator
       '@types/babel__code-frame':
         specifier: ^7.27.0
         version: 7.27.0
@@ -4684,6 +4687,50 @@ importers:
       '@se373/user-questions':
         specifier: workspace:^
         version: link:../../interaction/user-questions
+
+  vendor/dsh/typert/generator:
+    dependencies:
+      '@jridgewell/gen-mapping':
+        specifier: ^0.3.13
+        version: 0.3.13
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/typert-registry':
+        specifier: workspace:^
+        version: link:../registry
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
+
+  vendor/dsh/typert/loader:
+    dependencies:
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../schemastery
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../cordis
+      '@se373/cordis-plugin-loader':
+        specifier: workspace:^
+        version: link:../../../loader
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@se373/typert-registry':
+        specifier: workspace:^
+        version: link:../registry
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
 
   vendor/dsh/typert/protocol:
     devDependencies:

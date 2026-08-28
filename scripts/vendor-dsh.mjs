@@ -181,6 +181,20 @@ const LOCAL_MODS = [
     to: "const DSH_WEB_URL = 'SE373_WEB_URL' as const",
     why: 'the agent must see one harness variable namespace, not two',
   },
+  {
+    // The typert generator finds its subjects by walking the face aggregates'
+    // project references and keeping the ones under `packages/`. Ours are under
+    // `vendor/dsh/`, so without this it discovers nothing and emits nothing --
+    // silently, because "no contributors" is a legitimate answer.
+    // Upstream's own path is kept alongside, so our packages/*/* would be
+    // discovered too if one ever contributes a typert face.
+    package: '@deepseek-ai/dsh-typert-generator',
+    file: 'src/analyzer.ts',
+    from: "        if (!isWithin(realPath(packageRoot), join(this.options.root, 'packages'))) continue",
+    to: "        if (!isWithin(realPath(packageRoot), join(this.options.root, 'vendor', 'dsh'))\n"
+      + "          && !isWithin(realPath(packageRoot), join(this.options.root, 'packages'))) continue",
+    why: 'our vendored harness lives under vendor/dsh, not packages',
+  },
 ]
 
 /**
@@ -282,8 +296,14 @@ function workspaceDeps(manifest, all) {
  * runtime that cannot parse it, and a missing artifact is a fatal activation
  * error rather than a degradation. These stay on `lib/`, and the client build
  * is what puts a file there.
+ *
+ * `./typert` and `./remote` are there for a different reason: they have no
+ * source at all. They are generated per package by the typert generator, which
+ * also *validates* that the manifest names exactly `./lib/typert.<face>.js` —
+ * so rewriting them to source both points at a file that will never exist and
+ * makes codegen refuse to run.
  */
-const BUILT_EXPORT_KEYS = /^\.\/client(\/|$)/
+const BUILT_EXPORT_KEYS = /^\.\/(client|typert|remote)(\/|$)/
 
 /**
  * Rewrite an `exports` map from built output to source.
@@ -706,7 +726,63 @@ function writeSolution(aggregate, target, extra, note) {
   return covered
 }
 
-const clientCovered = writeSolution('tsconfig.client.json', 'tsconfig.vendor.client.json', [], [
+/**
+ * Generate the source-resolution facade the vendored programs compile against.
+ *
+ * Our own program deliberately has no `paths`: pnpm's links resolve every
+ * `@se373/*` name through its package `exports`, so a package that forgets to
+ * declare a dependency fails instead of silently working. That discipline is
+ * wrong for the vendored layer, and not by preference — by identity.
+ *
+ * A vendored package's `exports` point `types` at `lib/types/*.d.ts`. Inside
+ * one compilation, `./runtime-types` (relative, source) and `@se373/agent`
+ * (package name, declarations) then produce two nominal identities for the same
+ * class, and a class with a private field is not assignable to its own twin.
+ * That is exactly the error the typert generator hit on `core/agent`.
+ *
+ * Upstream carries the same facade for the same reason. Ours is generated from
+ * the tree rather than hand-kept: every vendored package's source entrypoints,
+ * plus its `./src/*` passthrough.
+ *
+ * `./client` is mapped to **source** here even though the package `exports`
+ * name a built artifact, and the two are not in conflict: `exports` is what
+ * Node and pnpm resolve at runtime, `paths` is what tsc resolves at compile
+ * time. The bundle has to be a file on disk; the *types* do not, and pointing
+ * them at source is what keeps one identity per class across the two planes.
+ * Upstream's facade does the same.
+ *
+ * `./typert` and `./remote` are absent: they have no source to point at.
+ */
+function writePathsFacade() {
+  /** @type {Record<string, string[]>} */
+  const paths = {}
+  for (const dir of [...vendoredDirs].sort()) {
+    const manifest = JSON.parse(readFileSync(join(DEST_ROOT, dir, 'package.json'), 'utf8'))
+    const base = `./vendor/dsh/${dir}`
+    for (const [key, value] of Object.entries(manifest.exports ?? {})) {
+      if (key === './package.json') continue
+      if (key === './src/*') { paths[`${manifest.name}/src/*`] = [`${base}/src/*`]; continue }
+      const specifier = key === '.' ? manifest.name : `${manifest.name}${key.slice(1)}`
+      if (BUILT_EXPORT_KEYS.test(key)) {
+        // Only the browser faces have a source counterpart to point at.
+        const source = join(DEST_ROOT, dir, 'src', key.slice('./'.length))
+        if (existsSync(source)) paths[specifier] = [`${base}/src/${key.slice('./'.length)}`]
+        continue
+      }
+      const target = typeof value === 'string' ? value : value?.default
+      if (typeof target !== 'string' || !target.startsWith('./src/')) continue
+      paths[specifier] = [`${base}/${target.slice('./'.length)}`]
+    }
+  }
+  for (const [name, dir] of FRAMEWORK_DIR) paths[name] = [`./${dir}/src`]
+  writeFileSync(join(REPO, 'tsconfig.vendor.paths.json'), JSON.stringify({
+    compilerOptions: { paths },
+  }, null, 2) + '\n')
+}
+
+writePathsFacade()
+
+const clientCovered = writeSolution('tsconfig.client.json', 'tsconfig.client.json', [], [
   'Browser-plane solution for the vendored layer. A separate program because',
   'both planes merge cordis `Context` under the same keys with different',
   'services, and one program cannot hold both sides of that merge. It also',
@@ -726,13 +802,17 @@ const hostExtra = [...vendoredDirs]
   .filter(dir => !clientCovered.has(dir))
   .map(dir => `./vendor/dsh/${dir}`)
 
-writeSolution('tsconfig.host.json', 'tsconfig.vendor.json', hostExtra, [
+writeSolution('tsconfig.host.json', 'tsconfig.host.json', hostExtra, [
   'Host-plane solution for the vendored layer. Emits declarations only, into',
   "each package's lib/types, which its package.json `types` field names.",
+  '',
+  'Named for the FACE, not for the layer, because the typert generator reads',
+  'the two face aggregates by these exact names. tsconfig.json is our own',
+  "packages' program; this one is the vendored code beneath them.",
   '',
   'Membership mirrors upstream tsconfig.host.json, filtered to what we',
   'vendored. Regenerated by scripts/vendor-dsh.mjs; do not hand-edit.',
 ])
 console.log(`vendored ${written} packages into vendor/dsh/ (${modded} local modifications re-applied)`)
 if (dropped.size > 0) console.log(`dropped ${dropped.size} test-only workspace deps: ${[...dropped].sort().join(', ')}`)
-console.log('next: pnpm install && npx tsc -b tsconfig.vendor.json && npx tsc -b tsconfig.vendor.client.json')
+console.log('next: pnpm install && npm run build:vendor')

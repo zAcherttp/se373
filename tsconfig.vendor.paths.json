@@ -1,0 +1,1584 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@se373/api-gateway": [
+        "./vendor/dsh/api/gateway/src/index.ts"
+      ],
+      "@se373/api-gateway/invariant": [
+        "./vendor/dsh/api/gateway/src/invariant.ts"
+      ],
+      "@se373/api-gateway/client": [
+        "./vendor/dsh/api/gateway/src/client"
+      ],
+      "@se373/api-gateway/types": [
+        "./vendor/dsh/api/gateway/src/types.ts"
+      ],
+      "@se373/api-gateway/src/*": [
+        "./vendor/dsh/api/gateway/src/*"
+      ],
+      "@se373/api-remotes": [
+        "./vendor/dsh/api/remotes/src/index.ts"
+      ],
+      "@se373/api-remotes/invariant": [
+        "./vendor/dsh/api/remotes/src/invariant.ts"
+      ],
+      "@se373/api-remotes/client": [
+        "./vendor/dsh/api/remotes/src/client"
+      ],
+      "@se373/api-remotes/types": [
+        "./vendor/dsh/api/remotes/src/types.ts"
+      ],
+      "@se373/api-remotes/src/*": [
+        "./vendor/dsh/api/remotes/src/*"
+      ],
+      "@se373/attachment": [
+        "./vendor/dsh/attachment/attachment/src/index.ts"
+      ],
+      "@se373/attachment/invariant": [
+        "./vendor/dsh/attachment/attachment/src/invariant.ts"
+      ],
+      "@se373/attachment/types": [
+        "./vendor/dsh/attachment/attachment/src/types.ts"
+      ],
+      "@se373/attachment/src/*": [
+        "./vendor/dsh/attachment/attachment/src/*"
+      ],
+      "@se373/app-boot": [
+        "./vendor/dsh/boot/app-boot/src/index.ts"
+      ],
+      "@se373/app-boot/invariant": [
+        "./vendor/dsh/boot/app-boot/src/invariant.ts"
+      ],
+      "@se373/app-boot/src/*": [
+        "./vendor/dsh/boot/app-boot/src/*"
+      ],
+      "@se373/cmdline": [
+        "./vendor/dsh/boot/cmdline/src/index.ts"
+      ],
+      "@se373/cmdline/invariant": [
+        "./vendor/dsh/boot/cmdline/src/invariant.ts"
+      ],
+      "@se373/cmdline/src/*": [
+        "./vendor/dsh/boot/cmdline/src/*"
+      ],
+      "@se373/headless": [
+        "./vendor/dsh/bundle/headless/src/index.ts"
+      ],
+      "@se373/headless/startup": [
+        "./vendor/dsh/bundle/headless/src/startup.ts"
+      ],
+      "@se373/headless/invariant": [
+        "./vendor/dsh/bundle/headless/src/invariant.ts"
+      ],
+      "@se373/headless/src/*": [
+        "./vendor/dsh/bundle/headless/src/*"
+      ],
+      "@se373/web-app": [
+        "./vendor/dsh/bundle/web-app/src/index.ts"
+      ],
+      "@se373/web-app/startup": [
+        "./vendor/dsh/bundle/web-app/src/startup.ts"
+      ],
+      "@se373/web-app/invariant": [
+        "./vendor/dsh/bundle/web-app/src/invariant.ts"
+      ],
+      "@se373/web-app/src/*": [
+        "./vendor/dsh/bundle/web-app/src/*"
+      ],
+      "@se373/client-connection": [
+        "./vendor/dsh/client/connection/src/index.ts"
+      ],
+      "@se373/client-connection/invariant": [
+        "./vendor/dsh/client/connection/src/invariant.ts"
+      ],
+      "@se373/client-connection/client": [
+        "./vendor/dsh/client/connection/src/client"
+      ],
+      "@se373/client-connection/src/*": [
+        "./vendor/dsh/client/connection/src/*"
+      ],
+      "@se373/client-hmr": [
+        "./vendor/dsh/client/hmr/src/index.ts"
+      ],
+      "@se373/client-hmr/invariant": [
+        "./vendor/dsh/client/hmr/src/invariant.ts"
+      ],
+      "@se373/client-hmr/client": [
+        "./vendor/dsh/client/hmr/src/client"
+      ],
+      "@se373/client-hmr/src/*": [
+        "./vendor/dsh/client/hmr/src/*"
+      ],
+      "@se373/client-locale": [
+        "./vendor/dsh/client/locale/src/index.ts"
+      ],
+      "@se373/client-locale/invariant": [
+        "./vendor/dsh/client/locale/src/invariant.ts"
+      ],
+      "@se373/client-locale/client": [
+        "./vendor/dsh/client/locale/src/client"
+      ],
+      "@se373/client-locale/src/*": [
+        "./vendor/dsh/client/locale/src/*"
+      ],
+      "@se373/client-modules": [
+        "./vendor/dsh/client/modules/src/index.ts"
+      ],
+      "@se373/client-modules/client": [
+        "./vendor/dsh/client/modules/src/client"
+      ],
+      "@se373/client-modules/invariant": [
+        "./vendor/dsh/client/modules/src/invariant.ts"
+      ],
+      "@se373/client-modules/src/*": [
+        "./vendor/dsh/client/modules/src/*"
+      ],
+      "@se373/client-runtime": [
+        "./vendor/dsh/client/runtime/src/index.ts"
+      ],
+      "@se373/client-runtime/invariant": [
+        "./vendor/dsh/client/runtime/src/invariant.ts"
+      ],
+      "@se373/client-runtime/client": [
+        "./vendor/dsh/client/runtime/src/client"
+      ],
+      "@se373/client-runtime/src/*": [
+        "./vendor/dsh/client/runtime/src/*"
+      ],
+      "@se373/client-ui-agent-preset": [
+        "./vendor/dsh/client/ui-agent-preset/src/index.ts"
+      ],
+      "@se373/client-ui-agent-preset/invariant": [
+        "./vendor/dsh/client/ui-agent-preset/src/invariant.ts"
+      ],
+      "@se373/client-ui-agent-preset/client": [
+        "./vendor/dsh/client/ui-agent-preset/src/client"
+      ],
+      "@se373/client-ui-agent-preset/src/*": [
+        "./vendor/dsh/client/ui-agent-preset/src/*"
+      ],
+      "@se373/client-ui-attachment": [
+        "./vendor/dsh/client/ui-attachment/src/index.ts"
+      ],
+      "@se373/client-ui-attachment/invariant": [
+        "./vendor/dsh/client/ui-attachment/src/invariant.ts"
+      ],
+      "@se373/client-ui-attachment/client": [
+        "./vendor/dsh/client/ui-attachment/src/client"
+      ],
+      "@se373/client-ui-attachment/src/*": [
+        "./vendor/dsh/client/ui-attachment/src/*"
+      ],
+      "@se373/client-ui-brand-official": [
+        "./vendor/dsh/client/ui-brand-official/src/index.ts"
+      ],
+      "@se373/client-ui-brand-official/invariant": [
+        "./vendor/dsh/client/ui-brand-official/src/invariant.ts"
+      ],
+      "@se373/client-ui-brand-official/client": [
+        "./vendor/dsh/client/ui-brand-official/src/client"
+      ],
+      "@se373/client-ui-brand-official/src/*": [
+        "./vendor/dsh/client/ui-brand-official/src/*"
+      ],
+      "@se373/client-ui-commands": [
+        "./vendor/dsh/client/ui-commands/src/index.ts"
+      ],
+      "@se373/client-ui-commands/invariant": [
+        "./vendor/dsh/client/ui-commands/src/invariant.ts"
+      ],
+      "@se373/client-ui-commands/client": [
+        "./vendor/dsh/client/ui-commands/src/client"
+      ],
+      "@se373/client-ui-commands/src/*": [
+        "./vendor/dsh/client/ui-commands/src/*"
+      ],
+      "@se373/client-ui-conversation": [
+        "./vendor/dsh/client/ui-conversation/src/index.ts"
+      ],
+      "@se373/client-ui-conversation/invariant": [
+        "./vendor/dsh/client/ui-conversation/src/invariant.ts"
+      ],
+      "@se373/client-ui-conversation/client": [
+        "./vendor/dsh/client/ui-conversation/src/client"
+      ],
+      "@se373/client-ui-conversation/src/*": [
+        "./vendor/dsh/client/ui-conversation/src/*"
+      ],
+      "@se373/client-ui-deliverables": [
+        "./vendor/dsh/client/ui-deliverables/src/index.ts"
+      ],
+      "@se373/client-ui-deliverables/invariant": [
+        "./vendor/dsh/client/ui-deliverables/src/invariant.ts"
+      ],
+      "@se373/client-ui-deliverables/client": [
+        "./vendor/dsh/client/ui-deliverables/src/client"
+      ],
+      "@se373/client-ui-deliverables/src/*": [
+        "./vendor/dsh/client/ui-deliverables/src/*"
+      ],
+      "@se373/client-ui-directory-picker-browse": [
+        "./vendor/dsh/client/ui-directory-picker-browse/src/index.ts"
+      ],
+      "@se373/client-ui-directory-picker-browse/invariant": [
+        "./vendor/dsh/client/ui-directory-picker-browse/src/invariant.ts"
+      ],
+      "@se373/client-ui-directory-picker-browse/client": [
+        "./vendor/dsh/client/ui-directory-picker-browse/src/client"
+      ],
+      "@se373/client-ui-directory-picker-browse/src/*": [
+        "./vendor/dsh/client/ui-directory-picker-browse/src/*"
+      ],
+      "@se373/client-ui-directory-picker-native": [
+        "./vendor/dsh/client/ui-directory-picker-native/src/index.ts"
+      ],
+      "@se373/client-ui-directory-picker-native/invariant": [
+        "./vendor/dsh/client/ui-directory-picker-native/src/invariant.ts"
+      ],
+      "@se373/client-ui-directory-picker-native/client": [
+        "./vendor/dsh/client/ui-directory-picker-native/src/client"
+      ],
+      "@se373/client-ui-directory-picker-native/src/*": [
+        "./vendor/dsh/client/ui-directory-picker-native/src/*"
+      ],
+      "@se373/client-ui-goal": [
+        "./vendor/dsh/client/ui-goal/src/index.ts"
+      ],
+      "@se373/client-ui-goal/invariant": [
+        "./vendor/dsh/client/ui-goal/src/invariant.ts"
+      ],
+      "@se373/client-ui-goal/client": [
+        "./vendor/dsh/client/ui-goal/src/client"
+      ],
+      "@se373/client-ui-goal/src/*": [
+        "./vendor/dsh/client/ui-goal/src/*"
+      ],
+      "@se373/client-ui-input-trigger": [
+        "./vendor/dsh/client/ui-input-trigger/src/index.ts"
+      ],
+      "@se373/client-ui-input-trigger/invariant": [
+        "./vendor/dsh/client/ui-input-trigger/src/invariant.ts"
+      ],
+      "@se373/client-ui-input-trigger/client": [
+        "./vendor/dsh/client/ui-input-trigger/src/client"
+      ],
+      "@se373/client-ui-input-trigger/src/*": [
+        "./vendor/dsh/client/ui-input-trigger/src/*"
+      ],
+      "@se373/client-ui-jobs": [
+        "./vendor/dsh/client/ui-jobs/src/index.ts"
+      ],
+      "@se373/client-ui-jobs/invariant": [
+        "./vendor/dsh/client/ui-jobs/src/invariant.ts"
+      ],
+      "@se373/client-ui-jobs/client": [
+        "./vendor/dsh/client/ui-jobs/src/client"
+      ],
+      "@se373/client-ui-jobs/src/*": [
+        "./vendor/dsh/client/ui-jobs/src/*"
+      ],
+      "@se373/client-ui-layout": [
+        "./vendor/dsh/client/ui-layout/src/index.ts"
+      ],
+      "@se373/client-ui-layout/invariant": [
+        "./vendor/dsh/client/ui-layout/src/invariant.ts"
+      ],
+      "@se373/client-ui-layout/client": [
+        "./vendor/dsh/client/ui-layout/src/client"
+      ],
+      "@se373/client-ui-layout/src/*": [
+        "./vendor/dsh/client/ui-layout/src/*"
+      ],
+      "@se373/client-ui-message-feedback": [
+        "./vendor/dsh/client/ui-message-feedback/src/index.ts"
+      ],
+      "@se373/client-ui-message-feedback/invariant": [
+        "./vendor/dsh/client/ui-message-feedback/src/invariant.ts"
+      ],
+      "@se373/client-ui-message-feedback/client": [
+        "./vendor/dsh/client/ui-message-feedback/src/client"
+      ],
+      "@se373/client-ui-message-feedback/src/*": [
+        "./vendor/dsh/client/ui-message-feedback/src/*"
+      ],
+      "@se373/client-ui-model-selection": [
+        "./vendor/dsh/client/ui-model-selection/src/index.ts"
+      ],
+      "@se373/client-ui-model-selection/invariant": [
+        "./vendor/dsh/client/ui-model-selection/src/invariant.ts"
+      ],
+      "@se373/client-ui-model-selection/client": [
+        "./vendor/dsh/client/ui-model-selection/src/client"
+      ],
+      "@se373/client-ui-model-selection/src/*": [
+        "./vendor/dsh/client/ui-model-selection/src/*"
+      ],
+      "@se373/client-ui-permission-presets": [
+        "./vendor/dsh/client/ui-permission-presets/src/index.ts"
+      ],
+      "@se373/client-ui-permission-presets/invariant": [
+        "./vendor/dsh/client/ui-permission-presets/src/invariant.ts"
+      ],
+      "@se373/client-ui-permission-presets/client": [
+        "./vendor/dsh/client/ui-permission-presets/src/client"
+      ],
+      "@se373/client-ui-permission-presets/src/*": [
+        "./vendor/dsh/client/ui-permission-presets/src/*"
+      ],
+      "@se373/client-ui-plan": [
+        "./vendor/dsh/client/ui-plan/src/index.ts"
+      ],
+      "@se373/client-ui-plan/invariant": [
+        "./vendor/dsh/client/ui-plan/src/invariant.ts"
+      ],
+      "@se373/client-ui-plan/client": [
+        "./vendor/dsh/client/ui-plan/src/client"
+      ],
+      "@se373/client-ui-plan/src/*": [
+        "./vendor/dsh/client/ui-plan/src/*"
+      ],
+      "@se373/client-ui-primitives": [
+        "./vendor/dsh/client/ui-primitives/src/index.ts"
+      ],
+      "@se373/client-ui-primitives/invariant": [
+        "./vendor/dsh/client/ui-primitives/src/invariant.ts"
+      ],
+      "@se373/client-ui-primitives/src/*": [
+        "./vendor/dsh/client/ui-primitives/src/*"
+      ],
+      "@se373/client-ui-reference": [
+        "./vendor/dsh/client/ui-reference/src/index.ts"
+      ],
+      "@se373/client-ui-reference/invariant": [
+        "./vendor/dsh/client/ui-reference/src/invariant.ts"
+      ],
+      "@se373/client-ui-reference/client": [
+        "./vendor/dsh/client/ui-reference/src/client"
+      ],
+      "@se373/client-ui-reference/src/*": [
+        "./vendor/dsh/client/ui-reference/src/*"
+      ],
+      "@se373/client-ui-renderer": [
+        "./vendor/dsh/client/ui-renderer/src/index.ts"
+      ],
+      "@se373/client-ui-renderer/invariant": [
+        "./vendor/dsh/client/ui-renderer/src/invariant.ts"
+      ],
+      "@se373/client-ui-renderer/client": [
+        "./vendor/dsh/client/ui-renderer/src/client"
+      ],
+      "@se373/client-ui-renderer/src/*": [
+        "./vendor/dsh/client/ui-renderer/src/*"
+      ],
+      "@se373/client-ui-settings": [
+        "./vendor/dsh/client/ui-settings/src/index.ts"
+      ],
+      "@se373/client-ui-settings/invariant": [
+        "./vendor/dsh/client/ui-settings/src/invariant.ts"
+      ],
+      "@se373/client-ui-settings/client": [
+        "./vendor/dsh/client/ui-settings/src/client"
+      ],
+      "@se373/client-ui-settings/src/*": [
+        "./vendor/dsh/client/ui-settings/src/*"
+      ],
+      "@se373/client-ui-settings-general": [
+        "./vendor/dsh/client/ui-settings-general/src/index.ts"
+      ],
+      "@se373/client-ui-settings-general/invariant": [
+        "./vendor/dsh/client/ui-settings-general/src/invariant.ts"
+      ],
+      "@se373/client-ui-settings-general/client": [
+        "./vendor/dsh/client/ui-settings-general/src/client"
+      ],
+      "@se373/client-ui-settings-general/src/*": [
+        "./vendor/dsh/client/ui-settings-general/src/*"
+      ],
+      "@se373/client-ui-settings-models": [
+        "./vendor/dsh/client/ui-settings-models/src/index.ts"
+      ],
+      "@se373/client-ui-settings-models/invariant": [
+        "./vendor/dsh/client/ui-settings-models/src/invariant.ts"
+      ],
+      "@se373/client-ui-settings-models/client": [
+        "./vendor/dsh/client/ui-settings-models/src/client"
+      ],
+      "@se373/client-ui-settings-models/src/*": [
+        "./vendor/dsh/client/ui-settings-models/src/*"
+      ],
+      "@se373/client-ui-settings-plugin-inventory": [
+        "./vendor/dsh/client/ui-settings-plugin-inventory/src/index.ts"
+      ],
+      "@se373/client-ui-settings-plugin-inventory/invariant": [
+        "./vendor/dsh/client/ui-settings-plugin-inventory/src/invariant.ts"
+      ],
+      "@se373/client-ui-settings-plugin-inventory/client": [
+        "./vendor/dsh/client/ui-settings-plugin-inventory/src/client"
+      ],
+      "@se373/client-ui-settings-plugin-inventory/src/*": [
+        "./vendor/dsh/client/ui-settings-plugin-inventory/src/*"
+      ],
+      "@se373/client-ui-settings-plugins": [
+        "./vendor/dsh/client/ui-settings-plugins/src/index.ts"
+      ],
+      "@se373/client-ui-settings-plugins/invariant": [
+        "./vendor/dsh/client/ui-settings-plugins/src/invariant.ts"
+      ],
+      "@se373/client-ui-settings-plugins/client": [
+        "./vendor/dsh/client/ui-settings-plugins/src/client"
+      ],
+      "@se373/client-ui-settings-plugins/src/*": [
+        "./vendor/dsh/client/ui-settings-plugins/src/*"
+      ],
+      "@se373/client-ui-sidebar": [
+        "./vendor/dsh/client/ui-sidebar/src/index.ts"
+      ],
+      "@se373/client-ui-sidebar/invariant": [
+        "./vendor/dsh/client/ui-sidebar/src/invariant.ts"
+      ],
+      "@se373/client-ui-sidebar/client": [
+        "./vendor/dsh/client/ui-sidebar/src/client"
+      ],
+      "@se373/client-ui-sidebar/src/*": [
+        "./vendor/dsh/client/ui-sidebar/src/*"
+      ],
+      "@se373/client-ui-skill": [
+        "./vendor/dsh/client/ui-skill/src/index.ts"
+      ],
+      "@se373/client-ui-skill/invariant": [
+        "./vendor/dsh/client/ui-skill/src/invariant.ts"
+      ],
+      "@se373/client-ui-skill/client": [
+        "./vendor/dsh/client/ui-skill/src/client"
+      ],
+      "@se373/client-ui-skill/src/*": [
+        "./vendor/dsh/client/ui-skill/src/*"
+      ],
+      "@se373/client-ui-slots": [
+        "./vendor/dsh/client/ui-slots/src/index.ts"
+      ],
+      "@se373/client-ui-slots/invariant": [
+        "./vendor/dsh/client/ui-slots/src/invariant.ts"
+      ],
+      "@se373/client-ui-slots/src/*": [
+        "./vendor/dsh/client/ui-slots/src/*"
+      ],
+      "@se373/client-ui-subagent": [
+        "./vendor/dsh/client/ui-subagent/src/index.ts"
+      ],
+      "@se373/client-ui-subagent/invariant": [
+        "./vendor/dsh/client/ui-subagent/src/invariant.ts"
+      ],
+      "@se373/client-ui-subagent/client": [
+        "./vendor/dsh/client/ui-subagent/src/client"
+      ],
+      "@se373/client-ui-subagent/src/*": [
+        "./vendor/dsh/client/ui-subagent/src/*"
+      ],
+      "@se373/client-ui-theme": [
+        "./vendor/dsh/client/ui-theme/src/index.ts"
+      ],
+      "@se373/client-ui-theme/invariant": [
+        "./vendor/dsh/client/ui-theme/src/invariant.ts"
+      ],
+      "@se373/client-ui-theme/client": [
+        "./vendor/dsh/client/ui-theme/src/client"
+      ],
+      "@se373/client-ui-theme/src/*": [
+        "./vendor/dsh/client/ui-theme/src/*"
+      ],
+      "@se373/client-ui-tool": [
+        "./vendor/dsh/client/ui-tool/src/index.ts"
+      ],
+      "@se373/client-ui-tool/invariant": [
+        "./vendor/dsh/client/ui-tool/src/invariant.ts"
+      ],
+      "@se373/client-ui-tool/client": [
+        "./vendor/dsh/client/ui-tool/src/client"
+      ],
+      "@se373/client-ui-tool/src/*": [
+        "./vendor/dsh/client/ui-tool/src/*"
+      ],
+      "@se373/client-ui-trajectory": [
+        "./vendor/dsh/client/ui-trajectory/src/index.ts"
+      ],
+      "@se373/client-ui-trajectory/invariant": [
+        "./vendor/dsh/client/ui-trajectory/src/invariant.ts"
+      ],
+      "@se373/client-ui-trajectory/client": [
+        "./vendor/dsh/client/ui-trajectory/src/client"
+      ],
+      "@se373/client-ui-trajectory/src/*": [
+        "./vendor/dsh/client/ui-trajectory/src/*"
+      ],
+      "@se373/client-ui-user-questions": [
+        "./vendor/dsh/client/ui-user-questions/src/index.ts"
+      ],
+      "@se373/client-ui-user-questions/invariant": [
+        "./vendor/dsh/client/ui-user-questions/src/invariant.ts"
+      ],
+      "@se373/client-ui-user-questions/client": [
+        "./vendor/dsh/client/ui-user-questions/src/client"
+      ],
+      "@se373/client-ui-user-questions/src/*": [
+        "./vendor/dsh/client/ui-user-questions/src/*"
+      ],
+      "@se373/client-ui-workflow-run": [
+        "./vendor/dsh/client/ui-workflow-run/src/index.ts"
+      ],
+      "@se373/client-ui-workflow-run/invariant": [
+        "./vendor/dsh/client/ui-workflow-run/src/invariant.ts"
+      ],
+      "@se373/client-ui-workflow-run/client": [
+        "./vendor/dsh/client/ui-workflow-run/src/client"
+      ],
+      "@se373/client-ui-workflow-run/src/*": [
+        "./vendor/dsh/client/ui-workflow-run/src/*"
+      ],
+      "@se373/client-ui-workspace": [
+        "./vendor/dsh/client/ui-workspace/src/index.ts"
+      ],
+      "@se373/client-ui-workspace/invariant": [
+        "./vendor/dsh/client/ui-workspace/src/invariant.ts"
+      ],
+      "@se373/client-ui-workspace/client": [
+        "./vendor/dsh/client/ui-workspace/src/client"
+      ],
+      "@se373/client-ui-workspace/src/*": [
+        "./vendor/dsh/client/ui-workspace/src/*"
+      ],
+      "@se373/client-web": [
+        "./vendor/dsh/client/web/src/index.ts"
+      ],
+      "@se373/client-web/invariant": [
+        "./vendor/dsh/client/web/src/invariant.ts"
+      ],
+      "@se373/client-web/src/*": [
+        "./vendor/dsh/client/web/src/*"
+      ],
+      "@se373/code-runtime": [
+        "./vendor/dsh/code-runtime/code-runtime/src/index.ts"
+      ],
+      "@se373/code-runtime/invariant": [
+        "./vendor/dsh/code-runtime/code-runtime/src/invariant.ts"
+      ],
+      "@se373/code-runtime/src/*": [
+        "./vendor/dsh/code-runtime/code-runtime/src/*"
+      ],
+      "@se373/code-runtime-worker-thread": [
+        "./vendor/dsh/code-runtime/code-runtime-worker-thread/src/index.ts"
+      ],
+      "@se373/code-runtime-worker-thread/invariant": [
+        "./vendor/dsh/code-runtime/code-runtime-worker-thread/src/invariant.ts"
+      ],
+      "@se373/code-runtime-worker-thread/worker": [
+        "./vendor/dsh/code-runtime/code-runtime-worker-thread/src/worker.cjs"
+      ],
+      "@se373/compaction": [
+        "./vendor/dsh/compaction/compaction/src/index.ts"
+      ],
+      "@se373/compaction/invariant": [
+        "./vendor/dsh/compaction/compaction/src/invariant.ts"
+      ],
+      "@se373/compaction/types": [
+        "./vendor/dsh/compaction/compaction/src/types.ts"
+      ],
+      "@se373/compaction/checkpoint": [
+        "./vendor/dsh/compaction/compaction/src/checkpoint.ts"
+      ],
+      "@se373/compaction/src/*": [
+        "./vendor/dsh/compaction/compaction/src/*"
+      ],
+      "@se373/file-reference": [
+        "./vendor/dsh/context/file-reference/src/index.ts"
+      ],
+      "@se373/file-reference/grammar": [
+        "./vendor/dsh/context/file-reference/src/grammar.ts"
+      ],
+      "@se373/file-reference/invariant": [
+        "./vendor/dsh/context/file-reference/src/invariant.ts"
+      ],
+      "@se373/file-reference/types": [
+        "./vendor/dsh/context/file-reference/src/types.ts"
+      ],
+      "@se373/file-reference/src/*": [
+        "./vendor/dsh/context/file-reference/src/*"
+      ],
+      "@se373/file-reference-local": [
+        "./vendor/dsh/context/file-reference-local/src/index.ts"
+      ],
+      "@se373/file-reference-local/search": [
+        "./vendor/dsh/context/file-reference-local/src/search.ts"
+      ],
+      "@se373/file-reference-local/invariant": [
+        "./vendor/dsh/context/file-reference-local/src/invariant.ts"
+      ],
+      "@se373/file-reference-local/src/*": [
+        "./vendor/dsh/context/file-reference-local/src/*"
+      ],
+      "@se373/session-reference": [
+        "./vendor/dsh/context/session-reference/src/index.ts"
+      ],
+      "@se373/session-reference/invariant": [
+        "./vendor/dsh/context/session-reference/src/invariant.ts"
+      ],
+      "@se373/session-reference/types": [
+        "./vendor/dsh/context/session-reference/src/types.ts"
+      ],
+      "@se373/session-reference/src/*": [
+        "./vendor/dsh/context/session-reference/src/*"
+      ],
+      "@se373/agent": [
+        "./vendor/dsh/core/agent/src/index.ts"
+      ],
+      "@se373/agent/invariant": [
+        "./vendor/dsh/core/agent/src/invariant.ts"
+      ],
+      "@se373/agent/types": [
+        "./vendor/dsh/core/agent/src/types.ts"
+      ],
+      "@se373/agent/src/*": [
+        "./vendor/dsh/core/agent/src/*"
+      ],
+      "@se373/agent-default-model": [
+        "./vendor/dsh/core/agent-default-model/src/index.ts"
+      ],
+      "@se373/agent-default-model/invariant": [
+        "./vendor/dsh/core/agent-default-model/src/invariant.ts"
+      ],
+      "@se373/agent-default-model/src/*": [
+        "./vendor/dsh/core/agent-default-model/src/*"
+      ],
+      "@se373/agent-loop": [
+        "./vendor/dsh/core/agent-loop/src/index.ts"
+      ],
+      "@se373/agent-loop/invariant": [
+        "./vendor/dsh/core/agent-loop/src/invariant.ts"
+      ],
+      "@se373/scope": [
+        "./vendor/dsh/core/scope/src/index.ts"
+      ],
+      "@se373/scope/invariant": [
+        "./vendor/dsh/core/scope/src/invariant.ts"
+      ],
+      "@se373/scope/src/*": [
+        "./vendor/dsh/core/scope/src/*"
+      ],
+      "@se373/session": [
+        "./vendor/dsh/core/session/src/index.ts"
+      ],
+      "@se373/session/invariant": [
+        "./vendor/dsh/core/session/src/invariant.ts"
+      ],
+      "@se373/session/types": [
+        "./vendor/dsh/core/session/src/types.ts"
+      ],
+      "@se373/session/src/*": [
+        "./vendor/dsh/core/session/src/*"
+      ],
+      "@se373/session/surface": [
+        "./vendor/dsh/core/session/src/surface.ts"
+      ],
+      "@se373/system-prompt": [
+        "./vendor/dsh/core/system-prompt/src/index.ts"
+      ],
+      "@se373/system-prompt/invariant": [
+        "./vendor/dsh/core/system-prompt/src/invariant.ts"
+      ],
+      "@se373/system-prompt/src/*": [
+        "./vendor/dsh/core/system-prompt/src/*"
+      ],
+      "@se373/tools": [
+        "./vendor/dsh/core/tools/src/index.ts"
+      ],
+      "@se373/tools/invariant": [
+        "./vendor/dsh/core/tools/src/invariant.ts"
+      ],
+      "@se373/tools/types": [
+        "./vendor/dsh/core/tools/src/types.ts"
+      ],
+      "@se373/tools/presentation": [
+        "./vendor/dsh/core/tools/src/presentation.ts"
+      ],
+      "@se373/tools/src/*": [
+        "./vendor/dsh/core/tools/src/*"
+      ],
+      "@se373/credentials": [
+        "./vendor/dsh/credentials/credentials/src/index.ts"
+      ],
+      "@se373/credentials/invariant": [
+        "./vendor/dsh/credentials/credentials/src/invariant.ts"
+      ],
+      "@se373/credentials/types": [
+        "./vendor/dsh/credentials/credentials/src/types.ts"
+      ],
+      "@se373/credentials/src/*": [
+        "./vendor/dsh/credentials/credentials/src/*"
+      ],
+      "@se373/credentials-local": [
+        "./vendor/dsh/credentials/credentials-local/src/index.ts"
+      ],
+      "@se373/credentials-local/invariant": [
+        "./vendor/dsh/credentials/credentials-local/src/invariant.ts"
+      ],
+      "@se373/credentials-local/src/*": [
+        "./vendor/dsh/credentials/credentials-local/src/*"
+      ],
+      "@se373/cordis-client-runner": [
+        "./vendor/dsh/extensions/cordis-client-runner/src/index.ts"
+      ],
+      "@se373/cordis-client-runner/invariant": [
+        "./vendor/dsh/extensions/cordis-client-runner/src/invariant.ts"
+      ],
+      "@se373/cordis-client-runner/client": [
+        "./vendor/dsh/extensions/cordis-client-runner/src/client"
+      ],
+      "@se373/cordis-client-runner/src/*": [
+        "./vendor/dsh/extensions/cordis-client-runner/src/*"
+      ],
+      "@se373/cordis-host-runner": [
+        "./vendor/dsh/extensions/cordis-host-runner/src/index.ts"
+      ],
+      "@se373/cordis-host-runner/invariant": [
+        "./vendor/dsh/extensions/cordis-host-runner/src/invariant.ts"
+      ],
+      "@se373/cordis-host-runner/types": [
+        "./vendor/dsh/extensions/cordis-host-runner/src/types.ts"
+      ],
+      "@se373/cordis-host-runner/src/*": [
+        "./vendor/dsh/extensions/cordis-host-runner/src/*"
+      ],
+      "@se373/client-ui-cordis": [
+        "./vendor/dsh/extensions/ui-cordis/src/index.ts"
+      ],
+      "@se373/client-ui-cordis/invariant": [
+        "./vendor/dsh/extensions/ui-cordis/src/invariant.ts"
+      ],
+      "@se373/client-ui-cordis/client": [
+        "./vendor/dsh/extensions/ui-cordis/src/client"
+      ],
+      "@se373/client-ui-cordis/src/*": [
+        "./vendor/dsh/extensions/ui-cordis/src/*"
+      ],
+      "@se373/message-feedback": [
+        "./vendor/dsh/feedback/message-feedback/src/index.ts"
+      ],
+      "@se373/message-feedback/invariant": [
+        "./vendor/dsh/feedback/message-feedback/src/invariant.ts"
+      ],
+      "@se373/message-feedback/types": [
+        "./vendor/dsh/feedback/message-feedback/src/types.ts"
+      ],
+      "@se373/message-feedback/src/*": [
+        "./vendor/dsh/feedback/message-feedback/src/*"
+      ],
+      "@se373/fs": [
+        "./vendor/dsh/fs/fs/src/index.ts"
+      ],
+      "@se373/fs/invariant": [
+        "./vendor/dsh/fs/fs/src/invariant.ts"
+      ],
+      "@se373/fs/src/*": [
+        "./vendor/dsh/fs/fs/src/*"
+      ],
+      "@se373/fs-local": [
+        "./vendor/dsh/fs/fs-local/src/index.ts"
+      ],
+      "@se373/fs-local/invariant": [
+        "./vendor/dsh/fs/fs-local/src/invariant.ts"
+      ],
+      "@se373/fs-local/src/*": [
+        "./vendor/dsh/fs/fs-local/src/*"
+      ],
+      "@se373/fs-observation-policy": [
+        "./vendor/dsh/fs/fs-observation-policy/src/index.ts"
+      ],
+      "@se373/fs-observation-policy/invariant": [
+        "./vendor/dsh/fs/fs-observation-policy/src/invariant.ts"
+      ],
+      "@se373/fs-observation-policy/src/*": [
+        "./vendor/dsh/fs/fs-observation-policy/src/*"
+      ],
+      "@se373/fs-sandbox": [
+        "./vendor/dsh/fs/fs-sandbox/src/index.ts"
+      ],
+      "@se373/fs-sandbox/invariant": [
+        "./vendor/dsh/fs/fs-sandbox/src/invariant.ts"
+      ],
+      "@se373/fs-sandbox/src/*": [
+        "./vendor/dsh/fs/fs-sandbox/src/*"
+      ],
+      "@se373/tool-fs": [
+        "./vendor/dsh/fs/tool-fs/src/index.ts"
+      ],
+      "@se373/tool-fs/invariant": [
+        "./vendor/dsh/fs/tool-fs/src/invariant.ts"
+      ],
+      "@se373/tool-fs/src/*": [
+        "./vendor/dsh/fs/tool-fs/src/*"
+      ],
+      "@se373/tool-fs-search": [
+        "./vendor/dsh/fs/tool-fs-search/src/index.ts"
+      ],
+      "@se373/tool-fs-search/invariant": [
+        "./vendor/dsh/fs/tool-fs-search/src/invariant.ts"
+      ],
+      "@se373/tool-fs-search/src/*": [
+        "./vendor/dsh/fs/tool-fs-search/src/*"
+      ],
+      "@se373/tool-str-replace-editor": [
+        "./vendor/dsh/fs/tool-str-replace-editor/src/index.ts"
+      ],
+      "@se373/tool-str-replace-editor/invariant": [
+        "./vendor/dsh/fs/tool-str-replace-editor/src/invariant.ts"
+      ],
+      "@se373/goal": [
+        "./vendor/dsh/goal/goal/src/index.ts"
+      ],
+      "@se373/goal/invariant": [
+        "./vendor/dsh/goal/goal/src/invariant.ts"
+      ],
+      "@se373/goal/types": [
+        "./vendor/dsh/goal/goal/src/types.ts"
+      ],
+      "@se373/goal/src/*": [
+        "./vendor/dsh/goal/goal/src/*"
+      ],
+      "@se373/tool-call-timeout-policy": [
+        "./vendor/dsh/guard/timeout-policy/src/index.ts"
+      ],
+      "@se373/tool-call-timeout-policy/invariant": [
+        "./vendor/dsh/guard/timeout-policy/src/invariant.ts"
+      ],
+      "@se373/tool-call-timeout-policy/src/*": [
+        "./vendor/dsh/guard/timeout-policy/src/*"
+      ],
+      "@se373/host-apiproxy": [
+        "./vendor/dsh/host/apiproxy/src/index.ts"
+      ],
+      "@se373/host-apiproxy/invariant": [
+        "./vendor/dsh/host/apiproxy/src/invariant.ts"
+      ],
+      "@se373/host-apiproxy/src/*": [
+        "./vendor/dsh/host/apiproxy/src/*"
+      ],
+      "@se373/host-apiproxy/api": [
+        "./vendor/dsh/host/apiproxy/src/api/index.ts"
+      ],
+      "@se373/host-apiproxy/api/*": [
+        "./vendor/dsh/host/apiproxy/src/api/*.ts"
+      ],
+      "@se373/host-directory-picker": [
+        "./vendor/dsh/host/directory-picker/src/index.ts"
+      ],
+      "@se373/host-directory-picker/invariant": [
+        "./vendor/dsh/host/directory-picker/src/invariant.ts"
+      ],
+      "@se373/host-directory-picker/src/*": [
+        "./vendor/dsh/host/directory-picker/src/*"
+      ],
+      "@se373/host-directory-picker-auto": [
+        "./vendor/dsh/host/directory-picker-auto/src/index.ts"
+      ],
+      "@se373/host-directory-picker-auto/invariant": [
+        "./vendor/dsh/host/directory-picker-auto/src/invariant.ts"
+      ],
+      "@se373/host-directory-picker-auto/src/*": [
+        "./vendor/dsh/host/directory-picker-auto/src/*"
+      ],
+      "@se373/host-directory-picker-browse": [
+        "./vendor/dsh/host/directory-picker-browse/src/index.ts"
+      ],
+      "@se373/host-directory-picker-browse/invariant": [
+        "./vendor/dsh/host/directory-picker-browse/src/invariant.ts"
+      ],
+      "@se373/host-directory-picker-browse/src/*": [
+        "./vendor/dsh/host/directory-picker-browse/src/*"
+      ],
+      "@se373/host-directory-picker-native": [
+        "./vendor/dsh/host/directory-picker-native/src/index.ts"
+      ],
+      "@se373/host-directory-picker-native/invariant": [
+        "./vendor/dsh/host/directory-picker-native/src/invariant.ts"
+      ],
+      "@se373/host-directory-picker-native/worker": [
+        "./vendor/dsh/host/directory-picker-native/src/worker.cjs"
+      ],
+      "@se373/host-directory-picker-native/src/*": [
+        "./vendor/dsh/host/directory-picker-native/src/*"
+      ],
+      "@se373/host-frontend-static": [
+        "./vendor/dsh/host/frontend-static/src/index.ts"
+      ],
+      "@se373/host-frontend-static/invariant": [
+        "./vendor/dsh/host/frontend-static/src/invariant.ts"
+      ],
+      "@se373/host-frontend-static/src/*": [
+        "./vendor/dsh/host/frontend-static/src/*"
+      ],
+      "@se373/host-plugin-inventory": [
+        "./vendor/dsh/host/plugin-inventory/src/index.ts"
+      ],
+      "@se373/host-plugin-inventory/invariant": [
+        "./vendor/dsh/host/plugin-inventory/src/invariant.ts"
+      ],
+      "@se373/host-plugin-inventory/types": [
+        "./vendor/dsh/host/plugin-inventory/src/types.ts"
+      ],
+      "@se373/host-plugin-inventory/src/*": [
+        "./vendor/dsh/host/plugin-inventory/src/*"
+      ],
+      "@se373/host-webserver": [
+        "./vendor/dsh/host/webserver/src/index.ts"
+      ],
+      "@se373/host-webserver/invariant": [
+        "./vendor/dsh/host/webserver/src/invariant.ts"
+      ],
+      "@se373/host-webserver/src/*": [
+        "./vendor/dsh/host/webserver/src/*"
+      ],
+      "@se373/anonymous-user-id": [
+        "./vendor/dsh/identity/anonymous-user-id/src/index.ts"
+      ],
+      "@se373/anonymous-user-id/invariant": [
+        "./vendor/dsh/identity/anonymous-user-id/src/invariant.ts"
+      ],
+      "@se373/anonymous-user-id/src/*": [
+        "./vendor/dsh/identity/anonymous-user-id/src/*"
+      ],
+      "@se373/commands": [
+        "./vendor/dsh/interaction/commands/src/index.ts"
+      ],
+      "@se373/commands/invariant": [
+        "./vendor/dsh/interaction/commands/src/invariant.ts"
+      ],
+      "@se373/commands/types": [
+        "./vendor/dsh/interaction/commands/src/types.ts"
+      ],
+      "@se373/commands/brand": [
+        "./vendor/dsh/interaction/commands/src/brand.ts"
+      ],
+      "@se373/commands/src/*": [
+        "./vendor/dsh/interaction/commands/src/*"
+      ],
+      "@se373/permission-presets": [
+        "./vendor/dsh/interaction/permission-presets/src/index.ts"
+      ],
+      "@se373/permission-presets/invariant": [
+        "./vendor/dsh/interaction/permission-presets/src/invariant.ts"
+      ],
+      "@se373/permission-presets/types": [
+        "./vendor/dsh/interaction/permission-presets/src/types.ts"
+      ],
+      "@se373/permission-presets/src/*": [
+        "./vendor/dsh/interaction/permission-presets/src/*"
+      ],
+      "@se373/user-approval": [
+        "./vendor/dsh/interaction/user-approval/src/index.ts"
+      ],
+      "@se373/user-approval/invariant": [
+        "./vendor/dsh/interaction/user-approval/src/invariant.ts"
+      ],
+      "@se373/user-approval/types": [
+        "./vendor/dsh/interaction/user-approval/src/types.ts"
+      ],
+      "@se373/user-approval/src/*": [
+        "./vendor/dsh/interaction/user-approval/src/*"
+      ],
+      "@se373/user-questions": [
+        "./vendor/dsh/interaction/user-questions/src/index.ts"
+      ],
+      "@se373/user-questions/invariant": [
+        "./vendor/dsh/interaction/user-questions/src/invariant.ts"
+      ],
+      "@se373/user-questions/types": [
+        "./vendor/dsh/interaction/user-questions/src/types.ts"
+      ],
+      "@se373/user-questions/src/*": [
+        "./vendor/dsh/interaction/user-questions/src/*"
+      ],
+      "@se373/jobs": [
+        "./vendor/dsh/jobs/jobs/src/index.ts"
+      ],
+      "@se373/jobs/invariant": [
+        "./vendor/dsh/jobs/jobs/src/invariant.ts"
+      ],
+      "@se373/jobs/brand": [
+        "./vendor/dsh/jobs/jobs/src/brand.ts"
+      ],
+      "@se373/jobs/src/*": [
+        "./vendor/dsh/jobs/jobs/src/*"
+      ],
+      "@se373/llm": [
+        "./vendor/dsh/llm/llm/src/index.ts"
+      ],
+      "@se373/llm/invariant": [
+        "./vendor/dsh/llm/llm/src/invariant.ts"
+      ],
+      "@se373/llm/types": [
+        "./vendor/dsh/llm/llm/src/types.ts"
+      ],
+      "@se373/llm/brand": [
+        "./vendor/dsh/llm/llm/src/brand.ts"
+      ],
+      "@se373/llm/message": [
+        "./vendor/dsh/llm/llm/src/message.ts"
+      ],
+      "@se373/llm/src/*": [
+        "./vendor/dsh/llm/llm/src/*"
+      ],
+      "@se373/llm-deepseek": [
+        "./vendor/dsh/llm/llm-deepseek/src/index.ts"
+      ],
+      "@se373/llm-deepseek/invariant": [
+        "./vendor/dsh/llm/llm-deepseek/src/invariant.ts"
+      ],
+      "@se373/llm-deepseek/src/*": [
+        "./vendor/dsh/llm/llm-deepseek/src/*"
+      ],
+      "@se373/llm-retry": [
+        "./vendor/dsh/llm/llm-retry/src/index.ts"
+      ],
+      "@se373/llm-retry/invariant": [
+        "./vendor/dsh/llm/llm-retry/src/invariant.ts"
+      ],
+      "@se373/llm-retry/types": [
+        "./vendor/dsh/llm/llm-retry/src/types.ts"
+      ],
+      "@se373/token-meter": [
+        "./vendor/dsh/llm/token-meter/src/index.ts"
+      ],
+      "@se373/token-meter/invariant": [
+        "./vendor/dsh/llm/token-meter/src/invariant.ts"
+      ],
+      "@se373/token-meter/src/*": [
+        "./vendor/dsh/llm/token-meter/src/*"
+      ],
+      "@se373/mcp-client": [
+        "./vendor/dsh/mcp/mcp-client/src/index.ts"
+      ],
+      "@se373/mcp-client/invariant": [
+        "./vendor/dsh/mcp/mcp-client/src/invariant.ts"
+      ],
+      "@se373/mcp-client/src/*": [
+        "./vendor/dsh/mcp/mcp-client/src/*"
+      ],
+      "@se373/node-addon-landlock-run": [
+        "./vendor/dsh/native/landlock-run/src/index.ts"
+      ],
+      "@se373/plan-mode": [
+        "./vendor/dsh/plan/plan-mode/src/index.ts"
+      ],
+      "@se373/plan-mode/invariant": [
+        "./vendor/dsh/plan/plan-mode/src/invariant.ts"
+      ],
+      "@se373/plan-mode/types": [
+        "./vendor/dsh/plan/plan-mode/src/types.ts"
+      ],
+      "@se373/plan-mode/src/*": [
+        "./vendor/dsh/plan/plan-mode/src/*"
+      ],
+      "@se373/agent-presets": [
+        "./vendor/dsh/preset/agent-presets/src/index.ts"
+      ],
+      "@se373/agent-presets/invariant": [
+        "./vendor/dsh/preset/agent-presets/src/invariant.ts"
+      ],
+      "@se373/agent-presets/types": [
+        "./vendor/dsh/preset/agent-presets/src/types.ts"
+      ],
+      "@se373/agent-presets/src/*": [
+        "./vendor/dsh/preset/agent-presets/src/*"
+      ],
+      "@se373/invariants": [
+        "./vendor/dsh/runtime-diagnostics/invariants/src/index.ts"
+      ],
+      "@se373/invariants/invariant": [
+        "./vendor/dsh/runtime-diagnostics/invariants/src/invariant.ts"
+      ],
+      "@se373/invariants/src/*": [
+        "./vendor/dsh/runtime-diagnostics/invariants/src/*"
+      ],
+      "@se373/sandbox": [
+        "./vendor/dsh/sandbox/sandbox/src/index.ts"
+      ],
+      "@se373/sandbox/invariant": [
+        "./vendor/dsh/sandbox/sandbox/src/invariant.ts"
+      ],
+      "@se373/sandbox/src/*": [
+        "./vendor/dsh/sandbox/sandbox/src/*"
+      ],
+      "@se373/sandbox-local": [
+        "./vendor/dsh/sandbox/sandbox-local/src/index.ts"
+      ],
+      "@se373/sandbox-local/invariant": [
+        "./vendor/dsh/sandbox/sandbox-local/src/invariant.ts"
+      ],
+      "@se373/sandbox-local/src/*": [
+        "./vendor/dsh/sandbox/sandbox-local/src/*"
+      ],
+      "@se373/sandbox-policy": [
+        "./vendor/dsh/sandbox/sandbox-policy/src/index.ts"
+      ],
+      "@se373/sandbox-policy/invariant": [
+        "./vendor/dsh/sandbox/sandbox-policy/src/invariant.ts"
+      ],
+      "@se373/sandbox-policy/src/*": [
+        "./vendor/dsh/sandbox/sandbox-policy/src/*"
+      ],
+      "@se373/sandbox-windows-acl": [
+        "./vendor/dsh/sandbox/sandbox-windows-acl/src/index.ts"
+      ],
+      "@se373/sandbox-windows-acl/runner": [
+        "./vendor/dsh/sandbox/sandbox-windows-acl/src/runner.ts"
+      ],
+      "@se373/sandbox-windows-acl/invariant": [
+        "./vendor/dsh/sandbox/sandbox-windows-acl/src/invariant.ts"
+      ],
+      "@se373/sandbox-windows-acl/src/*": [
+        "./vendor/dsh/sandbox/sandbox-windows-acl/src/*"
+      ],
+      "@se373/session-log-export": [
+        "./vendor/dsh/session-query/session-log-export/src/index.ts"
+      ],
+      "@se373/session-log-export/invariant": [
+        "./vendor/dsh/session-query/session-log-export/src/invariant.ts"
+      ],
+      "@se373/session-log-export/client": [
+        "./vendor/dsh/session-query/session-log-export/src/client"
+      ],
+      "@se373/session-log-export/src/*": [
+        "./vendor/dsh/session-query/session-log-export/src/*"
+      ],
+      "@se373/session-query": [
+        "./vendor/dsh/session-query/session-query/src/index.ts"
+      ],
+      "@se373/session-query/invariant": [
+        "./vendor/dsh/session-query/session-query/src/invariant.ts"
+      ],
+      "@se373/session-query/src/*": [
+        "./vendor/dsh/session-query/session-query/src/*"
+      ],
+      "@se373/session-persistence": [
+        "./vendor/dsh/session/session-persistence/src/index.ts"
+      ],
+      "@se373/session-persistence/invariant": [
+        "./vendor/dsh/session/session-persistence/src/invariant.ts"
+      ],
+      "@se373/session-persistence/src/*": [
+        "./vendor/dsh/session/session-persistence/src/*"
+      ],
+      "@se373/session-persistence-jsonl": [
+        "./vendor/dsh/session/session-persistence-jsonl/src/index.ts"
+      ],
+      "@se373/session-persistence-jsonl/invariant": [
+        "./vendor/dsh/session/session-persistence-jsonl/src/invariant.ts"
+      ],
+      "@se373/session-persistence-jsonl/src/*": [
+        "./vendor/dsh/session/session-persistence-jsonl/src/*"
+      ],
+      "@se373/session-projection": [
+        "./vendor/dsh/session/session-projection/src/index.ts"
+      ],
+      "@se373/session-projection/invariant": [
+        "./vendor/dsh/session/session-projection/src/invariant.ts"
+      ],
+      "@se373/session-projection/types": [
+        "./vendor/dsh/session/session-projection/src/types.ts"
+      ],
+      "@se373/session-projection/src/*": [
+        "./vendor/dsh/session/session-projection/src/*"
+      ],
+      "@se373/session-projection-cache": [
+        "./vendor/dsh/session/session-projection-cache/src/index.ts"
+      ],
+      "@se373/session-projection-cache/invariant": [
+        "./vendor/dsh/session/session-projection-cache/src/invariant.ts"
+      ],
+      "@se373/session-projection-cache/src/*": [
+        "./vendor/dsh/session/session-projection-cache/src/*"
+      ],
+      "@se373/session-stats": [
+        "./vendor/dsh/session/session-stats/src/index.ts"
+      ],
+      "@se373/session-stats/invariant": [
+        "./vendor/dsh/session/session-stats/src/invariant.ts"
+      ],
+      "@se373/session-stats/types": [
+        "./vendor/dsh/session/session-stats/src/types.ts"
+      ],
+      "@se373/session-stats/src/*": [
+        "./vendor/dsh/session/session-stats/src/*"
+      ],
+      "@se373/session-title": [
+        "./vendor/dsh/session/session-title/src/index.ts"
+      ],
+      "@se373/session-title/invariant": [
+        "./vendor/dsh/session/session-title/src/invariant.ts"
+      ],
+      "@se373/session-title/types": [
+        "./vendor/dsh/session/session-title/src/types.ts"
+      ],
+      "@se373/session-title/src/*": [
+        "./vendor/dsh/session/session-title/src/*"
+      ],
+      "@se373/settings": [
+        "./vendor/dsh/settings/settings/src/index.ts"
+      ],
+      "@se373/settings/invariant": [
+        "./vendor/dsh/settings/settings/src/invariant.ts"
+      ],
+      "@se373/settings/types": [
+        "./vendor/dsh/settings/settings/src/types.ts"
+      ],
+      "@se373/settings/src/*": [
+        "./vendor/dsh/settings/settings/src/*"
+      ],
+      "@se373/settings-file": [
+        "./vendor/dsh/settings/settings-file/src/index.ts"
+      ],
+      "@se373/settings-file/invariant": [
+        "./vendor/dsh/settings/settings-file/src/invariant.ts"
+      ],
+      "@se373/settings-file/src/*": [
+        "./vendor/dsh/settings/settings-file/src/*"
+      ],
+      "@se373/bash-local": [
+        "./vendor/dsh/shell/bash-local/src/index.ts"
+      ],
+      "@se373/bash-local/invariant": [
+        "./vendor/dsh/shell/bash-local/src/invariant.ts"
+      ],
+      "@se373/bash-local/src/*": [
+        "./vendor/dsh/shell/bash-local/src/*"
+      ],
+      "@se373/bash-sandbox": [
+        "./vendor/dsh/shell/bash-sandbox/src/index.ts"
+      ],
+      "@se373/bash-sandbox/invariant": [
+        "./vendor/dsh/shell/bash-sandbox/src/invariant.ts"
+      ],
+      "@se373/bash-sandbox/src/*": [
+        "./vendor/dsh/shell/bash-sandbox/src/*"
+      ],
+      "@se373/pwsh-local": [
+        "./vendor/dsh/shell/pwsh-local/src/index.ts"
+      ],
+      "@se373/pwsh-local/invariant": [
+        "./vendor/dsh/shell/pwsh-local/src/invariant.ts"
+      ],
+      "@se373/pwsh-local/src/*": [
+        "./vendor/dsh/shell/pwsh-local/src/*"
+      ],
+      "@se373/shell": [
+        "./vendor/dsh/shell/shell/src/index.ts"
+      ],
+      "@se373/shell/invariant": [
+        "./vendor/dsh/shell/shell/src/invariant.ts"
+      ],
+      "@se373/shell/src/*": [
+        "./vendor/dsh/shell/shell/src/*"
+      ],
+      "@se373/shell-env": [
+        "./vendor/dsh/shell/shell-env/src/index.ts"
+      ],
+      "@se373/shell-env/invariant": [
+        "./vendor/dsh/shell/shell-env/src/invariant.ts"
+      ],
+      "@se373/shell-env/src/*": [
+        "./vendor/dsh/shell/shell-env/src/*"
+      ],
+      "@se373/tool-bash": [
+        "./vendor/dsh/shell/tool-bash/src/index.ts"
+      ],
+      "@se373/tool-bash/invariant": [
+        "./vendor/dsh/shell/tool-bash/src/invariant.ts"
+      ],
+      "@se373/tool-bash/src/*": [
+        "./vendor/dsh/shell/tool-bash/src/*"
+      ],
+      "@se373/skill": [
+        "./vendor/dsh/skill/skill/src/index.ts"
+      ],
+      "@se373/skill/invariant": [
+        "./vendor/dsh/skill/skill/src/invariant.ts"
+      ],
+      "@se373/skill/src/*": [
+        "./vendor/dsh/skill/skill/src/*"
+      ],
+      "@se373/spill": [
+        "./vendor/dsh/spill/spill/src/index.ts"
+      ],
+      "@se373/spill/invariant": [
+        "./vendor/dsh/spill/spill/src/invariant.ts"
+      ],
+      "@se373/spill/src/*": [
+        "./vendor/dsh/spill/spill/src/*"
+      ],
+      "@se373/spill-local": [
+        "./vendor/dsh/spill/spill-local/src/index.ts"
+      ],
+      "@se373/spill-local/invariant": [
+        "./vendor/dsh/spill/spill-local/src/invariant.ts"
+      ],
+      "@se373/spill-local/src/*": [
+        "./vendor/dsh/spill/spill-local/src/*"
+      ],
+      "@se373/spill-policy": [
+        "./vendor/dsh/spill/spill-policy/src/index.ts"
+      ],
+      "@se373/spill-policy/invariant": [
+        "./vendor/dsh/spill/spill-policy/src/invariant.ts"
+      ],
+      "@se373/spill-policy/src/*": [
+        "./vendor/dsh/spill/spill-policy/src/*"
+      ],
+      "@se373/storage": [
+        "./vendor/dsh/storage/storage/src/index.ts"
+      ],
+      "@se373/storage/invariant": [
+        "./vendor/dsh/storage/storage/src/invariant.ts"
+      ],
+      "@se373/storage/src/*": [
+        "./vendor/dsh/storage/storage/src/*"
+      ],
+      "@se373/storage-domain": [
+        "./vendor/dsh/storage/storage-domain/src/index.ts"
+      ],
+      "@se373/storage-domain/invariant": [
+        "./vendor/dsh/storage/storage-domain/src/invariant.ts"
+      ],
+      "@se373/storage-domain/src/*": [
+        "./vendor/dsh/storage/storage-domain/src/*"
+      ],
+      "@se373/storage-json": [
+        "./vendor/dsh/storage/storage-json/src/index.ts"
+      ],
+      "@se373/storage-json/invariant": [
+        "./vendor/dsh/storage/storage-json/src/invariant.ts"
+      ],
+      "@se373/storage-json/src/*": [
+        "./vendor/dsh/storage/storage-json/src/*"
+      ],
+      "@se373/subagent": [
+        "./vendor/dsh/subagent/subagent/src/index.ts"
+      ],
+      "@se373/subagent/invariant": [
+        "./vendor/dsh/subagent/subagent/src/invariant.ts"
+      ],
+      "@se373/subagent/src/*": [
+        "./vendor/dsh/subagent/subagent/src/*"
+      ],
+      "@se373/subprocess": [
+        "./vendor/dsh/subprocess/subprocess/src/index.ts"
+      ],
+      "@se373/subprocess/invariant": [
+        "./vendor/dsh/subprocess/subprocess/src/invariant.ts"
+      ],
+      "@se373/subprocess/src/*": [
+        "./vendor/dsh/subprocess/subprocess/src/*"
+      ],
+      "@se373/subprocess-local": [
+        "./vendor/dsh/subprocess/subprocess-local/src/index.ts"
+      ],
+      "@se373/subprocess-local/invariant": [
+        "./vendor/dsh/subprocess/subprocess-local/src/invariant.ts"
+      ],
+      "@se373/subprocess-local/src/*": [
+        "./vendor/dsh/subprocess/subprocess-local/src/*"
+      ],
+      "@se373/llm-mock-server": [
+        "./vendor/dsh/test-support/llm-mock-server/src/index.ts"
+      ],
+      "@se373/llm-mock-server/invariant": [
+        "./vendor/dsh/test-support/llm-mock-server/src/invariant.ts"
+      ],
+      "@se373/llm-mock-server/src/*": [
+        "./vendor/dsh/test-support/llm-mock-server/src/*"
+      ],
+      "@se373/tool-todo": [
+        "./vendor/dsh/todo/tool-todo/src/index.ts"
+      ],
+      "@se373/tool-todo/invariant": [
+        "./vendor/dsh/todo/tool-todo/src/invariant.ts"
+      ],
+      "@se373/tool-todo/src/*": [
+        "./vendor/dsh/todo/tool-todo/src/*"
+      ],
+      "@se373/typert-generator": [
+        "./vendor/dsh/typert/generator/src/index.ts"
+      ],
+      "@se373/typert-generator/tsdown": [
+        "./vendor/dsh/typert/generator/src/tsdown-plugin.ts"
+      ],
+      "@se373/typert-generator/invariant": [
+        "./vendor/dsh/typert/generator/src/invariant.ts"
+      ],
+      "@se373/typert-generator/src/*": [
+        "./vendor/dsh/typert/generator/src/*"
+      ],
+      "@se373/typert-loader": [
+        "./vendor/dsh/typert/loader/src/index.ts"
+      ],
+      "@se373/typert-loader/invariant": [
+        "./vendor/dsh/typert/loader/src/invariant.ts"
+      ],
+      "@se373/typert-loader/src/*": [
+        "./vendor/dsh/typert/loader/src/*"
+      ],
+      "@se373/typert-protocol": [
+        "./vendor/dsh/typert/protocol/src/index.ts"
+      ],
+      "@se373/typert-protocol/invariant": [
+        "./vendor/dsh/typert/protocol/src/invariant.ts"
+      ],
+      "@se373/typert-protocol/types": [
+        "./vendor/dsh/typert/protocol/src/types.ts"
+      ],
+      "@se373/typert-protocol/src/*": [
+        "./vendor/dsh/typert/protocol/src/*"
+      ],
+      "@se373/typert-registry": [
+        "./vendor/dsh/typert/registry/src/index.ts"
+      ],
+      "@se373/typert-registry/invariant": [
+        "./vendor/dsh/typert/registry/src/invariant.ts"
+      ],
+      "@se373/typert-registry/client": [
+        "./vendor/dsh/typert/registry/src/client"
+      ],
+      "@se373/typert-registry/types": [
+        "./vendor/dsh/typert/registry/src/types.ts"
+      ],
+      "@se373/typert-registry/src/*": [
+        "./vendor/dsh/typert/registry/src/*"
+      ],
+      "@se373/atomic-write": [
+        "./vendor/dsh/util/atomic-write/src/index.ts"
+      ],
+      "@se373/atomic-write/invariant": [
+        "./vendor/dsh/util/atomic-write/src/invariant.ts"
+      ],
+      "@se373/atomic-write/src/*": [
+        "./vendor/dsh/util/atomic-write/src/*"
+      ],
+      "@se373/brand": [
+        "./vendor/dsh/util/brand/src/index.ts"
+      ],
+      "@se373/brand/invariant": [
+        "./vendor/dsh/util/brand/src/invariant.ts"
+      ],
+      "@se373/brand/src/*": [
+        "./vendor/dsh/util/brand/src/*"
+      ],
+      "@se373/home-paths": [
+        "./vendor/dsh/util/home-paths/src/index.ts"
+      ],
+      "@se373/home-paths/invariant": [
+        "./vendor/dsh/util/home-paths/src/invariant.ts"
+      ],
+      "@se373/home-paths/src/*": [
+        "./vendor/dsh/util/home-paths/src/*"
+      ],
+      "@se373/launch-environment": [
+        "./vendor/dsh/util/launch-environment/src/index.ts"
+      ],
+      "@se373/launch-environment/invariant": [
+        "./vendor/dsh/util/launch-environment/src/invariant.ts"
+      ],
+      "@se373/launch-environment/src/*": [
+        "./vendor/dsh/util/launch-environment/src/*"
+      ],
+      "@se373/native-command": [
+        "./vendor/dsh/util/native-command/src/index.ts"
+      ],
+      "@se373/native-command/invariant": [
+        "./vendor/dsh/util/native-command/src/invariant.ts"
+      ],
+      "@se373/native-command/src/*": [
+        "./vendor/dsh/util/native-command/src/*"
+      ],
+      "@se373/output-retention": [
+        "./vendor/dsh/util/output-retention/src/index.ts"
+      ],
+      "@se373/output-retention/invariant": [
+        "./vendor/dsh/util/output-retention/src/invariant.ts"
+      ],
+      "@se373/output-retention/src/*": [
+        "./vendor/dsh/util/output-retention/src/*"
+      ],
+      "@se373/timeout": [
+        "./vendor/dsh/util/timeout/src/index.ts"
+      ],
+      "@se373/timeout/invariant": [
+        "./vendor/dsh/util/timeout/src/invariant.ts"
+      ],
+      "@se373/timeout/src/*": [
+        "./vendor/dsh/util/timeout/src/*"
+      ],
+      "@se373/tool-workflow": [
+        "./vendor/dsh/workflow/tool-workflow/src/index.ts"
+      ],
+      "@se373/tool-workflow/invariant": [
+        "./vendor/dsh/workflow/tool-workflow/src/invariant.ts"
+      ],
+      "@se373/tool-workflow/types": [
+        "./vendor/dsh/workflow/tool-workflow/src/types.ts"
+      ],
+      "@se373/tool-workflow/src/*": [
+        "./vendor/dsh/workflow/tool-workflow/src/*"
+      ],
+      "@se373/workflow": [
+        "./vendor/dsh/workflow/workflow/src/index.ts"
+      ],
+      "@se373/workflow/invariant": [
+        "./vendor/dsh/workflow/workflow/src/invariant.ts"
+      ],
+      "@se373/workflow/types": [
+        "./vendor/dsh/workflow/workflow/src/types.ts"
+      ],
+      "@se373/workflow/src/*": [
+        "./vendor/dsh/workflow/workflow/src/*"
+      ],
+      "@se373/workspace": [
+        "./vendor/dsh/workspace/workspace/src/index.ts"
+      ],
+      "@se373/workspace/invariant": [
+        "./vendor/dsh/workspace/workspace/src/invariant.ts"
+      ],
+      "@se373/workspace/types": [
+        "./vendor/dsh/workspace/workspace/src/types.ts"
+      ],
+      "@se373/workspace/src/*": [
+        "./vendor/dsh/workspace/workspace/src/*"
+      ],
+      "@se373/cordis": [
+        "./vendor/cordis/src"
+      ],
+      "@se373/cosmokit": [
+        "./vendor/cosmokit/src"
+      ],
+      "@se373/schemastery": [
+        "./vendor/schemastery/src"
+      ],
+      "@se373/cordis-plugin-loader": [
+        "./vendor/loader/src"
+      ],
+      "@se373/cordis-plugin-include": [
+        "./vendor/include/src"
+      ],
+      "@se373/cordis-plugin-group": [
+        "./vendor/group/src"
+      ],
+      "@se373/cordis-plugin-timer": [
+        "./vendor/timer/src"
+      ],
+      "@se373/cordis-plugin-hmr": [
+        "./vendor/hmr/src"
+      ],
+      "@se373/cordis-plugin-logger-console": [
+        "./vendor/logger-console/src"
+      ]
+    }
+  }
+}

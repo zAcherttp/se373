@@ -20,12 +20,12 @@
       "default": "./src/types.ts"
     },
     "./typert": {
-      "types": "./lib/types/typert.host.d.ts",
-      "default": "./src/typert.host.ts"
+      "types": "./lib/typert.host.d.ts",
+      "default": "./lib/typert.host.js"
     },
     "./remote": {
-      "types": "./lib/types/typert.remote-client.d.ts",
-      "default": "./src/typert.remote-client.ts"
+      "types": "./lib/typert.remote-client.d.ts",
+      "default": "./lib/typert.remote-client.js"
     },
     "./src/*": "./src/*",
     "./package.json": "./package.json"
