@@ -40,6 +40,10 @@
     "@se373/tool-bash": "workspace:*",
     "@se373/tool-fs": "workspace:*",
     "@se373/tool-fs-search": "workspace:*",
-    "@se373/tool-str-replace-editor": "workspace:*"
+    "@se373/tool-str-replace-editor": "workspace:*",
+    "@se373/runtime-graph": "workspace:*",
+    "@se373/tool-graph-inspect": "workspace:*",
+    "@se373/logger-jsonl": "workspace:*",
+    "@se373/mcp-client": "workspace:*"
   }
 }

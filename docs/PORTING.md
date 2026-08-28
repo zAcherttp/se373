@@ -284,6 +284,29 @@ are denied so far:
 | `koffi` | denied | `session-persistence-jsonl/src/win32.ts` lazily loads it to call `kernel32.dll`. Never reached off Windows |
 | `node-pty` | allowed | a top-level import in `subprocess-local`, which every shell tool runs through, and there is no second subprocess provider upstream |
 | `@vscode/ripgrep` | allowed | its postinstall downloads the binary `tool-fs-search` shells out to. No binary, no grep or glob |
+| `@modelcontextprotocol/sdk` | denied | neither it nor anything in its closure ships an install or postinstall script — the several `prepare` scripts in there are never run for a registry tarball. Recorded as an explicit deny rather than left undecided, because an undecided build is a boot that stops on a prompt |
+
+### Deep imports into vendored source
+
+Every vendored manifest exports `"./src/*": "./src/*"`. That is upstream's own
+door for reuse below the package's public seam, and we use it in exactly one
+place. It is recorded here because **a sync could move those files**, and a deep
+import breaks silently at the next re-vendor rather than at review time.
+
+| Importer | Imports | Why not reimplement |
+|---|---|---|
+| `@se373/logger-jsonl` | `session-persistence-jsonl/src/format.ts` → `logSuffix`, `JsonlCompression` | the `.jsonl` / `.jsonl.zstd` suffix rule, and the type that selects it |
+| `@se373/logger-jsonl` | `session-persistence-jsonl/src/zstd.ts` → `compressZstdFrame`, `decompressZstdFrame`, `decompressZstdPrefix`, `scanZstdFrames` | a concatenated-frame container with structural scanning and torn-final-frame recovery. The torn path is the one that matters: it is what opens the log written by the crash under investigation |
+| `@se373/logger-jsonl` | `session-persistence-jsonl/src/win32.ts` → `publishNewFileWin32`, `ensureDurableDirectoryWin32` | Windows has no parent-directory fsync contract through Node, so durable publication goes through `koffi` → `MoveFileExW(MOVEFILE_WRITE_THROUGH)`. This is the single most expensive thing in the vendored tree to rediscover |
+
+`index.ts` and its `SessionPersistence` implementation are **not** reused: the
+top layer is typed on `SessionEvent`, which is the wrong *type*, not the wrong
+layer. The design note for this split is
+[`docs/design/runtime-observability.md`](design/runtime-observability.md) §7.
+
+The three imported modules know nothing about sessions, which is what makes the
+reuse honest rather than a shortcut. A sync that moves or renames any of them
+surfaces as a typecheck failure in `packages/runtime/logger-jsonl`.
 
 ### Out-of-tree upstream packages
 
@@ -335,10 +358,15 @@ tsconfig layer, our own bundles, and every `packages/*` not listed in §4.
 
 ## Known Limitations and Deferred Work
 
-- **59 of the 187 in-scope packages are vendored** (phases 2 and 3: the chat
-  closure, the tool and sandbox closure, the mock LLM server, and the Landlock
-  seam). `scripts/vendor-dsh.mjs` is the mechanism, so widening is a seed-list
-  edit rather than new work.
+- **60 of the 187 in-scope packages are vendored** (phases 2, 3 and 3.5: the
+  chat closure, the tool and sandbox closure, the mock LLM server, the Landlock
+  seam, and `mcp-client`). `scripts/vendor-dsh.mjs` is the mechanism, so
+  widening is a seed-list edit rather than new work.
+- **`mcp-client` cost one package, not the two that were budgeted.**
+  `typert/protocol` was already in the phase-3 closure, so the measured cost was
+  `mcp/mcp-client` alone plus the `@modelcontextprotocol/sdk` dependency. The
+  re-vendor of the other fourteen packages in its closure produced a byte-identical
+  tree, which is the first independent evidence that the script is idempotent.
 - **Phase 4 takes `bundle/web-app` whole: 78 more packages, 59 → 137.** Measured
   2026-08-27. Two smaller tiers were considered and rejected — a page with no
   host RPC (3 new packages) and the `/api` transport without dsh's UI (27) — on

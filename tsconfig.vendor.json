@@ -38,6 +38,7 @@
     { "path": "./vendor/dsh/llm/llm" },
     { "path": "./vendor/dsh/llm/llm-deepseek" },
     { "path": "./vendor/dsh/llm/llm-retry" },
+    { "path": "./vendor/dsh/mcp/mcp-client" },
     { "path": "./vendor/dsh/native/landlock-run" },
     { "path": "./vendor/dsh/runtime-diagnostics/invariants" },
     { "path": "./vendor/dsh/sandbox/sandbox" },

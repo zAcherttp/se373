@@ -34,3 +34,11 @@ allowBuilds:
   # @vscode/ripgrep: postinstall downloads the ripgrep binary that tool-fs-search
   # shells out to. No binary, no grep or glob tool.
   '@vscode/ripgrep': true
+
+  # @modelcontextprotocol/sdk: the one real third-party dependency the MCP
+  # client brings. Neither it nor anything in its closure ships an install or
+  # postinstall script -- the `prepare` scripts several of them declare are
+  # never run for a registry tarball. Recorded as an explicit deny anyway,
+  # because an undecided build is a boot that stops on a prompt, and the SDK is
+  # on the path of a demo where that failure would be invisible until it wasn't.
+  '@modelcontextprotocol/sdk': false

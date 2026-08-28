@@ -1,0 +1,26 @@
+{
+  "name": "@se373/runtime-graph",
+  "description": "ctx.runtimeGraph: a point-in-time projection of the live loader and fiber trees",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./types": "./src/types.ts",
+    "./invariant": "./src/invariant.ts",
+    "./package.json": "./package.json"
+  },
+  "license": "MIT",
+  "peerDependencies": {
+    "@se373/cordis": "workspace:^",
+    "@se373/cordis-plugin-loader": "workspace:^",
+    "@se373/invariants": "workspace:^"
+  },
+  "devDependencies": {
+    "@se373/cordis": "workspace:^",
+    "@se373/cordis-plugin-loader": "workspace:^",
+    "@se373/invariants": "workspace:^"
+  }
+}

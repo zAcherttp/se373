@@ -14,6 +14,27 @@
 - id: invariants
   name: '@se373/invariants'
 
+# The runtime's view of itself. A core service, not a seam: one loader tree, one
+# fiber tree, so no second provider could exist. Everything else that renders the
+# tree -- the phase-4 board, the pipeline graph -- reads this one projection,
+# which is what makes I5 true by construction.
+- id: runtime-graph
+  name: '@se373/runtime-graph'
+
+# Every run leaves a durable log under $SE373_HOME/logs. dsh has no app log at
+# all -- its logger channel lives and dies in the terminal -- so this is ours:
+# a second Cordis exporter beside the console one, with its own level threshold,
+# because a debug firehose is fine in a terminal and expensive on disk.
+- id: logger-jsonl
+  name: '@se373/logger-jsonl'
+  config:
+    dir: !!js dshHomePath('logs')
+    maxRuns: 5
+    # 'none' takes zstd off the path entirely; the file is then plain JSONL.
+    compression: zstd
+    levels:
+      default: 2
+
 # --- seams -------------------------------------------------------------------
 
 - id: llm
@@ -160,6 +181,35 @@
   config:
     maxOutputChars: 16000
 
+# The projection's first consumer, and the reason it lands before any view.
+- id: tool-graph-inspect
+  name: '@se373/tool-graph-inspect'
+
+# --- the evolution ladder, bottom rung -----------------------------------------
+#
+# Connect a third-party MCP server and its tools appear to the agent. Nothing is
+# authored and nothing is generated, so this rung cannot fail to compile -- which
+# is exactly why it ships disabled rather than excluded (I3): enabling it is this
+# one line, not a code change.
+#
+# ONE ROW IS ONE SERVER -- load the plugin again with another id for a second.
+# Flip `disabled` to false and the tools below arrive as `mcp__everything__*`.
+# `command` and `args` are spawned directly over the SDK's stdio transport, with
+# no shell interpolation; `transport: streamable-http` takes `url` and `headers`
+# instead. See vendor/dsh/mcp/mcp-client/README.md for the rest of the surface.
+- id: mcp-client
+  name: '@se373/mcp-client'
+  disabled: true
+  config:
+    transport: stdio
+    # Namespaces this server's tool names; must be unique across live instances.
+    serverName: everything
+    command: npx
+    args: ['-y', '@modelcontextprotocol/server-everything']
+    # false keeps a dead server from failing the boot; true is what a deployment
+    # that genuinely depends on the server wants.
+    failOnStartupError: false
+
 # --- the one-shot driver -----------------------------------------------------
 
 - id: code-runtime
@@ -173,3 +223,19 @@
   inject: [headlessStartup]
   config:
     task: !!js ctx.headlessStartup.task
+
+# --- runtime invariant companions ---------------------------------------------
+#
+# Each package's checks mount as their own row, so a check is selectable by
+# config rather than by deletion -- the same reason the companion lives behind a
+# `./invariant` export instead of inside the package entrypoint. They come last
+# because each injects the subject it checks.
+
+- id: runtime-graph-invariant
+  name: '@se373/runtime-graph/invariant'
+
+- id: logger-jsonl-invariant
+  name: '@se373/logger-jsonl/invariant'
+
+- id: tool-graph-inspect-invariant
+  name: '@se373/tool-graph-inspect/invariant'
