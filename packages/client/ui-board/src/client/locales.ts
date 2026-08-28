@@ -1,0 +1,50 @@
+/** Copy dictionaries for the runtime board. */
+
+/** Simplified Chinese dictionary and key source of truth. */
+export const zh = {
+  open: '运行时视图',
+  close: '关闭',
+  refresh: '刷新',
+  loading: '正在读取运行时…',
+  error: '暂时无法读取运行时。',
+  search: '搜索组件',
+  empty: '没有匹配的组件。',
+  rows: '行',
+  disabled: '已停用',
+  notLive: '未挂载',
+  waiting: '等待依赖',
+  realm: '隔离域',
+  provides: '提供',
+  injects: '依赖',
+  unsatisfied: '未满足',
+  transitions: '状态变化（不是日志）',
+  config: '配置',
+  none: '无',
+  captured: '快照时间',
+} as const
+
+/** Dictionary key domain, taken from the Chinese source of truth. */
+export type BoardLocaleKey = keyof typeof zh
+
+/** English dictionary. */
+export const en: Record<BoardLocaleKey, string> = {
+  open: 'Runtime',
+  close: 'Close',
+  refresh: 'Refresh',
+  loading: 'Reading the runtime…',
+  error: 'The runtime could not be read.',
+  search: 'Search components',
+  empty: 'No component matches.',
+  rows: 'rows',
+  disabled: 'disabled',
+  notLive: 'not live',
+  waiting: 'waiting on',
+  realm: 'realm',
+  provides: 'provides',
+  injects: 'injects',
+  unsatisfied: 'unsatisfied',
+  transitions: 'transitions — state changes, not log lines',
+  config: 'config',
+  none: 'none',
+  captured: 'captured',
+}

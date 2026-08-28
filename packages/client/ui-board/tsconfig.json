@@ -1,0 +1,19 @@
+{
+  // A project in the BROWSER-FACE program (`tsconfig.client.json`). It cannot
+  // be in ours: both faces merge cordis `Context` under the same keys with
+  // different services, and one program cannot hold both sides of that merge.
+  "extends": "../../../tsconfig.client.base.json",
+  "compilerOptions": { "rootDir": "src", "outDir": "lib/types" },
+  "include": ["src"],
+  "references": [
+    { "path": "../../../vendor/cordis" },
+    { "path": "../../../vendor/dsh/api/remotes/tsconfig.client.json" },
+    { "path": "../../../vendor/dsh/client/runtime" },
+    { "path": "../../../vendor/dsh/client/locale" },
+    { "path": "../../../vendor/dsh/client/ui-layout" },
+    { "path": "../../../vendor/dsh/client/ui-primitives" },
+    { "path": "../../../vendor/dsh/client/ui-slots" },
+    { "path": "../../../vendor/dsh/runtime-diagnostics/invariants" },
+    { "path": "../../runtime/board-gateway" }
+  ]
+}

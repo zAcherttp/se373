@@ -1,5 +1,14 @@
 {
-  "extends": "../../../tsconfig.base.json",
-  "compilerOptions": { "noEmit": true },
-  "include": ["src"]
+  // A project in the HOST-FACE program (`tsconfig.host.json`) as well as in our
+  // own. It emits declarations because a package outside our program --
+  // `@se373/board-gateway`, compiled in the host face -- resolves this one
+  // through its package `exports`, and there is no `paths` facade for ours.
+  "extends": "../../../tsconfig.host.base.json",
+  "compilerOptions": { "rootDir": "src", "outDir": "lib/types" },
+  "include": ["src"],
+  "references": [
+    { "path": "../../../vendor/cordis" },
+    { "path": "../../../vendor/loader" },
+    { "path": "../../../vendor/dsh/runtime-diagnostics/invariants" }
+  ]
 }

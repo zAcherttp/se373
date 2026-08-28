@@ -112,17 +112,19 @@ const SHARED_FILES = [
       },
       {
         from: "globSync('packages/*/*/package.json', { cwd: REPOSITORY_ROOT })",
-        to: "globSync('vendor/dsh/*/*/package.json', { cwd: REPOSITORY_ROOT })",
-        why: 'our harness packages live under vendor/dsh, not packages',
+        to: "globSync(['vendor/dsh/*/*/package.json', 'packages/*/*/package.json'], { cwd: REPOSITORY_ROOT })",
+        why: 'our harness packages live under vendor/dsh, and our OWN UI plugins under packages',
       },
       {
         from: "return repositoryPath.startsWith('packages/') ? `../../../${repositoryPath}` : source",
-        to: "return repositoryPath.startsWith('vendor/dsh/') ? `../../../${repositoryPath}` : source",
+        to: "return repositoryPath.startsWith('vendor/dsh/') || repositoryPath.startsWith('packages/')\n"
+          + "    ? `../../../${repositoryPath}`\n"
+          + "    : source",
         why: 'browser sourcemap paths mirror our directories, not upstream\'s',
       },
       {
         from: "throw new Error(`tsdown: no packages/*/*/package.json declares the name ${id}`)",
-        to: "throw new Error(`tsdown: no vendor/dsh/*/*/package.json declares the name ${id}`)",
+        to: "throw new Error(`tsdown: no vendor/dsh/*/*/ or packages/*/*/ package.json declares the name ${id}`)",
         why: 'the diagnostic must name the path a reader would actually look in',
       },
       {
@@ -251,6 +253,25 @@ const LOCAL_MODS = [
     to: "console.log(`se373 web: ${webUrl}",
     why: 'the startup line names the product, and this product is not dsh',
   },
+  {
+    // 17-18 add OUR Remote to the client assembly. The list is hand-kept
+    // upstream -- a contribution is selected, not discovered -- so a namespace
+    // of ours has to be selected the same way theirs are.
+    package: '@deepseek-ai/dsh-api-remotes',
+    file: 'src/client/index.ts',
+    from: "import sessionReferencesRemote from '@se373/session-reference/remote'",
+    to: "import sessionReferencesRemote from '@se373/session-reference/remote'\n"
+      + "import boardRemote from '@se373/board-gateway/remote'",
+    why: 'the runtime board reads the graph through ctx.remote.board',
+  },
+  {
+    package: '@deepseek-ai/dsh-api-remotes',
+    file: 'src/client/index.ts',
+    from: '      pluginInventoryRemote, messageFeedbackRemote, sessionReferencesRemote,',
+    to: '      pluginInventoryRemote, messageFeedbackRemote, sessionReferencesRemote,\n'
+      + '      boardRemote,',
+    why: 'a contribution that is imported but never mounted answers nothing',
+  },
 ]
 
 /**
@@ -268,6 +289,9 @@ const LOCAL_MODS = [
 const EXTRA_DEPS = new Map([
   // `import type { ScopeKey } from '.../scope'` in src/api-proxy.ts.
   ['@deepseek-ai/dsh-host-apiproxy', { '@deepseek-ai/dsh-scope': 'workspace:^' }],
+  // Ours, imported by local modification 17: the Remote contribution list is
+  // hand-kept upstream, so a namespace of ours is selected the same way.
+  ['@deepseek-ai/dsh-api-remotes', { '@se373/board-gateway': 'workspace:*' }],
 ])
 
 /**
@@ -564,8 +588,8 @@ for (const group of existsSync(DEST_ROOT) ? readdirSync(DEST_ROOT, { withFileTyp
  * both merge cordis `Context` under the same keys with different services.
  */
 const BASE_TSCONFIG = new Map([
-  ['tsconfig.base.json', 'tsconfig.vendor.base.json'],
-  ['tsconfig.base.client.json', 'tsconfig.vendor.client.base.json'],
+  ['tsconfig.base.json', 'tsconfig.host.base.json'],
+  ['tsconfig.base.client.json', 'tsconfig.client.base.json'],
 ])
 
 /**
@@ -726,7 +750,11 @@ for (const name of toVendor) {
     out[field] = rewritten
   }
   for (const [dep, range] of Object.entries(EXTRA_DEPS.get(name) ?? {})) {
-    if (!closure.has(dep)) throw new Error(`extra dependency ${dep} of ${name} is not in the vendored closure`)
+    // An upstream name must be in the closure or the link would dangle; one of
+    // ours is a workspace member and resolves on its own.
+    if (dep.startsWith('@deepseek-ai/') && !closure.has(dep)) {
+      throw new Error(`extra dependency ${dep} of ${name} is not in the vendored closure`)
+    }
     out.dependencies = { ...out.dependencies, [rescope(dep)]: range }
   }
   writeFileSync(join(to, 'package.json'), JSON.stringify(out, null, 2) + '\n')
@@ -887,7 +915,7 @@ function writePathsFacade() {
 
 writePathsFacade()
 
-const clientCovered = writeSolution('tsconfig.client.json', 'tsconfig.client.json', 'tsconfig.vendor.client.base.json', [], [
+const clientCovered = writeSolution('tsconfig.client.json', 'tsconfig.client.json', 'tsconfig.client.base.json', ourProjects('client'), [
   'Browser-plane solution for the vendored layer. A separate program because',
   'both planes merge cordis `Context` under the same keys with different',
   'services, and one program cannot hold both sides of that merge. It also',
@@ -907,7 +935,34 @@ const hostExtra = [...vendoredDirs]
   .filter(dir => !clientCovered.has(dir))
   .map(dir => `./vendor/dsh/${dir}`)
 
-writeSolution('tsconfig.host.json', 'tsconfig.host.json', 'tsconfig.vendor.base.json', hostExtra, [
+/**
+ * Our own packages that join a face program, by `se373.face` in their manifest.
+ *
+ * Most of ours belong only to `tsconfig.json`. A package joins a face when
+ * something in that face has to resolve it -- a typert Remote is the case that
+ * forces it, because the generator finds its subjects by walking the face
+ * aggregate's project references and reflects across package boundaries.
+ * @param face - the face to collect.
+ * @returns repo-relative project paths, sorted.
+ */
+function ourProjects(face) {
+  const projects = []
+  const root = join(REPO, 'packages')
+  for (const group of existsSync(root) ? readdirSync(root, { withFileTypes: true }) : []) {
+    if (!group.isDirectory()) continue
+    for (const pkg of readdirSync(join(root, group.name), { withFileTypes: true })) {
+      const manifestPath = join(root, group.name, pkg.name, 'package.json')
+      if (!pkg.isDirectory() || !existsSync(manifestPath)) continue
+      const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'))
+      if (manifest.se373?.face === face) projects.push(`./packages/${group.name}/${pkg.name}`)
+    }
+  }
+  return projects.sort()
+}
+
+hostExtra.push(...ourProjects('host'))
+
+writeSolution('tsconfig.host.json', 'tsconfig.host.json', 'tsconfig.host.base.json', hostExtra, [
   'Host-plane solution for the vendored layer. Emits declarations only, into',
   "each package's lib/types, which its package.json `types` field names.",
   '',

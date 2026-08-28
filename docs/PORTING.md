@@ -88,7 +88,7 @@ Keep this log exhaustive.
    `publishConfig` were dropped and `private: true` set — nothing here is
    published.
 
-3. **`tsconfig.json` in each package** now extends `tsconfig.vendor.base.json`
+3. **`tsconfig.json` in each package** now extends `tsconfig.host.base.json`
    instead of dsh's root base. Per-package strictness relaxations are unchanged
    from dsh.
 
@@ -242,7 +242,7 @@ under `vendor/dsh`, framework under `vendor/`, root bases renamed) and drops any
 reference to a package outside our closure.
 
 The two solution files follow from the same source. `tsconfig.host.json` and
-`tsconfig.vendor.client.json` take their membership from upstream's own
+`tsconfig.client.json` take their membership from upstream's own
 `tsconfig.host.json` and `tsconfig.client.json`, filtered to what we vendored.
 The host solution additionally takes every vendored package the browser plane
 does not claim: upstream reaches many of ours only through `apps/cli` and

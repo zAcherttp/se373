@@ -22,5 +22,8 @@
     "@se373/cordis": "workspace:^",
     "@se373/cordis-plugin-loader": "workspace:^",
     "@se373/invariants": "workspace:^"
+  },
+  "se373": {
+    "face": "host"
   }
 }

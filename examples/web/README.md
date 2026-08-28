@@ -39,15 +39,16 @@ automated run cannot leave sessions that look like yours afterwards.
 
 ## What is in the tree
 
-108 rows, of which 107 are live and one — `mcp-client` — is deliberately
+112 rows, of which 111 are live and one — `mcp-client` — is deliberately
 disabled and visible, because a row you cannot see is one you cannot turn on.
+The board in the bottom-right corner is how you look at them.
 
 | Layer | |
 |---|---|
 | Host spine | transcribed from dsh's `bundle/base`, restricted to what we vendored |
 | Web host + transport | transcribed from dsh's `bundle/web-app` patch |
 | Browser roster | the `dsh.client` rows, each served as a `lib/client.js` bundle |
-| Ours | `runtime-graph`, `logger-jsonl`, `tool-graph-inspect`, and their invariant companions |
+| Ours | `runtime-graph`, `logger-jsonl`, `tool-graph-inspect`, `board-gateway`, `client-ui-board`, and their invariant companions |
 
 Both bundles are transcribed rather than mounted: we do not vendor them *as
 bundles*, because between them they name ~36 packages outside our closure.
@@ -68,5 +69,8 @@ bundles*, because between them they name ~36 packages outside our closure.
   question.
 - **Approval is `ask` and there is now somebody to ask** — which is what phase 4
   was for. `SE373_PERMISSION_MODE=danger-full-access` still bypasses it.
-- **No board yet.** `ctx.runtimeGraph` is mounted and `graph_inspect` works from
-  the chat box, but nothing renders the graph. That is the next slice.
+- **The board reads on open, not live.** `Refresh` re-reads; there is no push
+  transport (decision D9). Node transitions travel with the payload, so a
+  re-read recovers the history you slept through.
+- **The board is a panel, not a canvas.** No node-and-edge drawing yet — see
+  [`@se373/client-ui-board`](../../packages/client/ui-board/README.md).

@@ -84,7 +84,9 @@ function browserSourcePath(source: string, sourcemapPath: string): string {
   if (!source.startsWith('.')) return source
   const physicalSource = resolvePath(dirname(sourcemapPath), source)
   const repositoryPath = relative(REPOSITORY_ROOT, physicalSource).split(sep).join('/')
-  return repositoryPath.startsWith('vendor/dsh/') ? `../../../${repositoryPath}` : source
+  return repositoryPath.startsWith('vendor/dsh/') || repositoryPath.startsWith('packages/')
+    ? `../../../${repositoryPath}`
+    : source
 }
 
 /**
@@ -358,7 +360,7 @@ const clientExternalCache = new Map<string, ReadonlySet<string>>()
 function workspaceManifest(id: string): WorkspaceManifest {
   const cached = manifestCache.get(id)
   if (cached !== undefined) return cached
-  for (const manifestPath of globSync('vendor/dsh/*/*/package.json', { cwd: REPOSITORY_ROOT })) {
+  for (const manifestPath of globSync(['vendor/dsh/*/*/package.json', 'packages/*/*/package.json'], { cwd: REPOSITORY_ROOT })) {
     const manifest = JSON.parse(
       readFileSync(resolvePath(REPOSITORY_ROOT, manifestPath), 'utf8'),
     ) as WorkspaceManifest
@@ -366,7 +368,7 @@ function workspaceManifest(id: string): WorkspaceManifest {
     manifestCache.set(id, manifest)
     return manifest
   }
-  throw new Error(`tsdown: no vendor/dsh/*/*/package.json declares the name ${id}`)
+  throw new Error(`tsdown: no vendor/dsh/*/*/ or packages/*/*/ package.json declares the name ${id}`)
 }
 
 /**

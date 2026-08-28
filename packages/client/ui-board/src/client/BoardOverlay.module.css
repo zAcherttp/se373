@@ -1,0 +1,132 @@
+/*
+ * The overlay layer is click-through by design, so every element that should
+ * receive a click opts back in explicitly. Colours ride the theme's own
+ * `--dsw-*` tokens rather than literals, so the board follows Light/Dark/System
+ * without knowing which is active.
+ */
+
+.root {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  max-height: calc(100% - 32px);
+  pointer-events: none;
+}
+
+.toggle {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--dsw-color-border-1, rgb(255 255 255 / 12%));
+  border-radius: 999px;
+  background: var(--dsw-color-bg-2, rgb(32 32 36));
+  color: var(--dsw-color-text-1, rgb(235 235 240));
+  font-size: 12px;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.toggle:hover { border-color: var(--dsw-color-border-2, rgb(255 255 255 / 24%)); }
+
+.count {
+  color: var(--dsw-color-text-3, rgb(150 150 160));
+  font-variant-numeric: tabular-nums;
+}
+
+.panel {
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: min(560px, calc(100vw - 48px));
+  max-height: min(520px, calc(100vh - 120px));
+  padding: 12px;
+  border: 1px solid var(--dsw-color-border-1, rgb(255 255 255 / 12%));
+  border-radius: 12px;
+  background: var(--dsw-color-bg-2, rgb(28 28 32));
+  color: var(--dsw-color-text-1, rgb(235 235 240));
+  box-shadow: 0 12px 40px rgb(0 0 0 / 45%);
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.census { color: var(--dsw-color-text-3, rgb(150 150 160)); font-variant-numeric: tabular-nums; }
+
+.search {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--dsw-color-border-1, rgb(255 255 255 / 12%));
+  border-radius: 8px;
+  background: var(--dsw-color-bg-1, rgb(20 20 24));
+  color: inherit;
+  font-size: 12px;
+}
+
+.list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 12px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 8px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 4px 6px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.row:hover { background: var(--dsw-color-bg-3, rgb(255 255 255 / 6%)); }
+.rowSelected { background: var(--dsw-color-bg-3, rgb(255 255 255 / 10%)); }
+
+/* The lifecycle axis is the only thing carried by colour, and never by colour
+   alone: the phase is also the row's title text and its detail line. */
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--dsw-color-text-4, rgb(110 110 120)); }
+.dotActive { background: rgb(80 190 120); }
+.dotPending { background: rgb(225 185 80); }
+.dotFailed { background: rgb(225 100 100); }
+.dotDisabled { background: rgb(90 90 100); }
+
+.rowId { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rowMeta { color: var(--dsw-color-text-3, rgb(150 150 160)); font-size: 11px; }
+
+.detail {
+  flex: 0 0 auto;
+  max-height: 220px;
+  overflow-y: auto;
+  padding-top: 8px;
+  border-top: 1px solid var(--dsw-color-border-1, rgb(255 255 255 / 12%));
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.detailKey { color: var(--dsw-color-text-3, rgb(150 150 160)); }
+.mono { font-family: var(--dsw-font-mono, ui-monospace, monospace); }
+.unsat { color: rgb(225 130 130); }
+.pre { margin: 4px 0 0; white-space: pre-wrap; word-break: break-word; }
+.status { padding: 12px 4px; color: var(--dsw-color-text-3, rgb(150 150 160)); }

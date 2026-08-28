@@ -1,0 +1,68 @@
+{
+  "name": "@se373/client-ui-board",
+  "description": "The runtime board: a frame-wide panel over ctx.runtimeGraph",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./src/invariant.ts"
+    },
+    "./client": {
+      "types": "./lib/types/client/index.d.ts",
+      "default": "./lib/client.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/client.js",
+    "lib/types/**/*.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "se373": {
+    "face": "client"
+  },
+  "dsh": {
+    "client": {
+      "inject": [
+        "@se373/api-remotes",
+        "@se373/client-runtime",
+        "@se373/client-locale",
+        "@se373/client-ui-layout"
+      ],
+      "platform": "web"
+    }
+  },
+  "peerDependencies": {
+    "@se373/api-remotes": "workspace:*",
+    "@se373/client-locale": "workspace:*",
+    "@se373/client-runtime": "workspace:*",
+    "@se373/client-ui-layout": "workspace:*",
+    "@se373/cordis": "workspace:*",
+    "@se373/invariants": "workspace:*"
+  },
+  "devDependencies": {
+    "@se373/api-remotes": "workspace:*",
+    "@se373/board-gateway": "workspace:*",
+    "@se373/client-locale": "workspace:*",
+    "@se373/client-runtime": "workspace:*",
+    "@se373/client-ui-layout": "workspace:*",
+    "@se373/client-ui-primitives": "workspace:*",
+    "@se373/client-ui-slots": "workspace:*",
+    "@se373/cordis": "workspace:*",
+    "@se373/invariants": "workspace:*",
+    "@types/react": "~18.3.1",
+    "react": "^18.2.0"
+  }
+}

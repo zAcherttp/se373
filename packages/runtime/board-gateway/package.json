@@ -1,0 +1,59 @@
+{
+  "name": "@se373/board-gateway",
+  "description": "Remote namespace exposing ctx.runtimeGraph to browser surfaces",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./src/invariant.ts"
+    },
+    "./types": {
+      "types": "./lib/types/types.d.ts",
+      "default": "./src/types.ts"
+    },
+    "./typert": {
+      "types": "./lib/typert.host.d.ts",
+      "default": "./lib/typert.host.js"
+    },
+    "./remote": {
+      "types": "./lib/typert.remote-client.d.ts",
+      "default": "./lib/typert.remote-client.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/typert.host.js",
+    "lib/typert.host.d.ts",
+    "lib/typert.remote-client.js",
+    "lib/typert.remote-client.d.ts",
+    "lib/types/**/*.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "se373": {
+    "face": "host"
+  },
+  "dependencies": {
+    "@se373/typert-protocol": "workspace:*",
+    "zod": "^4.0.0"
+  },
+  "peerDependencies": {
+    "@se373/cordis": "workspace:*",
+    "@se373/invariants": "workspace:*",
+    "@se373/runtime-graph": "workspace:*"
+  },
+  "devDependencies": {
+    "@se373/cordis": "workspace:*",
+    "@se373/invariants": "workspace:*",
+    "@se373/runtime-graph": "workspace:*"
+  }
+}

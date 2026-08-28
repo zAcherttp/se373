@@ -8,6 +8,7 @@ import fileReferencesRemote from '@se373/file-reference/remote'
 import pluginInventoryRemote from '@se373/host-plugin-inventory/remote'
 import messageFeedbackRemote from '@se373/message-feedback/remote'
 import sessionReferencesRemote from '@se373/session-reference/remote'
+import boardRemote from '@se373/board-gateway/remote'
 import type { TypertClientRemote } from '@se373/typert-protocol'
 
 export type { TypertClientRemote as ClientRemote } from '@se373/typert-protocol'
@@ -116,6 +117,7 @@ export async function apply(ctx: Context): Promise<() => Promise<void>> {
     for (const contribution of [
       commandsRemote, goalsRemote, dynamicRemote, fileReferencesRemote,
       pluginInventoryRemote, messageFeedbackRemote, sessionReferencesRemote,
+      boardRemote,
     ]) {
       disposers.push(await ctx.remote.$mount(contribution))
     }

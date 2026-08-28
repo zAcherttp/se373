@@ -1,6 +1,9 @@
 {
-  // Vendored code is upstream's, checked upstream. Relaxations mirror dsh's
-  // vendor tsconfigs; do not tighten them to match our packages.
+  // The HOST-FACE compiler shape: every project in `tsconfig.host.json`, ours
+  // and upstream's alike. It is named for the face rather than for provenance
+  // because a package of ours that joins the host program needs exactly these
+  // settings -- the shared source-resolution facade above all, since that is
+  // what keeps one nominal identity per class across the program.
   "extends": ["./tsconfig.base.json", "./tsconfig.vendor.paths.json"],
   "compilerOptions": {
     "declaration": true,

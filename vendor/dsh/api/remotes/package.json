@@ -50,7 +50,8 @@
     }
   },
   "dependencies": {
-    "@se373/typert-protocol": "workspace:^"
+    "@se373/typert-protocol": "workspace:^",
+    "@se373/board-gateway": "workspace:*"
   },
   "peerDependencies": {
     "@se373/agent": "workspace:^",

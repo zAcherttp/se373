@@ -1,5 +1,5 @@
 {
-  // Browser-plane compiler shape for vendored code: React JSX and the DOM
+  // Browser-plane compiler shape for the host-face program: React JSX and the DOM
   // library, and — unlike the host base — real JavaScript output.
   //
   // The host half runs from source under `tsx`, so declarations are all it

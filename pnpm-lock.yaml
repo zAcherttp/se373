@@ -150,6 +150,9 @@ importers:
       '@se373/bash-sandbox':
         specifier: workspace:*
         version: link:../vendor/dsh/shell/bash-sandbox
+      '@se373/board-gateway':
+        specifier: workspace:*
+        version: link:../packages/runtime/board-gateway
       '@se373/client-connection':
         specifier: workspace:*
         version: link:../vendor/dsh/client/connection
@@ -168,6 +171,9 @@ importers:
       '@se373/client-ui-attachment':
         specifier: workspace:*
         version: link:../vendor/dsh/client/ui-attachment
+      '@se373/client-ui-board':
+        specifier: workspace:*
+        version: link:../packages/client/ui-board
       '@se373/client-ui-commands':
         specifier: workspace:*
         version: link:../vendor/dsh/client/ui-commands
@@ -466,6 +472,42 @@ importers:
         specifier: workspace:*
         version: link:../vendor/dsh/workspace/workspace
 
+  packages/client/ui-board:
+    devDependencies:
+      '@se373/api-remotes':
+        specifier: workspace:*
+        version: link:../../../vendor/dsh/api/remotes
+      '@se373/board-gateway':
+        specifier: workspace:*
+        version: link:../../runtime/board-gateway
+      '@se373/client-locale':
+        specifier: workspace:*
+        version: link:../../../vendor/dsh/client/locale
+      '@se373/client-runtime':
+        specifier: workspace:*
+        version: link:../../../vendor/dsh/client/runtime
+      '@se373/client-ui-layout':
+        specifier: workspace:*
+        version: link:../../../vendor/dsh/client/ui-layout
+      '@se373/client-ui-primitives':
+        specifier: workspace:*
+        version: link:../../../vendor/dsh/client/ui-primitives
+      '@se373/client-ui-slots':
+        specifier: workspace:*
+        version: link:../../../vendor/dsh/client/ui-slots
+      '@se373/cordis':
+        specifier: workspace:*
+        version: link:../../../vendor/cordis
+      '@se373/invariants':
+        specifier: workspace:*
+        version: link:../../../vendor/dsh/runtime-diagnostics/invariants
+      '@types/react':
+        specifier: ~18.3.1
+        version: 18.3.31
+      react:
+        specifier: ^18.2.0
+        version: 18.3.1
+
   packages/demo/hello:
     devDependencies:
       '@se373/cordis':
@@ -477,6 +519,25 @@ importers:
       '@se373/schemastery':
         specifier: workspace:^
         version: link:../../../vendor/schemastery
+
+  packages/runtime/board-gateway:
+    dependencies:
+      '@se373/typert-protocol':
+        specifier: workspace:*
+        version: link:../../../vendor/dsh/typert/protocol
+      zod:
+        specifier: ^4.0.0
+        version: 4.4.3
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:*
+        version: link:../../../vendor/cordis
+      '@se373/invariants':
+        specifier: workspace:*
+        version: link:../../../vendor/dsh/runtime-diagnostics/invariants
+      '@se373/runtime-graph':
+        specifier: workspace:*
+        version: link:../runtime-graph
 
   packages/runtime/logger-jsonl:
     dependencies:
@@ -574,6 +635,9 @@ importers:
 
   vendor/dsh/api/remotes:
     dependencies:
+      '@se373/board-gateway':
+        specifier: workspace:*
+        version: link:../../../../packages/runtime/board-gateway
       '@se373/typert-protocol':
         specifier: workspace:^
         version: link:../../typert/protocol

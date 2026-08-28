@@ -17,7 +17,9 @@
 import { defineConfig } from 'tsdown'
 
 export default defineConfig({
-  workspace: ['vendor/dsh/*/*'],
+  // Ours as well as theirs: a UI plugin of ours is a client bundle like any
+  // other, and `client-modules` cannot tell the difference.
+  workspace: ['vendor/dsh/*/*', 'packages/*/*'],
   // Package-local configs own every entry. A root entry here would emit a
   // second, unconfigured artifact into each package's lib/.
   entry: '',

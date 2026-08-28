@@ -1,0 +1,16 @@
+{
+  // A project in the HOST-FACE program (`tsconfig.host.json`), not in our own
+  // `tsconfig.json`. It has to be: the typert generator finds its subjects by
+  // walking that aggregate's project references, and it needs this package
+  // compiled under the same source-resolution facade as the vendored code it
+  // reflects across.
+  "extends": "../../../tsconfig.host.base.json",
+  "compilerOptions": { "rootDir": "src", "outDir": "lib/types" },
+  "include": ["src"],
+  "references": [
+    { "path": "../../../vendor/cordis" },
+    { "path": "../../../vendor/dsh/typert/protocol" },
+    { "path": "../../../vendor/dsh/runtime-diagnostics/invariants" },
+    { "path": "../runtime-graph" }
+  ]
+}

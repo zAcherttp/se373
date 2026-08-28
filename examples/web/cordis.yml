@@ -314,6 +314,13 @@
 - id: cordis-host-runner
   name: '@se373/cordis-host-runner'
 
+# Ours: the runtime graph as a Remote namespace. Its own row rather than part of
+# runtime-graph, because publishing the projection over a network boundary is a
+# deployment choice -- and a node carries its resolved config, so this is a row
+# a hardened deployment might well turn off.
+- id: board-gateway
+  name: '@se373/board-gateway'
+
 # --- the transport -------------------------------------------------------------
 
 # Parses the web flags (--host, --port, --trusted-host, --no-open) and provides
@@ -457,6 +464,10 @@
 - id: ui-trajectory
   name: '@se373/client-ui-trajectory'
 
+# Ours: the board, in the shell's frame-wide overlay seat.
+- id: ui-board
+  name: '@se373/client-ui-board'
+
 # The official brand occupants are deliberately absent: `ui-brand-official`
 # gates on a build profile we never set, so mounting it would add a row that
 # renders nothing -- and what it would render is not ours to display.
@@ -471,3 +482,9 @@
 
 - id: tool-graph-inspect-invariant
   name: '@se373/tool-graph-inspect/invariant'
+
+- id: board-gateway-invariant
+  name: '@se373/board-gateway/invariant'
+
+- id: ui-board-invariant
+  name: '@se373/client-ui-board/invariant'
