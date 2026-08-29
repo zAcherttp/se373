@@ -6,6 +6,7 @@
     { "path": "../../../vendor/cordis" },
     { "path": "../../../vendor/schemastery" },
     { "path": "../../../vendor/dsh/runtime-diagnostics/invariants" },
+    { "path": "../../builder/plan-gate" },
     { "path": "../../runtime/runtime-graph" },
     { "path": "../chunker" },
     { "path": "../corpus" },

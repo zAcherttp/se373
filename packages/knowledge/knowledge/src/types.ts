@@ -92,6 +92,16 @@ export interface RetrieveOptions {
 /** Options for one ingest. */
 export interface IngestOptions {
   /**
+   * The approved plan authorising a destructive rebuild.
+   *
+   * Only consulted when a `plan-gate` row is mounted and the ingest resolves to
+   * a destructive mode (`create` or `re-embed` — a new generation is built).
+   * Incremental content updates are not destructive and are never gated; that
+   * distinction is exactly what the generation key covers and content hashing
+   * does not.
+   */
+  readonly planId?: string
+  /**
    * Re-read and re-embed every document, even unchanged ones.
    *
    * The escape hatch for the case content hashing cannot see: a bug in the

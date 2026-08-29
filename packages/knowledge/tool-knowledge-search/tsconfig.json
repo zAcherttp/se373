@@ -5,7 +5,7 @@
   "references": [
     { "path": "../../../vendor/cordis" },
     { "path": "../../../vendor/dsh/core/tools" },
-    { "path": "../../../vendor/dsh/context/system-prompt" },
+    { "path": "../../../vendor/dsh/core/system-prompt" },
     { "path": "../../runtime/runtime-graph" },
     { "path": "../knowledge" },
     { "path": "../vector-store" }

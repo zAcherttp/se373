@@ -23,6 +23,7 @@
  */
 
 import { Context, Service } from '@se373/cordis'
+import { canonicalDigest } from '@se373/digest'
 import { randomUUID } from 'node:crypto'
 import z from '@se373/schemastery'
 import type Schema from '@se373/schemastery'
@@ -34,6 +35,10 @@ import type {} from '@se373/embedding'
 import type { VectorRecord } from '@se373/vector-store'
 import type {} from '@se373/vector-store'
 import type { Reranker } from '@se373/rerank'
+// Type-only: erased at runtime, so the knowledge plane carries no builder-plane
+// code. The gate is reached through `ctx.get`, and a tree with no `plan-gate`
+// row is simply ungated — I3's shape for a policy.
+import type { PlanGate } from '@se373/plan-gate'
 import { describePlan, firstDivergence, generationKey, rebuildPlan } from './staleness.ts'
 import { WRITE_PATH_STAGES } from './types.ts'
 import type {
@@ -100,6 +105,30 @@ declare module '@se373/cordis' {
       query: Query,
       next: () => readonly RetrievedChunk[] | Promise<readonly RetrievedChunk[]>,
     ): readonly RetrievedChunk[] | Promise<readonly RetrievedChunk[]>
+  }
+}
+
+/**
+ * Thrown when a destructive rebuild needs an approval it does not have.
+ *
+ * Deliberately an ordinary error carrying the plan id rather than a wait: a
+ * headless run blocked on a click hangs forever, and a thrown plan is a normal
+ * tool result a model or a UI can act on — approve, then call
+ * `ingest({ planId })`.
+ */
+export class IngestPlanRequiredError extends Error {
+  /** Stable machine-readable code. */
+  readonly code = 'INGEST_PLAN_REQUIRED' as const
+  /** The plan awaiting a decision. */
+  readonly planId: string
+
+  constructor(planId: string, summary: string) {
+    super(
+      `this ingest is destructive (${summary}) and a plan gate is mounted. `
+      + `Approve plan ${planId}, then call ingest({ planId: ${JSON.stringify(planId)} }).`,
+    )
+    this.name = 'IngestPlanRequiredError'
+    this.planId = planId
   }
 }
 
@@ -308,6 +337,42 @@ export class KnowledgePipeline extends Service {
     if (active !== null && plan === null && !(options.force ?? false)) mode = 'incremental'
     else if (active !== null && plan !== null && !plan.rechunk && !(options.force ?? false)) mode = 're-embed'
     else mode = 'create'
+
+    // §5.5's approval gate, consulted where the destruction is decided rather
+    // than where it is rendered. `create` and `re-embed` build a generation;
+    // `incremental` is a content update and passes ungated. The digest binds
+    // the approval to THIS configuration: if a stage changes between proposal
+    // and approval, the genKey moves, the digest no longer matches, and the
+    // stale approval cannot run — which is the gate's whole point.
+    if (mode !== 'incremental') {
+      const gate = this.ctx.get('planGate') as PlanGate | undefined
+      if (gate !== undefined) {
+        const subject = { kind: 'index-rebuild', genKey, mode }
+        const digest = canonicalDigest(subject)
+        if (options.planId !== undefined) {
+          gate.consume(options.planId, digest)
+        } else {
+          const rebuild = plan === null ? null : describePlan(plan)
+          const proposed = gate.propose({
+            kind: 'index-rebuild',
+            summary: rebuild ?? `build a new generation under ${genKey.slice(0, 12)}…`,
+            steps: [
+              ...plan === null
+                ? [{ summary: 'crawl, chunk and embed the corpus into a new generation', destructive: false }]
+                : [{ summary: rebuild!, destructive: true }],
+              { summary: 'flip the active generation; the previous one is retired, not deleted', destructive: false },
+            ],
+            subject,
+            detail: { stages: this.descriptions(), mode },
+          })
+          if (proposed.status === 'approved') {
+            gate.consume(proposed.id, digest)
+          } else {
+            throw new IngestPlanRequiredError(proposed.id, proposed.summary)
+          }
+        }
+      }
+    }
 
     const labels = {
       [KEY_LABEL]: genKey,

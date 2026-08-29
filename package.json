@@ -19,7 +19,8 @@
     "lint": "oxlint .",
     "models": "node --import tsx/esm scripts/models.ts",
     "models:acquire": "node --import tsx/esm scripts/models.ts acquire",
-    "models:verify": "node --import tsx/esm scripts/models.ts verify"
+    "models:verify": "node --import tsx/esm scripts/models.ts verify",
+    "test:build": "node --import tsx/esm scripts/test-build.ts"
   },
   "devDependencies": {
     "@se373/home-paths": "workspace:*",

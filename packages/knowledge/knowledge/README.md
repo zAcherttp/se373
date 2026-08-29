@@ -79,10 +79,12 @@ update is not.
 - **A store-schema change re-embeds.** §5.5's table says it should only rewrite,
   but `scan` returns chunks without their vectors, so there is nothing to copy
   forward. The plan reports the spec; the executor does more.
-- **No approval gate.** §5.5 requires a destructive change to be plan-gated,
-  stating which stages rebuild and how long it takes. `status()` returns
-  everything such a card needs and nothing presents it or blocks on it; that
-  arrives with the builder plane.
+- **The gate refuses; it does not render.** `ingest()` gates its destructive
+  modes through `ctx.planGate` when one is mounted — propose-and-throw carrying
+  the plan id, `ingest({ planId })` to consume, digest-bound so an approval
+  cannot outlive the configuration it approved. What is still missing is the
+  *card*: nothing renders the plan's steps and stage descriptions to a human;
+  callers read the thrown error.
 - **Nothing drains in-flight queries before a flip.** `activate` switches the
   pointer immediately.
 - **`ingest/progress` fires per document**, so a single very large document is

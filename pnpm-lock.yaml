@@ -847,6 +847,9 @@ importers:
       '@se373/embedding':
         specifier: workspace:*
         version: link:../embedding
+      '@se373/plan-gate':
+        specifier: workspace:*
+        version: link:../../builder/plan-gate
       '@se373/rerank':
         specifier: workspace:*
         version: link:../rerank
@@ -866,6 +869,9 @@ importers:
       '@se373/schemastery':
         specifier: workspace:^
         version: link:../../../vendor/schemastery
+      '@se373/vs-sqlite-vec':
+        specifier: workspace:*
+        version: link:../vs-sqlite-vec
 
   packages/knowledge/knowledge-dedup:
     dependencies:

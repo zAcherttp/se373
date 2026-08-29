@@ -9,67 +9,11 @@
  */
 import { Context, Inject } from '@se373/cordis';
 import { owningEntry } from "./attribute.js";
+import { sanitize } from "./sanitize.js";
 import { phaseOf } from "./lifecycle.js";
 import { NODE_ROLES } from "./types.js";
 /** The effect label `ctx.tools.register()` attaches to its disposer. */
 const TOOL_REGISTER_LABEL = 'tools.register()';
-/** Guard against a config object that cycles or nests without bound. */
-const MAX_CONFIG_DEPTH = 12;
-/**
- * Reduce an arbitrary config value to something that survives JSON.
- *
- * A `!!js` row can put a function, a service handle, or a cyclic object into
- * config; the projection has to be sendable, so those become labels rather than
- * throwing or silently dropping the field.
- * @param value - the value to sanitize.
- * @param seen - objects already on the current path, for cycle detection.
- * @param depth - remaining nesting budget.
- * @returns a JSON-safe projection of `value`.
- */
-function sanitize(value, seen, depth = MAX_CONFIG_DEPTH) {
-    if (value === null || value === undefined)
-        return null;
-    switch (typeof value) {
-        case 'boolean':
-        case 'string':
-            return value;
-        case 'number':
-            return Number.isFinite(value) ? value : String(value);
-        case 'bigint':
-            return String(value);
-        case 'function':
-            return '[Function]';
-        case 'symbol':
-            return String(value);
-        default:
-            break;
-    }
-    const object = value;
-    if (seen.has(object))
-        return '[Circular]';
-    if (depth <= 0)
-        return '[Truncated]';
-    if (object instanceof Date)
-        return object.toISOString();
-    if (object instanceof RegExp || object instanceof Error)
-        return String(object);
-    seen.add(object);
-    try {
-        if (Array.isArray(object)) {
-            return object.map(item => sanitize(item, seen, depth - 1));
-        }
-        const out = {};
-        for (const [key, item] of Object.entries(object)) {
-            if (item === undefined)
-                continue;
-            out[key] = sanitize(item, seen, depth - 1);
-        }
-        return out;
-    }
-    finally {
-        seen.delete(object);
-    }
-}
 /**
  * Every service name this context resolves differently from the root context.
  *

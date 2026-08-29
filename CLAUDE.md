@@ -54,6 +54,42 @@ Every phase ends with something that **runs**. Slice vertically, never ship a la
 architecture doc §13 and §14 carry the consequences.
 
 - **The deliverable is chat → plan → fabricate**, recorded first with a live fabrication as the encore. Pace is ours; there is no external deadline, and phases are the reproducible checkpoints.
+### Settled 2026-08-29 — the gap grill
+
+Sixteen decisions; the sweep they mandated is `docs/FEATURE-LOG.md` § sweep-1.
+
+- **"Working agent" means conversational**, closed at 6d: `agent-presets` +
+  `subagent-spawn-in-process` + a `workspaceRoot` sandbox. A fabricated
+  subsystem was 6c's honest output, not the end state.
+- **Generality evidence is two fabrications end-to-end**: Internal Knowledge and
+  Code Review. Code Review is fabricated *pointed at the repository*, composed
+  read-only `inspect`-style — a reviewer that can edit the diff it reviews is a
+  category error, and two agents with different filesystem postures from config
+  alone is the better demo anyway.
+- **`workspaceRoot` is caller-supplied per fabrication**, defaulting to a fresh
+  `$SE373_HOME/workspaces/<name>/`. It has no schema default upstream, which is
+  upstream saying it must be a decision; pointing one at the repo is a thing the
+  plan card shows and a human approves.
+- **Fabricated presets are written per fabrication, into the agent's own
+  workspace, and scoped to it**: the subtree mounts its own `agent-presets` row
+  over that directory with `agentPresets` isolated. The main picker never sees
+  them — no upstream visibility flag exists, and none is needed.
+- **Fabricated agents share the builder's LLM and credentials** — `llm` is never
+  in the isolate set, the same §6.3 shared-parent layer as the store. No
+  model/credential override field on the spec until a recipe needs one.
+- **`ingest()` is gated**: destructive modes only (`create`/`re-embed`), no gate
+  row means no gate (I3), gate mounted means propose-and-throw carrying the plan
+  id, `ingest({ planId })` consumes. `autoApprove` proceeds in one call.
+- **The 6d fork demo forks the chunker** — pure, no server, honest suite. The
+  gated-install path is built and exercised with a server-free dependency;
+  Milvus stays the strongest *possible* demonstration, not the filmed one.
+- **"Hot-swaps in" means conformance then a config-row swap** — I3's own
+  mechanism, no restart. HMR-on-source-edit is built behind the staging gate and
+  demoed only in the recording; the tag's demonstrable must not depend on it.
+- **D9 is accepted: poll-only for the semester.** Transitions travel with the
+  payload, so polling is latency, never loss. Revisit only if phase 8's compare
+  view needs push.
+
 - **A spec is a block, and `ctx.pipelines` is not a second registry.** Settled
   2026-08-29 at 6c: a resolved agent spec is a `kind: 'pipeline'` block in
   `ctx.blocks`. One registry keyed by `kind` is what makes "compare two
@@ -81,6 +117,15 @@ architecture doc §13 and §14 carry the consequences.
 - **Sync policy: neither freeze nor track.** Update the clone when something looks worth having, read the breaking changes, re-run the vendoring script for the affected seeds, read the diff.
 - **Divergence policy:** small mechanical edits go in `LOCAL_MODS`; anything additive is our own package plugging into the vendored seam; never fork a vendored package into `packages/`.
 
+- **A `Not yet` bullet that survives two phases is promoted to a tracked risk
+  or explicitly marked accepted.** The log stays append-only; the decision is
+  recorded, not the history edited. Baseline: `FEATURE-LOG.md` § sweep-1, which
+  classified all 48 then-open bullets.
+- **`pnpm test:build` runs before each tag.** It is not part of `pnpm test` —
+  minutes-long checks in the inner loop are checks people learn to skip. It
+  caught a broken project reference on its first run, which `pnpm typecheck`
+  structurally cannot see (our program never follows package references; only
+  the build does).
 - **A mutation that fails to fail proves nothing.** Learned at 6b: four of
   fifteen mutations were missed on the first pass, and only two were weak
   *tests* — the other two were mutations of mine that did not reproduce the bug
@@ -143,10 +188,16 @@ formality.
 
 ## Immediate next steps
 
-1. **Start phase 6d** (authoring) — the fork namespace, plan-gated dependency
-   installs, conformance suites, and staging→HMR. The repository already refuses
-   to mount an `origin: 'agent'` block; 6d is what lets one earn it. This is the
-   claim, not the flourish — do not let it be the thing that gets cut.
+1. **Start phase 6d** (authoring), in the grilled order: (1) the fork
+   namespace — one namespaced-write mechanism serving block forks and fabricated
+   preset directories alike; (2) conversational wiring — per-fabrication preset
+   with its own persona, `workspaceRoot`, `subagent-spawn-in-process`, and the
+   Code Review fabrication as the second archetype; (3) authoring — agent block
+   → syntax → typecheck → conformance → mount, with the chunker fork as the
+   demonstrable and a plan-gated server-free dependency install; (4) the staging
+   gate → HMR, recorded only. The repository already refuses to mount an
+   `origin: 'agent'` block; 6d is what lets one earn it. This is the claim, not
+   the flourish — do not let it be the thing that gets cut.
 2. ~~Re-read the testing decision~~ — **done 2026-08-28.** Nine specs, written
    against silent failure modes rather than for coverage, and each one shown to
    fail against the bug it describes.
@@ -193,18 +244,16 @@ formality.
   declared and has never been downloaded, so the `last_hidden_state`
   mean-pooling path is covered by unit tests over fabricated tensors and nothing
   else.
-- **§5.5's approval gate exists and the knowledge pipeline does not call it.**
-  `ctx.planGate` shipped at 6c and `status()` already returns everything a plan
-  card needs; wiring `ingest()` to propose before a destructive rebuild is a
-  small change gated on one decision — what an unattended ingest should do when
-  no gate is mounted.
+- ~~**§5.5's approval gate exists and the knowledge pipeline does not call
+  it.**~~ **Closed 2026-08-29**: `ingest()` gates its destructive modes through
+  `ctx.planGate`, digest-bound, with no-gate-row meaning ungated (I3).
 - **Cross-lingual retrieval is uneven and the demo shows it failing.** Concrete
   questions transfer; ad-hoc translations of domain jargon do not. This is the
   concrete argument for D6's authored Vietnamese question set — a translated
   English set would measure the translation.
 - Model-authored UI is a demo cliff — keep a deterministic fallback for anything shown live.
 - **Solo changes the scope calculus, not the schedule.** Six *recipes* ship and the block vocabulary must span all six, but only two archetypes get built out — the generality is the claim, the demos are evidence for it. Cut breadth before depth.
-- **D9 is what this design opened, and it is now smaller than it was.** The runtime graph still has no push transport upstream (`pluginInventory.list()` is poll-only), but node transitions are recorded as they happen rather than sampled, so a polling board is a latency compromise and not a lossy one. ~~D10~~ closed 2026-08-28: the third-party MCP path works, no fallback server needed.
+- ~~**D9**~~ — **accepted 2026-08-29: poll-only for the semester.** Transitions are recorded as they happen and travel with the payload, so polling is a latency compromise and never a lossy one. Revisit only if phase 8's compare view needs live updates. ~~D10~~ closed 2026-08-28: the third-party MCP path works, no fallback server needed.
 - dsh is a developer preview with an unstable API; Cordis advertises the same.
 
 ## Working with me on this

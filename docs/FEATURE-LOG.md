@@ -781,3 +781,76 @@ against behaviours the demo had already been observed getting wrong.
 - **§5.5's rebuild is still not gated.** The gate now exists and the knowledge
   pipeline does not call it — closing that is a two-line change and a decision
   about what an unattended ingest should do.
+
+---
+
+## sweep-1 — Every deferral, decided
+
+**2026-08-29** · **Commit** *(this one)* · **Tag** — none: nothing new runs.
+
+A bookkeeping entry, not a phase — recorded here because the log is append-only
+and the 48 `Not yet` bullets above must not be edited. This is the one sweep the
+new promotion rule starts from: every bullet below is now **closed** (a later
+phase built it), **accepted** (a decision, with its reason), or **scheduled** (a
+named phase owns it). A bullet that survives two more phases without one of
+these labels gets promoted to a tracked risk; that rule now lives in CLAUDE.md.
+
+### Closed by later phases
+
+| Bullet | Closed by |
+|---|---|
+| phase-2: no tools | phase 3 |
+| phase-2: one shot, not a chat | phase 4 |
+| phase-2: 28 of 126 packages | phases 3–5; 150 vendored via dsh's own bundles |
+| phase-3: approval has no one to ask | phase 4; a human drove a real approved turn |
+| phase-3: still one shot | phases 4–5 |
+| phase-3: no key-free demonstrable | phase 3.5's mock LLM; every later demo has one |
+| phase-3.5: nothing renders any of this | phase 4's board |
+| phase-4: tools on host plane, not behind presets | phase 5's preset roster |
+| phase-4: jobs / subagent spawning / compaction / skills rows absent | phase 5 vendored all four |
+| phase-4: still no board-side tests | testing decision lifted 2026-08-28; wire-cast spec |
+| phase-5: still two specs | 162 now |
+| phase-6a: only the write path | phase 6b |
+| phase-6a: nothing ingests | phase 6b |
+| phase-6a: the flip is manual | phase 6b's ingest drives it |
+| phase-6a: no golden vectors | phase 6b |
+| phase-6b: no approval gate | **this commit** — `ingest()` proposes to `ctx.planGate`, destructive modes only, digest-bound |
+| phase-6c: §5.5's rebuild still not gated | same |
+
+### Accepted, with the reason
+
+| Bullet | Why it stays |
+|---|---|
+| phase-1: console exporter CLI-mounted, not a row | harness-internal; no demo or invariant rests on it |
+| phase-2: `~/.se373` not `~/.dsh` | a decision, recorded in CLAUDE.md, never a gap |
+| phase-2: upstream tests not vendored | vendored packages' own specs now run in `pnpm test`; testkit-dependent ones are dropped by the vendor script and covered upstream |
+| phase-3: Landlock inert | macOS is the dev and demo platform; Linux hardening is out of semester scope |
+| phase-3.5 / phase-4: no push transport (D9) | **decided 2026-08-29: poll-only for the semester.** Transitions travel with the payload, so polling is latency, not loss. Revisit only if phase 8's compare view needs live updates |
+| phase-3.5: vendored rows untyped on the graph | annotating a vendored package is an edit the next sync overwrites; the divergence policy forbids it, and untyped rows render fine |
+| phase-3.5: transitions start at row mount | same boundary the app log has; `internal/status` has no backlog to replay |
+| phase-3.5: no failure reason on a failed node | the transitions show the path in; the run log says why; duplicating the error into the projection adds a second source |
+| phase-4: board is a panel, not a canvas | the list answers what is running, what failed, and why; a drawing earns its place when it explains something the list does not |
+| phase-4: web-search rows absent | they need third-party API keys; excluded with the other 40 |
+| phase-4 / phase-5: upstream `plan-mode` unported | superseded for I8 by our `ctx.planGate`; the rest of plan-mode is upstream product writing |
+| phase-5: chat tree keeps host-plane tools | deliberate — the headless runner needs them; the web tree is the preset-gated one |
+| phase-5: child transcript not read back | the gateway serves sessions a client owns; a subagent belongs to its parent |
+| phase-6a: second model declared, never exercised | the default path has golden vectors; e5's `last_hidden_state` pooling is covered by unit tests over fabricated tensors, which is proportionate for an alternative nobody has selected |
+| phase-6a: CPU only, unmeasured beyond demo scale | demo scale is the semester's scale; execution providers would enter the fingerprint before being offered |
+| phase-6b: store-schema change re-embeds rather than only rewriting | `scan` returns no vectors, so there is nothing to copy; schema bumps are rare, deliberate, and the extra cost is visible |
+| phase-6b: incremental scans the whole index and writes into the live generation | a content update is not a configuration change; a crash converges on re-run |
+| phase-6b: cross-lingual uneven on translated jargon | accepted until phase 8, where D6's *authored* Vietnamese question set exists precisely because a translated set would measure the translation |
+| phase-6b: near-duplicates across documents untouched | the post-retrieve waterfall is where an MMR listener lands when ranking quality becomes the work |
+| phase-6b: no ingest tool | the fabrication flow ingests before a session starts; a `knowledge_status` tool is a phase-7 candidate |
+| phase-6b: `ingest/*` events unrendered | the events carry everything a Chat node needs; the renderer belongs with the web-plane knowledge view |
+| phase-6c: no spec diff | scheduled with phase 8's compare view, which is its consumer |
+
+### Scheduled, by name
+
+| Bullet | Owner |
+|---|---|
+| phase-5: `subagent_fork`, background, `list_agents`, `interrupt_agent` unexercised | 6d — conversational wiring runs fabricated agents through spawn; what stays unexercised after that is re-swept |
+| phase-6c: preset recorded, not applied | 6d step 2 |
+| phase-6c: no workspace sandbox | 6d step 2 — `workspaceRoot` caller-supplied, defaulting to `$SE373_HOME/workspaces/<name>/` |
+| phase-6c: `mountable` can never allow an agent block | 6d step 3 — conformance suites are what let one earn it |
+| phase-6c: manifests in one file | 6d step 3 — they move to their packages when authoring makes them load-bearing |
+| phase-6c: no intent parsing | the chat→plan→fabricate deliverable — it is the model-in-the-loop step, after 6d |

@@ -131,7 +131,22 @@ if (pipeline === undefined) {
   console.error('  !! the fabricated subtree has no knowledgePipeline')
   process.exitCode = 1
 } else {
-  const report = await pipeline.ingest()
+  // The fabricated pipeline's first ingest is a destructive rebuild, and the
+  // gate in the root realm is visible from the subtree -- planGate is not among
+  // the isolates, deliberately, the same way llm is not: policy is shared, the
+  // pipeline composition is what differs. So §5.5's card appears here too, and
+  // approving it is the same gesture as approving the fabrication was.
+  const refused = await pipeline.ingest().then(() => null, (error: unknown) => error)
+  if (!(refused instanceof Error) || !('planId' in refused)) {
+    console.error('  !! a destructive ingest ran without consulting the gate')
+    process.exitCode = 1
+    throw refused ?? new Error('ingest succeeded ungated')
+  }
+  const rebuild = ctx.planGate.get((refused as { planId: string }).planId)
+  console.log(`  rebuild plan ${rebuild.id.slice(0, 8)} — ${rebuild.summary}`)
+  ctx.planGate.approve(rebuild.id)
+  console.log('  approved.')
+  const report = await pipeline.ingest({ planId: rebuild.id })
   console.log(`  ingested ${report.chunks.written} chunks from ${report.documents.seen} documents in ${report.durationMs} ms`)
   for (const question of ['What is a seam?', 'Why is index staleness computed?']) {
     const hits = await pipeline.retrieve(question, { k: 2 })

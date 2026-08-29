@@ -19,6 +19,7 @@
     "@se373/corpus": "workspace:*",
     "@se373/digest": "workspace:*",
     "@se373/embedding": "workspace:*",
+    "@se373/plan-gate": "workspace:*",
     "@se373/rerank": "workspace:*",
     "@se373/runtime-graph": "workspace:*",
     "@se373/vector-store": "workspace:*"
@@ -31,7 +32,10 @@
   "devDependencies": {
     "@se373/cordis": "workspace:^",
     "@se373/invariants": "workspace:^",
-    "@se373/schemastery": "workspace:^"
+    "@se373/schemastery": "workspace:^",
+    "@se373/vs-sqlite-vec": "workspace:*"
   },
-  "se373": { "face": "host" }
+  "se373": {
+    "face": "host"
+  }
 }
