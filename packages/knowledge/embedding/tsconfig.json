@@ -7,6 +7,7 @@
   "include": ["src"],
   "references": [
     { "path": "../../../vendor/cordis" },
-    { "path": "../../../vendor/dsh/runtime-diagnostics/invariants" }
+    { "path": "../../../vendor/dsh/runtime-diagnostics/invariants" },
+    { "path": "../digest" }
   ]
 }

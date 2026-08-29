@@ -25,5 +25,8 @@
   },
   "se373": {
     "face": "host"
+  },
+  "dependencies": {
+    "@se373/digest": "workspace:*"
   }
 }

@@ -45,6 +45,16 @@ export interface Generation {
   readonly createdAt: number
   /** How many vectors are stored. */
   readonly records: number
+  /**
+   * Opaque strings the writer attached at creation.
+   *
+   * The store never interprets these. `@se373/knowledge` uses them to record
+   * the generation key and each write-path stage's digest, which is what lets a
+   * later boot ask "was this index built by the pipeline I am configured with
+   * now, and if not, which stage changed?" — a question the store has no
+   * business understanding but every business preserving.
+   */
+  readonly labels: Readonly<Record<string, string>>
 }
 
 /** A chunk about to be stored, paired positionally with a vector. */

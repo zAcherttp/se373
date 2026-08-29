@@ -1,0 +1,18 @@
+{
+  "name": "@se373/corpus",
+  "description": "ctx.corpusSources: the document seam, and the content hash incremental re-ingest turns on",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./types": "./src/types.ts",
+    "./package.json": "./package.json"
+  },
+  "license": "MIT",
+  "peerDependencies": { "@se373/cordis": "workspace:^" },
+  "devDependencies": { "@se373/cordis": "workspace:^" },
+  "se373": { "face": "host" }
+}

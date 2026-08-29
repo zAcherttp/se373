@@ -25,7 +25,12 @@ interface Meta {
   readonly modelId: string
   readonly status: GenerationStatus
   readonly createdAt: number
+  /** Opaque writer labels, stored under a `label:` key prefix. */
+  readonly labels: Readonly<Record<string, string>>
 }
+
+/** Meta keys carrying a writer label rather than a store fact. */
+const LABEL_PREFIX = 'label:'
 
 /** Float32 vector as the blob vec0 expects. */
 function toBlob(vector: Float32Array): Uint8Array {
@@ -87,6 +92,10 @@ export class GenerationDatabase {
     put.run('modelId', meta.modelId)
     put.run('status', meta.status)
     put.run('createdAt', String(meta.createdAt))
+    // Labels share the meta table under a prefix rather than getting one of
+    // their own: they are written once at creation and read whole, so a second
+    // table would buy nothing but a second thing to migrate.
+    for (const [key, value] of Object.entries(meta.labels)) put.run(LABEL_PREFIX + key, value)
     return new GenerationDatabase(db, id)
   }
 
@@ -110,6 +119,10 @@ export class GenerationDatabase {
   describe(): Generation {
     const meta = this.meta()
     const count = this.db.prepare('select count(*) as n from records').get() as { n: number }
+    const labels: Record<string, string> = {}
+    for (const [key, value] of Object.entries(meta)) {
+      if (key.startsWith(LABEL_PREFIX)) labels[key.slice(LABEL_PREFIX.length)] = value
+    }
     return {
       id: this.id,
       fingerprint: meta['fingerprint'] ?? '',
@@ -118,6 +131,7 @@ export class GenerationDatabase {
       status: (meta['status'] ?? 'building') as GenerationStatus,
       createdAt: Number(meta['createdAt'] ?? 0),
       records: Number(count.n),
+      labels,
     }
   }
 
@@ -191,6 +205,62 @@ export class GenerationDatabase {
       text: row.text,
       metadata: row.metadata === null ? null : JSON.parse(row.metadata) as Record<string, unknown>,
     }))
+  }
+
+  /**
+   * Every stored record, without its vector, in insertion order.
+   *
+   * Paged rather than read whole: this is the chunk-cache read behind a
+   * re-embed, so it runs over the entire index by definition, and the point of
+   * streaming it is not to hold the corpus in memory while doing so.
+   * @param batch - rows per page.
+   */
+  *records(batch = 500): Generator<VectorRecord> {
+    const page = this.db.prepare('select id, key, text, metadata from records where id > ? order by id limit ?')
+    let after = 0
+    for (;;) {
+      const rows = page.all(after, batch) as
+        { id: number, key: string, text: string | null, metadata: string | null }[]
+      if (rows.length === 0) return
+      for (const row of rows) {
+        after = row.id
+        yield {
+          key: row.key,
+          ...row.text === null ? {} : { text: row.text },
+          ...row.metadata === null ? {} : { metadata: JSON.parse(row.metadata) as Record<string, unknown> },
+        }
+      }
+    }
+  }
+
+  /**
+   * Delete rows by key.
+   * @param keys - record keys; unknown keys are ignored.
+   * @returns how many rows were removed.
+   */
+  remove(keys: readonly string[]): number {
+    const find = this.db.prepare('select id from records where key = ?')
+    const dropRow = this.db.prepare('delete from records where id = ?')
+    const dropVector = this.db.prepare('delete from vectors where rowid = ?')
+    let removed = 0
+    this.db.exec('begin')
+    try {
+      for (const key of keys) {
+        const row = find.get(key) as { id: number } | undefined
+        if (row === undefined) continue
+        // The vector first: a records row with no vector is invisible to every
+        // query, but a vector with no records row is a hit that fails its join
+        // and silently shrinks every result set it appears in.
+        dropVector.run(BigInt(row.id))
+        dropRow.run(row.id)
+        removed += 1
+      }
+      this.db.exec('commit')
+    } catch (error) {
+      this.db.exec('rollback')
+      throw error
+    }
+    return removed
   }
 
   /** Close the handle. */

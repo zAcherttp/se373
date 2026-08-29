@@ -1,0 +1,13 @@
+{
+  "extends": "../../../tsconfig.host.base.json",
+  "compilerOptions": { "rootDir": "src", "outDir": "lib/types" },
+  "include": ["src"],
+  "references": [
+    { "path": "../../../vendor/cordis" },
+    { "path": "../../../vendor/dsh/core/tools" },
+    { "path": "../../../vendor/dsh/context/system-prompt" },
+    { "path": "../../runtime/runtime-graph" },
+    { "path": "../knowledge" },
+    { "path": "../vector-store" }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "extends": "../../../tsconfig.host.base.json",
+  "compilerOptions": { "rootDir": "src", "outDir": "lib/types" },
+  "include": ["src"],
+  "references": [
+    { "path": "../../../vendor/cordis" },
+    { "path": "../../../vendor/schemastery" },
+    { "path": "../../../vendor/dsh/runtime-diagnostics/invariants" },
+    { "path": "../../runtime/runtime-graph" },
+    { "path": "../chunker" },
+    { "path": "../corpus" },
+    { "path": "../digest" },
+    { "path": "../embedding" },
+    { "path": "../rerank" },
+    { "path": "../vector-store" }
+  ]
+}

@@ -1,0 +1,24 @@
+# Phase 6b's end condition: the knowledge agent answers.
+#
+# Two includes and one row. The phase-2/3 agent spine is included unchanged, the
+# knowledge plane is included unchanged, and what joins them is a single tool.
+# That is the claim: adding retrieval to an existing agent is config, not code.
+#
+# `search_knowledge` injects `ctx.knowledgePipeline` and nothing else (§5.6), so
+# every stage in the included plane is invisible to it — swap the chunker or the
+# embedder and the tool neither knows nor needs regenerating.
+#
+# Run:  node --import tsx/esm examples/knowledge-demo/agent.mts
+
+- id: chat
+  name: '@se373/cordis-plugin-include'
+  config:
+    path: ../chat/cordis.yml
+
+- id: plane
+  name: '@se373/cordis-plugin-include'
+  config:
+    path: ./plane.yml
+
+- id: tool-knowledge-search
+  name: '@se373/tool-knowledge-search'

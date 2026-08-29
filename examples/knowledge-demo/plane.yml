@@ -1,0 +1,90 @@
+# The knowledge plane: four seams and a composition, with no agent in front.
+#
+# Included by `agent.yml` rather than repeated there, so the tree that answers
+# questions and the tree that builds the index are the same rows pointed at the
+# same store -- which is also the only reason the second one can find what the
+# first one wrote.
+#
+# Four seams and a composition. Each seam is a `declare module` plus an abstract
+# Service base -- there is no row for a seam itself -- so what you see below is
+# one provider per stage, and swapping any of them is editing one `name:`.
+#
+# The corpus is this repository's own documentation, which is deliberate: it is
+# the corpus D6 names, it is genuinely multilingual to query against, and it
+# means the demo's answers can be checked by reading the file it cites.
+#
+# It declares no shared infrastructure -- no `invariants`, no `runtime-graph`.
+# Those belong to whatever includes this, and providing them here would collide
+# with the agent tree that already has them. Its own invariant companions stay,
+# because they only *register into* `ctx.invariants` rather than providing it.
+#
+# Boot it through `demo.yml`, which supplies that infrastructure:
+#   node --import tsx/esm examples/knowledge-demo/demo.mts
+
+- id: model-registry
+  name: '@se373/model-registry'
+
+# --- the write path, in cascade order ----------------------------------------
+
+- id: corpus
+  name: '@se373/corpus-fs'
+  config:
+    # Resolved from this file rather than from the working directory, so the
+    # sourceRef -- and therefore the generation key -- does not depend on where
+    # the demo was launched from.
+    # The third root is the demo's own scratch corpus, so steps 4-6 can change a
+    # document without editing the repository. Absent outside the demo.
+    # Quoted, because `!!js` tags a *scalar*: an unquoted bracket would be
+    # parsed as a YAML flow sequence before the tag ever saw it.
+    roots: !!js "[new URL('../../docs', baseUrl).pathname, new URL('../../packages', baseUrl).pathname].concat(process.env.SE373_DEMO_CORPUS ? [process.env.SE373_DEMO_CORPUS] : [])"
+    extensions: ['.md']
+
+- id: chunker
+  name: '@se373/chunker-markdown'
+  config:
+    size: 900
+    overlap: 120
+    minSize: 200
+
+- id: embedder
+  name: '@se373/embedder-onnx-local'
+  config:
+    batchSize: 8
+
+- id: vector-store
+  name: '@se373/vs-sqlite-vec'
+  config:
+    dir: !!js dshHomePath('vectors/knowledge-demo')
+
+# --- the read path -----------------------------------------------------------
+
+# The post-retrieve waterfall's one shipped listener. A long document is many
+# overlapping chunks, so a query that matches one usually matches its
+# neighbours -- and `k` hits become one document said five ways.
+- id: knowledge-dedup
+  name: '@se373/knowledge-dedup'
+  config:
+    perDocument: 1
+
+- id: reranker
+  name: '@se373/rerank-none'
+
+# --- the composition ---------------------------------------------------------
+
+- id: knowledge
+  name: '@se373/knowledge'
+  config:
+    k: 5
+    overfetch: 4
+    batchSize: 8
+
+# --- invariant companions ----------------------------------------------------
+
+- id: embedding-invariant
+  name: '@se373/embedding/invariant'
+
+- id: model-registry-invariant
+  name: '@se373/model-registry/invariant'
+
+- id: knowledge-invariant
+  name: '@se373/knowledge/invariant'

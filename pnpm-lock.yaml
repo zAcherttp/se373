@@ -162,6 +162,15 @@ importers:
       '@se373/board-gateway':
         specifier: workspace:*
         version: link:../packages/runtime/board-gateway
+      '@se373/chunker':
+        specifier: workspace:*
+        version: link:../packages/knowledge/chunker
+      '@se373/chunker-markdown':
+        specifier: workspace:*
+        version: link:../packages/knowledge/chunker-markdown
+      '@se373/chunker-recursive':
+        specifier: workspace:*
+        version: link:../packages/knowledge/chunker-recursive
       '@se373/client-connection':
         specifier: workspace:*
         version: link:../vendor/dsh/client/connection
@@ -309,9 +318,18 @@ importers:
       '@se373/cordis-plugin-timer':
         specifier: workspace:*
         version: link:../vendor/timer
+      '@se373/corpus':
+        specifier: workspace:*
+        version: link:../packages/knowledge/corpus
+      '@se373/corpus-fs':
+        specifier: workspace:*
+        version: link:../packages/knowledge/corpus-fs
       '@se373/credentials-local':
         specifier: workspace:*
         version: link:../vendor/dsh/credentials/credentials-local
+      '@se373/digest':
+        specifier: workspace:*
+        version: link:../packages/knowledge/digest
       '@se373/embedder-onnx-local':
         specifier: workspace:*
         version: link:../packages/knowledge/embedder-onnx-local
@@ -366,6 +384,12 @@ importers:
       '@se373/jobs-local':
         specifier: workspace:*
         version: link:../vendor/dsh/jobs/jobs-local
+      '@se373/knowledge':
+        specifier: workspace:*
+        version: link:../packages/knowledge/knowledge
+      '@se373/knowledge-dedup':
+        specifier: workspace:*
+        version: link:../packages/knowledge/knowledge-dedup
       '@se373/llm':
         specifier: workspace:*
         version: link:../vendor/dsh/llm/llm
@@ -399,6 +423,12 @@ importers:
       '@se373/plan-mode':
         specifier: workspace:*
         version: link:../vendor/dsh/plan/plan-mode
+      '@se373/rerank':
+        specifier: workspace:*
+        version: link:../packages/knowledge/rerank
+      '@se373/rerank-none':
+        specifier: workspace:*
+        version: link:../packages/knowledge/rerank-none
       '@se373/runtime-graph':
         specifier: workspace:*
         version: link:../packages/runtime/runtime-graph
@@ -501,6 +531,9 @@ importers:
       '@se373/tool-jobs':
         specifier: workspace:*
         version: link:../vendor/dsh/jobs/tool-jobs
+      '@se373/tool-knowledge-search':
+        specifier: workspace:*
+        version: link:../packages/knowledge/tool-knowledge-search
       '@se373/tool-skill':
         specifier: workspace:*
         version: link:../vendor/dsh/skill/tool-skill
@@ -595,6 +628,78 @@ importers:
         specifier: workspace:^
         version: link:../../../vendor/schemastery
 
+  packages/knowledge/chunker:
+    dependencies:
+      '@se373/corpus':
+        specifier: workspace:*
+        version: link:../corpus
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../vendor/cordis
+
+  packages/knowledge/chunker-markdown:
+    dependencies:
+      '@se373/chunker':
+        specifier: workspace:*
+        version: link:../chunker
+      '@se373/corpus':
+        specifier: workspace:*
+        version: link:../corpus
+      '@se373/digest':
+        specifier: workspace:*
+        version: link:../digest
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../vendor/cordis
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../vendor/schemastery
+
+  packages/knowledge/chunker-recursive:
+    dependencies:
+      '@se373/chunker':
+        specifier: workspace:*
+        version: link:../chunker
+      '@se373/corpus':
+        specifier: workspace:*
+        version: link:../corpus
+      '@se373/digest':
+        specifier: workspace:*
+        version: link:../digest
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../vendor/cordis
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../vendor/schemastery
+
+  packages/knowledge/corpus:
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../vendor/cordis
+
+  packages/knowledge/corpus-fs:
+    dependencies:
+      '@se373/corpus':
+        specifier: workspace:*
+        version: link:../corpus
+      '@se373/digest':
+        specifier: workspace:*
+        version: link:../digest
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../vendor/cordis
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../vendor/schemastery
+
+  packages/knowledge/digest: {}
+
   packages/knowledge/embedder-onnx-local:
     dependencies:
       '@lenml/tokenizers':
@@ -618,6 +723,10 @@ importers:
         version: link:../../../vendor/schemastery
 
   packages/knowledge/embedding:
+    dependencies:
+      '@se373/digest':
+        specifier: workspace:*
+        version: link:../digest
     devDependencies:
       '@se373/cordis':
         specifier: workspace:^
@@ -625,6 +734,53 @@ importers:
       '@se373/invariants':
         specifier: workspace:^
         version: link:../../../vendor/dsh/runtime-diagnostics/invariants
+
+  packages/knowledge/knowledge:
+    dependencies:
+      '@se373/chunker':
+        specifier: workspace:*
+        version: link:../chunker
+      '@se373/corpus':
+        specifier: workspace:*
+        version: link:../corpus
+      '@se373/digest':
+        specifier: workspace:*
+        version: link:../digest
+      '@se373/embedding':
+        specifier: workspace:*
+        version: link:../embedding
+      '@se373/rerank':
+        specifier: workspace:*
+        version: link:../rerank
+      '@se373/runtime-graph':
+        specifier: workspace:*
+        version: link:../../runtime/runtime-graph
+      '@se373/vector-store':
+        specifier: workspace:*
+        version: link:../vector-store
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../vendor/cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../../vendor/dsh/runtime-diagnostics/invariants
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../vendor/schemastery
+
+  packages/knowledge/knowledge-dedup:
+    dependencies:
+      '@se373/knowledge':
+        specifier: workspace:*
+        version: link:../knowledge
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../vendor/cordis
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../vendor/schemastery
 
   packages/knowledge/model-registry:
     dependencies:
@@ -644,6 +800,54 @@ importers:
       '@se373/schemastery':
         specifier: workspace:^
         version: link:../../../vendor/schemastery
+
+  packages/knowledge/rerank:
+    dependencies:
+      '@se373/vector-store':
+        specifier: workspace:*
+        version: link:../vector-store
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../vendor/cordis
+
+  packages/knowledge/rerank-none:
+    dependencies:
+      '@se373/digest':
+        specifier: workspace:*
+        version: link:../digest
+      '@se373/rerank':
+        specifier: workspace:*
+        version: link:../rerank
+      '@se373/vector-store':
+        specifier: workspace:*
+        version: link:../vector-store
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../vendor/cordis
+
+  packages/knowledge/tool-knowledge-search:
+    dependencies:
+      '@se373/knowledge':
+        specifier: workspace:*
+        version: link:../knowledge
+      '@se373/runtime-graph':
+        specifier: workspace:*
+        version: link:../../runtime/runtime-graph
+      '@se373/vector-store':
+        specifier: workspace:*
+        version: link:../vector-store
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../vendor/cordis
+      '@se373/system-prompt':
+        specifier: workspace:^
+        version: link:../../../vendor/dsh/core/system-prompt
+      '@se373/tools':
+        specifier: workspace:^
+        version: link:../../../vendor/dsh/core/tools
 
   packages/knowledge/vector-store:
     dependencies:

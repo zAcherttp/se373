@@ -1,0 +1,21 @@
+# The knowledge plane on its own, with the shared infrastructure it needs.
+#
+# `plane.yml` deliberately provides no `invariants` and no `runtime-graph`: they
+# belong to whatever includes it, and `agent.yml` gets them from the chat tree.
+# This file is the other host — three rows and an include.
+#
+# Run:  node --import tsx/esm examples/knowledge-demo/demo.mts
+
+- id: invariants
+  name: '@se373/invariants'
+
+- id: runtime-graph
+  name: '@se373/runtime-graph'
+
+- id: plane
+  name: '@se373/cordis-plugin-include'
+  config:
+    path: ./plane.yml
+
+- id: runtime-graph-invariant
+  name: '@se373/runtime-graph/invariant'

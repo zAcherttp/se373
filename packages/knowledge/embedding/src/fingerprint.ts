@@ -11,10 +11,8 @@
  *
  * 1. **Stability.** The same inputs must digest identically across processes,
  *    across Node versions, and regardless of the order in which fields were
- *    assembled. `JSON.stringify` preserves insertion order, so an identity built
- *    field-by-field in a different sequence would hash differently while
- *    describing the same model. Everything is therefore re-serialized through a
- *    key-sorting canonicalizer rather than stringified directly.
+ *    assembled. That is `@se373/digest`'s job, shared with every other
+ *    write-path stage so the four of them cannot canonicalize differently.
  * 2. **Coverage.** Any field a caller can vary that changes a vector must be an
  *    input. The one deliberate exclusion is `modelId`, which is a registry row's
  *    human-facing name: renaming a row does not change a single vector, and
@@ -24,26 +22,8 @@
  * @module @se373/embedding/fingerprint
  */
 
-import { createHash } from 'node:crypto'
+import { canonicalDigest } from '@se373/digest'
 import type { EmbedderIdentityInput } from './types.ts'
-
-/**
- * JSON with object keys in sorted order, at every depth.
- *
- * Arrays keep their order — for `artifacts` that order is meaningful input, and
- * the caller sorts it before it gets here.
- * @param value - any JSON-representable value.
- * @returns canonical JSON text.
- */
-function canonical(value: unknown): string {
-  if (value === null || typeof value !== 'object') return JSON.stringify(value) ?? 'null'
-  if (Array.isArray(value)) return `[${value.map(canonical).join(',')}]`
-  const keys = Object.keys(value as Record<string, unknown>).sort()
-  const body = keys
-    .map(key => `${JSON.stringify(key)}:${canonical((value as Record<string, unknown>)[key])}`)
-    .join(',')
-  return `{${body}}`
-}
 
 /**
  * The exact object that gets hashed.
@@ -77,7 +57,7 @@ export function fingerprintInputs(input: EmbedderIdentityInput): Record<string, 
  * @returns lowercase hex SHA-256.
  */
 export function fingerprintIdentity(input: EmbedderIdentityInput): string {
-  return createHash('sha256').update(canonical(fingerprintInputs(input))).digest('hex')
+  return canonicalDigest(fingerprintInputs(input))
 }
 
 /**
