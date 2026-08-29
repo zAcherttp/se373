@@ -16,6 +16,11 @@
   "extends": "./tsconfig.host.base.json",
   "files": [],
   "references": [
+    { "path": "./packages/knowledge/embedder-onnx-local" },
+    { "path": "./packages/knowledge/embedding" },
+    { "path": "./packages/knowledge/model-registry" },
+    { "path": "./packages/knowledge/vector-store" },
+    { "path": "./packages/knowledge/vs-sqlite-vec" },
     { "path": "./packages/runtime/board-gateway" },
     { "path": "./packages/runtime/runtime-graph" },
     { "path": "./vendor/cordis" },

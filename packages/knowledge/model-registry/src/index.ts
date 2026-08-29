@@ -1,0 +1,179 @@
+/**
+ * `ctx.modelRegistry` — which models exist, whether we have them, and how to get
+ * them.
+ *
+ * A **core service, not a seam.** There is one cache directory and one set of
+ * declared rows per process; a second registry would not be an alternative
+ * implementation, it would be a second opinion about what is on disk.
+ *
+ * The reason this is a separate package from the embedder is that the questions
+ * are different. "Which models could serve a 256-dimensional generation" and
+ * "are these bytes here" are about *files*, and they outlive the embedding seam
+ * — a cross-encoder reranker is the same question with different weights. So the
+ * registry knows nothing about inference, and the provider knows nothing about
+ * downloading.
+ *
+ * @module @se373/model-registry
+ */
+
+import { Context, Service } from '@se373/cordis'
+import { dshHomePath } from '@se373/home-paths'
+import z from '@se373/schemastery'
+import type Schema from '@se373/schemastery'
+import { acquireRow } from './acquire.ts'
+import { BUILTIN_MODELS, DEFAULT_MODEL_ID } from './catalog.ts'
+import { modelDir, resolveRow, rowBytes, verifyRow } from './cache.ts'
+import type { AcquireOptions, ModelResolution, ModelRow } from './types.ts'
+
+export * from './types.ts'
+export { BUILTIN_MODELS, DEFAULT_MODEL_ID } from './catalog.ts'
+export { modelDir, resolveRow, rowBytes, verifyRow } from './cache.ts'
+export { acquireRow } from './acquire.ts'
+
+declare module '@se373/cordis' {
+  interface Context {
+    modelRegistry: ModelRegistryService
+  }
+}
+
+/** Environment override for the cache root. */
+export const MODELS_ROOT_ENV = 'SE373_MODELS_ROOT'
+
+/** Configuration for the model registry. */
+export interface Config {
+  /**
+   * Cache root.
+   *
+   * Resolution order is config, then `$SE373_MODELS_ROOT`, then
+   * `$SE373_HOME/models`. The environment step exists because model weights are
+   * hundreds of megabytes and are not anybody's *data*: a run with a throwaway
+   * home — every demo and every spec — should not mean a re-download, and two
+   * checkouts on one machine should be able to share one cache. Logs and
+   * sessions correctly follow the home; weights correctly do not have to.
+   */
+  readonly root?: string
+  /**
+   * Extra rows, merged over the shipped catalog by `id`.
+   *
+   * Declared as a loose record rather than a full schema: a row is a long,
+   * digest-bearing literal, and the useful validation of one is
+   * `describeIdentityFault`, which runs against the identity it produces. A
+   * second, partial schema here would reject nothing the identity check does not
+   * and would drift from it.
+   */
+  readonly models?: readonly ModelRow[]
+}
+
+/**
+ * The declared model catalog and the cache behind it.
+ */
+export class ModelRegistryService extends Service {
+  static override readonly name = 'model-registry'
+
+  static readonly Config: Schema<Config> = z.object({
+    root: z.string(),
+    models: z.array(z.any()).default([]),
+  }) as Schema<Config>
+
+  /** Cache root; every path this service returns is under it. */
+  readonly root: string
+
+  private readonly rows: Map<string, ModelRow>
+
+  constructor(ctx: Context, config: Config = {}) {
+    super(ctx, 'modelRegistry')
+    this.root = config.root ?? process.env[MODELS_ROOT_ENV] ?? dshHomePath('models')
+    this.rows = new Map(BUILTIN_MODELS.map(row => [row.id, row]))
+    // Config wins on id collision, so a shipped row can be re-pinned to a newer
+    // revision without editing the package -- which is invariant I3 applied to
+    // model weights rather than to plugins.
+    for (const row of config.models ?? []) this.rows.set(row.id, row)
+  }
+
+  /** Every declared row, shipped and configured. */
+  list(): ModelRow[] {
+    return [...this.rows.values()]
+  }
+
+  /**
+   * Rows able to produce a given width.
+   *
+   * The filter is over `mrlDims`, not over `nativeDims >= dims`: only a
+   * Matryoshka-trained model may be truncated, and slicing an ordinary
+   * embedding to a prefix produces a vector that is well-formed and meaningless.
+   * @param dims - the width a generation needs.
+   * @returns candidate rows.
+   */
+  candidates(dims: number): ModelRow[] {
+    return this.list().filter(row => row.mrlDims.includes(dims))
+  }
+
+  /**
+   * Look up a row.
+   * @param id - a row id; defaults to the shipped default.
+   * @returns the row.
+   * @throws Error naming every known id when the id is unknown.
+   */
+  row(id: string = DEFAULT_MODEL_ID): ModelRow {
+    const row = this.rows.get(id)
+    if (row === undefined) {
+      throw new Error(`unknown model ${JSON.stringify(id)}; declared: ${this.list().map(r => r.id).join(', ')}`)
+    }
+    return row
+  }
+
+  /**
+   * Whether a row's bytes are on disk.
+   * @param id - a row id; defaults to the shipped default.
+   * @returns `ready` with paths, or `missing` with a remedy.
+   */
+  async resolve(id?: string): Promise<ModelResolution> {
+    return resolveRow(this.root, this.row(id))
+  }
+
+  /**
+   * Fetch whatever a row is missing.
+   *
+   * A no-op when the row already resolves, so it is safe to call repeatedly and
+   * safe to call after an interrupted run.
+   * @param id - a row id; defaults to the shipped default.
+   * @param options - progress and cancellation.
+   * @returns the resolution afterwards, which is `ready` on success.
+   */
+  async acquire(id?: string, options: AcquireOptions = {}): Promise<ModelResolution> {
+    const row = this.row(id)
+    const before = await resolveRow(this.root, row)
+    if (before.status === 'ready') return before
+    await acquireRow(this.root, row, before.missing, options)
+    return resolveRow(this.root, row)
+  }
+
+  /**
+   * Re-hash a row's files against their pinned digests.
+   * @param id - a row id; defaults to the shipped default.
+   * @returns repository-relative paths that did not match; empty is a pass.
+   */
+  async verify(id?: string): Promise<string[]> {
+    return verifyRow(this.root, this.row(id))
+  }
+
+  /**
+   * Where a row's files live, whether or not they are there.
+   * @param id - a row id; defaults to the shipped default.
+   * @returns an absolute directory.
+   */
+  directory(id?: string): string {
+    return modelDir(this.root, this.row(id))
+  }
+
+  /**
+   * Total transfer size of a row.
+   * @param id - a row id; defaults to the shipped default.
+   * @returns bytes.
+   */
+  bytes(id?: string): number {
+    return rowBytes(this.row(id))
+  }
+}
+
+export default ModelRegistryService

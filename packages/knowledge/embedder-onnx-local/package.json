@@ -1,0 +1,32 @@
+{
+  "name": "@se373/embedder-onnx-local",
+  "description": "ctx.embedder over a local ONNX encoder: no API key, no network at query time",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./session": "./src/session.ts",
+    "./package.json": "./package.json"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@lenml/tokenizers": "^3.7.2",
+    "@se373/embedding": "workspace:*",
+    "@se373/model-registry": "workspace:*",
+    "onnxruntime-node": "^1.29.0"
+  },
+  "peerDependencies": {
+    "@se373/cordis": "workspace:^",
+    "@se373/schemastery": "workspace:^"
+  },
+  "devDependencies": {
+    "@se373/cordis": "workspace:^",
+    "@se373/schemastery": "workspace:^"
+  },
+  "se373": {
+    "face": "host"
+  }
+}

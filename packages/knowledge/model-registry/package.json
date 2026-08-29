@@ -1,0 +1,35 @@
+{
+  "name": "@se373/model-registry",
+  "description": "ctx.modelRegistry: declared model rows, a content-pinned cache, and deliberate acquisition",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./types": "./src/types.ts",
+    "./catalog": "./src/catalog.ts",
+    "./cache": "./src/cache.ts",
+    "./invariant": "./src/invariant.ts",
+    "./package.json": "./package.json"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@se373/embedding": "workspace:*",
+    "@se373/home-paths": "workspace:*"
+  },
+  "peerDependencies": {
+    "@se373/cordis": "workspace:^",
+    "@se373/invariants": "workspace:^",
+    "@se373/schemastery": "workspace:^"
+  },
+  "devDependencies": {
+    "@se373/cordis": "workspace:^",
+    "@se373/invariants": "workspace:^",
+    "@se373/schemastery": "workspace:^"
+  },
+  "se373": {
+    "face": "host"
+  }
+}

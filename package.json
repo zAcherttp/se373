@@ -16,10 +16,14 @@
     "clean:sessions": "node --import tsx/esm scripts/clean-sessions.ts",
     "typecheck": "tsc -b tsconfig.json && tsc -b apps/web/tsconfig.json",
     "test": "vitest run",
-    "lint": "oxlint ."
+    "lint": "oxlint .",
+    "models": "node --import tsx/esm scripts/models.ts",
+    "models:acquire": "node --import tsx/esm scripts/models.ts acquire",
+    "models:verify": "node --import tsx/esm scripts/models.ts verify"
   },
   "devDependencies": {
     "@se373/home-paths": "workspace:*",
+    "@se373/model-registry": "workspace:*",
     "@se373/typert-generator": "workspace:*",
     "@types/babel__code-frame": "^7.27.0",
     "@types/js-yaml": "^4.0.9",

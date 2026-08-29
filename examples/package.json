@@ -66,6 +66,8 @@
     "@se373/cordis-plugin-include": "workspace:*",
     "@se373/cordis-plugin-timer": "workspace:*",
     "@se373/credentials-local": "workspace:*",
+    "@se373/embedder-onnx-local": "workspace:*",
+    "@se373/embedding": "workspace:*",
     "@se373/file-reference-local": "workspace:*",
     "@se373/fs-observation-policy": "workspace:*",
     "@se373/fs-sandbox": "workspace:*",
@@ -89,6 +91,7 @@
     "@se373/logger-jsonl": "workspace:*",
     "@se373/mcp-client": "workspace:*",
     "@se373/message-feedback": "workspace:*",
+    "@se373/model-registry": "workspace:*",
     "@se373/permission-presets": "workspace:*",
     "@se373/persona": "workspace:*",
     "@se373/plan-mode": "workspace:*",
@@ -137,6 +140,8 @@
     "@se373/typert-registry": "workspace:*",
     "@se373/user-approval": "workspace:*",
     "@se373/user-questions": "workspace:*",
+    "@se373/vector-store": "workspace:*",
+    "@se373/vs-sqlite-vec": "workspace:*",
     "@se373/web-app": "workspace:*",
     "@se373/workspace": "workspace:*"
   }

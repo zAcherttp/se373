@@ -1,0 +1,68 @@
+# Phase 6a: vectors exist.
+#
+# The whole knowledge write path, minus the parts phase 6b adds. No LLM, no API
+# key, no network once the model is on disk.
+#
+# There is no row for the seams themselves. A seam is a `declare module` plus an
+# abstract Service base, exactly as `@se373/fs` is upstream: `ctx.provide` claims
+# ownership of a name rather than declaring a namespace, so a row that announced
+# `embedder` would collide with the first provider that tried to fill it.
+#
+# Swapping a provider is still a config edit (I3): point `embedder` at a
+# different package, or change `dims` below, and nothing recompiles -- but the
+# fingerprint changes, so the store refuses to mix the result with an index
+# built before the change.
+#
+# Run:  node --import tsx/esm examples/embed-demo/demo.mts
+
+- id: invariants
+  name: '@se373/invariants'
+
+- id: runtime-graph
+  name: '@se373/runtime-graph'
+
+- id: model-registry
+  name: '@se373/model-registry'
+
+- id: embedder
+  name: '@se373/embedder-onnx-local'
+  config:
+    # Omitting `model` takes the registry default (embeddinggemma-300m-q8), and
+    # omitting `dims` takes that row's default width of 768, so the demo
+    # exercises the defaults rather than a special case.
+    batchSize: 8
+
+- id: vector-store
+  name: '@se373/vs-sqlite-vec'
+  config:
+    dir: !!js dshHomePath('vectors/embed-demo')
+
+- id: narrow
+  name: '@se373/cordis-plugin-group'
+  group: true
+  isolate:
+    embedder: true
+  config:
+    # Same weights, different stored width, and therefore a different model as
+    # far as any index is concerned. It exists so the refusal can be shown with
+    # real vectors rather than a fabricated fingerprint -- and it is the same
+    # machinery a rebuild uses: while a new generation is written by a
+    # differently-configured embedder, the old one keeps serving queries,
+    # because `ctx.embedder` resolves per realm.
+    #
+    # Take the isolate away and this is a duplicate-service error, which is the
+    # correct behaviour for a seam.
+    - id: narrow-embedder
+      name: '@se373/embedder-onnx-local'
+      config:
+        dims: 256
+        batchSize: 8
+
+- id: runtime-graph-invariant
+  name: '@se373/runtime-graph/invariant'
+
+- id: embedding-invariant
+  name: '@se373/embedding/invariant'
+
+- id: model-registry-invariant
+  name: '@se373/model-registry/invariant'

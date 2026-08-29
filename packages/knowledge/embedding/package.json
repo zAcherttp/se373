@@ -1,0 +1,29 @@
+{
+  "name": "@se373/embedding",
+  "description": "ctx.embedder: the text-to-vector seam, its identity fingerprint, and its conformance suite",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./types": "./src/types.ts",
+    "./fingerprint": "./src/fingerprint.ts",
+    "./conformance": "./src/conformance.ts",
+    "./invariant": "./src/invariant.ts",
+    "./package.json": "./package.json"
+  },
+  "license": "MIT",
+  "peerDependencies": {
+    "@se373/cordis": "workspace:^",
+    "@se373/invariants": "workspace:^"
+  },
+  "devDependencies": {
+    "@se373/cordis": "workspace:^",
+    "@se373/invariants": "workspace:^"
+  },
+  "se373": {
+    "face": "host"
+  }
+}

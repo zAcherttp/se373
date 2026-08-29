@@ -42,3 +42,10 @@ allowBuilds:
   # because an undecided build is a boot that stops on a prompt, and the SDK is
   # on the path of a demo where that failure would be invisible until it wasn't.
   '@modelcontextprotocol/sdk': false
+
+  # onnxruntime-node: its install script downloads the prebuilt native runtime
+  # for this platform. Unavoidable and load-bearing -- it is the inference
+  # engine `embedder-onnx-local` runs on, and there is no pure-JS alternative
+  # that keeps I2's "no API key" promise. Same call as node-pty, for the same
+  # reason: a denied build here is not a degraded feature, it is an absent one.
+  onnxruntime-node: true

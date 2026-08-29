@@ -1,0 +1,12 @@
+{
+  // Host face. Emits declarations because the ONNX provider and the vector
+  // store both resolve this package through its `exports` rather than through
+  // a `paths` facade.
+  "extends": "../../../tsconfig.host.base.json",
+  "compilerOptions": { "rootDir": "src", "outDir": "lib/types" },
+  "include": ["src"],
+  "references": [
+    { "path": "../../../vendor/cordis" },
+    { "path": "../../../vendor/dsh/runtime-diagnostics/invariants" }
+  ]
+}

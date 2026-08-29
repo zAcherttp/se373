@@ -1,0 +1,12 @@
+{
+  "extends": "../../../tsconfig.host.base.json",
+  "compilerOptions": { "rootDir": "src", "outDir": "lib/types" },
+  "include": ["src"],
+  "references": [
+    { "path": "../../../vendor/cordis" },
+    { "path": "../../../vendor/schemastery" },
+    { "path": "../../../vendor/dsh/util/home-paths" },
+    { "path": "../../../vendor/dsh/runtime-diagnostics/invariants" },
+    { "path": "../embedding" }
+  ]
+}
