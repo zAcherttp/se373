@@ -16,8 +16,10 @@
   "dependencies": {
     "@se373/block-registry": "workspace:*",
     "@se373/digest": "workspace:*",
+    "@se373/home-paths": "workspace:*",
     "@se373/plan-gate": "workspace:*",
-    "@se373/runtime-graph": "workspace:*"
+    "@se373/runtime-graph": "workspace:*",
+    "@se373/scaffold": "workspace:*"
   },
   "peerDependencies": {
     "@se373/cordis": "workspace:^",
@@ -27,7 +29,11 @@
   "devDependencies": {
     "@se373/cordis": "workspace:^",
     "@se373/cordis-plugin-loader": "workspace:^",
-    "@se373/invariants": "workspace:^"
+    "@se373/invariants": "workspace:^",
+    "@types/js-yaml": "^4.0.9",
+    "js-yaml": "^4.1.0"
   },
-  "se373": { "face": "host" }
+  "se373": {
+    "face": "host"
+  }
 }

@@ -1,0 +1,190 @@
+# The agent spine for the fabrication demo: examples/chat/cordis.yml
+# transcribed MINUS the one-shot driver rows. The driver exits when no task is
+# given, and this tree's turns are driven by the demo through ctx.agents -- the
+# gateway's own shape -- so the runner would only print an error and request
+# exit during boot.
+#
+# The model-facing TOOL rows are dropped too (tool-fs, tool-fs-search,
+# tool-bash, tool-str-replace-editor, tool-graph-inspect): in this demo every
+# tool an agent has arrives through its fabricated preset, which is the claim.
+# The SERVICES those tools sit on -- fs, bash, sandbox, subprocess -- stay,
+# exactly as the web tree keeps them under the preset roster.
+
+- id: timer
+  name: '@se373/cordis-plugin-timer'
+
+- id: invariants
+  name: '@se373/invariants'
+
+# The runtime's view of itself. A core service, not a seam: one loader tree, one
+# fiber tree, so no second provider could exist. Everything else that renders the
+# tree -- the phase-4 board, the pipeline graph -- reads this one projection,
+# which is what makes I5 true by construction.
+- id: runtime-graph
+  name: '@se373/runtime-graph'
+
+# Every run leaves a durable log under $SE373_HOME/logs. dsh has no app log at
+# all -- its logger channel lives and dies in the terminal -- so this is ours:
+# a second Cordis exporter beside the console one, with its own level threshold,
+# because a debug firehose is fine in a terminal and expensive on disk.
+- id: logger-jsonl
+  name: '@se373/logger-jsonl'
+  config:
+    dir: !!js dshHomePath('logs')
+    maxRuns: 5
+    # 'none' takes zstd off the path entirely; the file is then plain JSONL.
+    compression: zstd
+    levels:
+      default: 2
+
+# --- seams -------------------------------------------------------------------
+
+- id: llm
+  name: '@se373/llm'
+
+- id: session
+  name: '@se373/session'
+
+- id: tools
+  name: '@se373/tools'
+
+- id: approval
+  name: '@se373/user-approval'
+  config:
+    # A one-shot run has nobody to ask, so `danger-full-access` is the only mode
+    # that answers without hanging. Phase 4's chat box is what makes `ask` real.
+    policy: !!js "(process.env.SE373_PERMISSION_MODE ?? 'workspace-write') === 'danger-full-access' ? 'never' : 'ask'"
+
+# --- providers ---------------------------------------------------------------
+
+# User-settings document under $SE373_HOME (default ~/.se373), hot-reloaded.
+# An `llm-deepseek:` section here overrides the adapter row below at runtime.
+- id: settings
+  name: '@se373/settings-file'
+
+# Inherited environment over the managed $SE373_HOME/.credentials.yaml, with
+# project and user `.env` fallbacks. DEEPSEEK_API_KEY is the reference the
+# adapter resolves per request.
+- id: credentials
+  name: '@se373/credentials-local'
+
+- id: llm-deepseek
+  name: '@se373/llm-deepseek'
+  config:
+    # Unset in normal use, so the adapter falls back to $DEEPSEEK_BASE_URL and
+    # then the public API. The spine spec points it at a local mock server, which
+    # is what makes phase 2 demonstrable without an API key.
+    baseURL: !!js process.env.SE373_LLM_BASE_URL
+
+- id: llm-retry
+  name: '@se373/llm-retry'
+
+- id: session-persistence-jsonl
+  name: '@se373/session-persistence-jsonl'
+  config:
+    root: !!js dshHomePath('sessions')
+
+# --- the loop ----------------------------------------------------------------
+
+- id: system-prompt
+  name: '@se373/system-prompt'
+  config:
+    persona: >-
+      You are a coding agent powered by the {{model}} model. Your working directory is {{cwd}}.
+
+- id: agent
+  name: '@se373/agent'
+
+- id: agent-default-model
+  name: '@se373/agent-default-model'
+  config:
+    provider: deepseek-official
+    model: deepseek-v4-flash
+
+- id: agent-loop
+  name: '@se373/agent-loop'
+  config:
+    agents: []
+
+# --- the effect boundary -----------------------------------------------------
+#
+# Phase 3. Every row below is dsh's, verbatim, including the platform `disabled`
+# expressions -- which is the point of I3: a Windows demo needs no code change,
+# only different rows evaluating true.
+
+- id: subprocess
+  name: '@se373/subprocess-local'
+
+- id: sandbox
+  name: '@se373/sandbox-local'
+
+- id: sandbox-policy
+  name: '@se373/sandbox-policy'
+  config:
+    mode: !!js process.env.SE373_PERMISSION_MODE ?? 'workspace-write'
+    workspaceRoot: !!js process.cwd()
+
+- id: bash-sandbox
+  name: '@se373/bash-sandbox'
+  disabled: !!js process.platform === 'win32'
+  config:
+    timeoutMs: 60000
+
+- id: permission
+  name: '@se373/permission-presets'
+  config:
+    presets:
+      read-only:
+        sandbox: read-only
+        approval: ask
+      workspace-write:
+        sandbox: workspace-write
+        approval: ask
+      danger-full-access:
+        sandbox: danger-full-access
+        approval: never
+
+- id: shell-env
+  name: '@se373/shell-env'
+
+- id: fs-sandbox
+  name: '@se373/fs-sandbox'
+
+- id: fs-observation-policy
+  name: '@se373/fs-observation-policy'
+
+- id: spill-local
+  name: '@se373/spill-local'
+
+- id: spill-policy
+  name: '@se373/spill-policy'
+  config:
+    maxInlineBytes: 50000
+
+- id: timeout-policy
+  name: '@se373/tool-call-timeout-policy'
+- id: mcp-client
+  name: '@se373/mcp-client'
+  disabled: true
+  config:
+    transport: stdio
+    # Namespaces this server's tool names; must be unique across live instances.
+    serverName: everything
+    command: npx
+    args: ['-y', '@modelcontextprotocol/server-everything']
+    # false keeps a dead server from failing the boot; true is what a deployment
+    # that genuinely depends on the server wants.
+    failOnStartupError: false
+
+# --- runtime invariant companions ---------------------------------------------
+#
+# Each package's checks mount as their own row, so a check is selectable by
+# config rather than by deletion -- the same reason the companion lives behind a
+# `./invariant` export instead of inside the package entrypoint. They come last
+# because each injects the subject it checks.
+
+- id: runtime-graph-invariant
+  name: '@se373/runtime-graph/invariant'
+
+- id: logger-jsonl-invariant
+  name: '@se373/logger-jsonl/invariant'

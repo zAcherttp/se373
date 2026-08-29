@@ -29,6 +29,22 @@ export interface RecipePrefill {
   readonly archetype: string
   /** What gets loaded into the chat box. */
   readonly prompt: string
+  /**
+   * The fabricated agent's own voice.
+   *
+   * Written into the fabricated preset's persona row, and scoped to that agent
+   * alone — the main builder's persona settings never see it. `{{model}}` and
+   * `{{cwd}}` interpolate the way upstream's persona rows do.
+   */
+  readonly persona: string
+  /**
+   * Filesystem posture, when the agent composes filesystem tools.
+   *
+   * `read-only` shadows `fs` and `sandboxPolicy` in the preset's own realm over
+   * a read-only policy, the shape the shipped `inspect` preset proved. Absent
+   * means `workspace-write` over the fabricated agent's own workspace.
+   */
+  readonly filesystem?: 'read-only'
   /** Thinking effort to preselect. */
   readonly effort: 'low' | 'medium' | 'high'
   /** The agent preset a build starts from. */
@@ -69,6 +85,8 @@ export const COOKBOOK: readonly BlockInput[] = [
         + 'them, edit them and run commands, and it should explain what it changed before it changes it.',
       effort: 'medium',
       preset: 'standard',
+      persona: 'You are a coding agent powered by the {{model}} model, working in {{cwd}}. Read before '
+        + 'you write, explain a change before you make it, and show what you changed after.',
       blocks: ['block.tool-fs', 'block.tool-fs-search', 'block.tool-bash', 'block.tool-graph-inspect'],
       outcome: 'Ask it to change something in the workspace and it does, showing its edits.',
     },
@@ -83,8 +101,18 @@ export const COOKBOOK: readonly BlockInput[] = [
         + 'documented rule from what is a judgement call.',
       effort: 'high',
       preset: 'standard',
-      blocks: ['block.tool-fs', 'block.tool-fs-search', 'block.tool-bash'],
-      outcome: 'Point it at a branch and it reports findings you can act on.',
+      persona: 'You are a code reviewer powered by the {{model}} model, working read-only in {{cwd}}. '
+        + 'Read the code and the standards documents, report findings with the file and line, and '
+        + 'separate what breaks a documented rule from what is a judgement call. The write and edit '
+        + 'tools in your catalog will be refused: this agent runs against a read-only filesystem. If a '
+        + 'change is needed, describe it precisely and say you cannot make it.',
+      filesystem: 'read-only',
+      // No shell: bash-local resolves its sandbox in the HOST realm, so a shell
+      // here would run under the host policy against the host cwd -- the wrong
+      // workspace and the wrong mode. The same reason the shipped `inspect`
+      // preset has no shell.
+      blocks: ['block.tool-fs', 'block.tool-fs-search'],
+      outcome: 'Point it at a tree and it reports findings you can act on, without being able to edit it.',
     },
   ),
   recipe(
@@ -97,6 +125,8 @@ export const COOKBOOK: readonly BlockInput[] = [
         + 'each be checked as met or not met.',
       effort: 'high',
       preset: 'inspect',
+      persona: 'You are a requirements analyst powered by the {{model}} model. Ask the questions that '
+        + 'change the answer, then emit numbered requirements each checkable as met or not met.',
       blocks: ['block.tool-fs'],
       outcome: 'Give it a paragraph and it returns requirements, plus the questions it still needs answered.',
     },
@@ -110,6 +140,10 @@ export const COOKBOOK: readonly BlockInput[] = [
         + 'index the docs, answer questions by retrieving passages, and cite the passages it used.',
       effort: 'medium',
       preset: 'inspect',
+      persona: 'You are a knowledge assistant powered by the {{model}} model. You answer questions '
+        + 'from an indexed corpus of documentation, not from memory: use search_knowledge for anything '
+        + 'factual, quote the passages you relied on by their keys, and say plainly when the index has '
+        + 'no answer. You have no shell, no filesystem, and no way to change anything.',
       blocks: [
         'block.model-registry',
         'block.corpus-fs',
@@ -137,6 +171,8 @@ export const COOKBOOK: readonly BlockInput[] = [
         + 'reconciles what comes back. It should say what it delegated and why before it delegates.',
       effort: 'high',
       preset: 'standard',
+      persona: 'You are an orchestrator powered by the {{model}} model. Break the task into independent '
+        + 'parts, say what you delegate and why before delegating, and reconcile what comes back.',
       blocks: ['block.tool-subagent', 'block.tool-fs', 'block.tool-graph-inspect'],
       outcome: 'Give it a task with independent parts and watch the children appear on the graph.',
     },
@@ -150,6 +186,8 @@ export const COOKBOOK: readonly BlockInput[] = [
         + 'tools the server offers, explain what each one does, and use them when they fit.',
       effort: 'medium',
       preset: 'standard',
+      persona: 'You are an assistant powered by the {{model}} model whose capabilities come from an '
+        + 'external MCP server. List what the server offers when asked, and use its tools when they fit.',
       blocks: ['block.mcp-client', 'block.tool-graph-inspect'],
       outcome: 'The server\'s tools appear in the catalog and the agent calls them.',
     },

@@ -1,0 +1,46 @@
+# Phase 6d, step 2: fabricated agents are agents.
+#
+# The chat spine included unchanged, the builder plane, and NOTHING model-facing
+# of our own: no knowledge rows, no tool rows, no personas. Everything the two
+# fabricated agents can do arrives through fabrication -- their subsystems as
+# subtree rows, their tools and voices as generated preset compositions scoped
+# to them alone.
+#
+# Run:  node --import tsx/esm examples/fabricate-demo/demo.mts
+
+- id: spine
+  name: '@se373/cordis-plugin-include'
+  config:
+    path: ./spine.yml
+
+- id: block-registry
+  name: '@se373/block-registry'
+
+- id: system-blocks
+  name: '@se373/system-blocks'
+
+- id: recipes
+  name: '@se373/recipes'
+
+- id: plan-gate
+  name: '@se373/plan-gate'
+
+- id: builder
+  name: '@se373/builder'
+
+# The subagent machinery, so the shipped roster exists beside the fabricated
+# ones -- the main picker's contents are part of what the demo asserts.
+- id: agent-presets
+  name: '@se373/agent-presets'
+  config:
+    default: standard
+    includeUserRoot: false
+    roots:
+      - path: !!js new URL('../../config/agent-presets', baseUrl).pathname
+        trust: system
+
+- id: block-registry-invariant
+  name: '@se373/block-registry/invariant'
+
+- id: builder-invariant
+  name: '@se373/builder/invariant'

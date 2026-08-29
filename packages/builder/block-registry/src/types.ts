@@ -61,6 +61,18 @@ export interface BlockManifest {
   readonly indexInvalidating?: boolean
   /** The module a loader row would name. Absent for blocks that are not rows. */
   readonly plugin?: string
+  /**
+   * Which plane of a fabricated agent this row belongs to.
+   *
+   * `subsystem` (the default) mounts in the fabricated subtree — the plane the
+   * agent runs on. `agent` mounts in the fabricated *preset composition*, the
+   * per-agent scope where tools and personas live: a tool registered there is
+   * visible only to sessions joined to that preset, which is what upstream's
+   * whole preset mechanism exists to provide. Putting a tool in the subtree
+   * instead leaves it `pending` forever — `ctx.tools` is a per-agent affair —
+   * which is exactly the warning 6c's plans kept printing.
+   */
+  readonly mount?: 'subsystem' | 'agent'
   /** Cordis services it injects. */
   readonly inject?: readonly string[]
   /** Credentials or config that must be filled before it leaves `blocked`. */

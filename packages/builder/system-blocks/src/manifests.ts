@@ -40,26 +40,39 @@ export const SYSTEM_BLOCKS: readonly BlockInput[] = [
   // --- tools ------------------------------------------------------------------
   block('tool-fs', '@se373/tool-fs', 'Read, write and edit files in the workspace', {
     role: 'tool',
+    mount: 'agent',
     inject: ['tools', 'fs'],
   }),
   block('tool-fs-search', '@se373/tool-fs-search', 'Grep and glob across the workspace', {
     role: 'tool',
+    mount: 'agent',
     inject: ['tools'],
+    // Required by the tool's own schema -- it has no default upstream, and the
+    // shipped inspect preset sets exactly this. A manifest default is what
+    // makes composing the block not require knowing that.
+    defaults: { sampleOverCapGlobResults: false },
   }),
   block('tool-bash', '@se373/tool-bash', 'Run shell commands in the workspace', {
     role: 'tool',
+    mount: 'agent',
     inject: ['tools', 'bash'],
   }),
   block('tool-subagent', '@se373/tool-subagent', 'Delegate a task to a subagent', {
     role: 'tool',
+    mount: 'agent',
     inject: ['tools', 'subagents'],
   }),
   block('tool-graph-inspect', '@se373/tool-graph-inspect', 'Inspect the plugin runtime from inside it', {
     role: 'tool',
+    mount: 'agent',
     inject: ['tools', 'runtimeGraph', 'systemPrompt'],
   }),
   block('tool-knowledge-search', '@se373/tool-knowledge-search', 'Search the indexed knowledge base by meaning', {
     role: 'tool',
+    // Agent-plane: it registers into the per-agent tool catalog, while its
+    // `knowledgePipeline` injection resolves through the roster's realm to the
+    // fabricated subtree. That split is the whole point of `mount`.
+    mount: 'agent',
     inject: ['tools', 'knowledgePipeline', 'systemPrompt'],
   }),
 

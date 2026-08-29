@@ -112,6 +112,7 @@
     "@se373/runtime-graph": "workspace:*",
     "@se373/sandbox-local": "workspace:*",
     "@se373/sandbox-policy": "workspace:*",
+    "@se373/scaffold": "workspace:*",
     "@se373/session": "workspace:*",
     "@se373/session-log-export": "workspace:*",
     "@se373/session-persistence-jsonl": "workspace:*",

@@ -188,16 +188,18 @@ formality.
 
 ## Immediate next steps
 
-1. **Start phase 6d** (authoring), in the grilled order: (1) the fork
-   namespace — one namespaced-write mechanism serving block forks and fabricated
-   preset directories alike; (2) conversational wiring — per-fabrication preset
-   with its own persona, `workspaceRoot`, `subagent-spawn-in-process`, and the
-   Code Review fabrication as the second archetype; (3) authoring — agent block
-   → syntax → typecheck → conformance → mount, with the chunker fork as the
-   demonstrable and a plan-gated server-free dependency install; (4) the staging
-   gate → HMR, recorded only. The repository already refuses to mount an
-   `origin: 'agent'` block; 6d is what lets one earn it. This is the claim, not
-   the flourish — do not let it be the thing that gets cut.
+1. **Finish phase 6d.** Steps 1–2 are done (`examples/fabricate-demo/`): the
+   scaffold, and conversational fabrication — two agents at once, each with its
+   own persona and catalog, the Code Review fabrication read-only against the
+   repo. One mechanism correction against the grilled plan, found by reading
+   upstream rather than assumed: a spawned child `composeFrom`s its *parent's*
+   composition and cannot join a different preset, so fabricated agents converse
+   as their own sessions created the gateway's way; `subagent-spawn-in-process`
+   remains delegation *from* an agent. Remaining: (3) authoring — agent block →
+   syntax → typecheck → conformance → mount, chunker fork as the demonstrable,
+   plan-gated server-free dependency install; (4) the staging gate → HMR,
+   recorded only. The repository already refuses to mount an `origin: 'agent'`
+   block; 6d is what lets one earn it.
 2. ~~Re-read the testing decision~~ — **done 2026-08-28.** Nine specs, written
    against silent failure modes rather than for coverage, and each one shown to
    fail against the bug it describes.

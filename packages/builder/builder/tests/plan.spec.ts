@@ -138,7 +138,10 @@ describe('plan', () => {
       ['block.store', 'block.registry'],
     )
     const plan = await builder.plan({ recipe: 'recipe.test' })
-    expect(plan.spec.isolates).toEqual(['vectorStore'])
+    // `agentPresets` is always isolated -- the subtree's own roster is what
+    // scopes the fabricated persona to this agent, and it must not collide with
+    // the main roster. The provides-only block still must NOT appear.
+    expect(plan.spec.isolates).toEqual(['agentPresets', 'settings', 'vectorStore'])
   })
 
   it('warns when a row injects something no sibling and no parent provides', async () => {

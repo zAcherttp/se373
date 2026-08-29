@@ -8,7 +8,9 @@
     { "path": "../../../vendor/dsh/runtime-diagnostics/invariants" },
     { "path": "../../knowledge/digest" },
     { "path": "../../runtime/runtime-graph" },
+    { "path": "../../../vendor/dsh/util/home-paths" },
     { "path": "../block-registry" },
-    { "path": "../plan-gate" }
+    { "path": "../plan-gate" },
+    { "path": "../scaffold" }
   ]
 }

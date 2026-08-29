@@ -450,6 +450,9 @@ importers:
       '@se373/sandbox-policy':
         specifier: workspace:*
         version: link:../vendor/dsh/sandbox/sandbox-policy
+      '@se373/scaffold':
+        specifier: workspace:*
+        version: link:../packages/builder/scaffold
       '@se373/session':
         specifier: workspace:*
         version: link:../vendor/dsh/core/session
@@ -622,12 +625,18 @@ importers:
       '@se373/digest':
         specifier: workspace:*
         version: link:../../knowledge/digest
+      '@se373/home-paths':
+        specifier: workspace:*
+        version: link:../../../vendor/dsh/util/home-paths
       '@se373/plan-gate':
         specifier: workspace:*
         version: link:../plan-gate
       '@se373/runtime-graph':
         specifier: workspace:*
         version: link:../../runtime/runtime-graph
+      '@se373/scaffold':
+        specifier: workspace:*
+        version: link:../scaffold
     devDependencies:
       '@se373/cordis':
         specifier: workspace:^
@@ -638,6 +647,12 @@ importers:
       '@se373/invariants':
         specifier: workspace:^
         version: link:../../../vendor/dsh/runtime-diagnostics/invariants
+      '@types/js-yaml':
+        specifier: ^4.0.9
+        version: 4.0.9
+      js-yaml:
+        specifier: ^4.1.0
+        version: 4.3.1
 
   packages/builder/plan-gate:
     dependencies:
@@ -664,6 +679,8 @@ importers:
       '@se373/cordis':
         specifier: workspace:^
         version: link:../../../vendor/cordis
+
+  packages/builder/scaffold: {}
 
   packages/builder/system-blocks:
     dependencies:

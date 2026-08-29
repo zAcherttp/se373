@@ -64,22 +64,49 @@ resources deliberately shared stay shared.
 Dismantling removes the subtree and leaves the spec in the repository:
 dismantling a running agent is not the same as forgetting how it was built.
 
+## The conversational half (6d step 2)
+
+A spec now splits into **subsystem rows** (the plane, mounted in the subtree)
+and **agent rows** (the model-facing composition). Agent rows are not mounted by
+the builder at all: they are written — with the recipe's persona and, when
+filesystem tools are composed, a sandbox realm — into a generated preset
+directory inside the agent's own scaffold, and the subtree mounts its **own**
+`agent-presets` row over that directory with `agentPresets` (and `settings`)
+isolated. That isolation is what keeps the fabricated persona out of the main
+picker, and it is why `presetsOf(entryId)` exists: the root context cannot see
+the roster, so session-creating callers reach it through the row's own fiber.
+
+A session then joins the way the gateway's do:
+
+```ts
+const presets = ctx.builder.presetsOf(agent.entryId)
+await ctx.agents.create({ ..., setup: agentCtx => presets.mount(agentCtx, agent.presetId) })
+```
+
+**One correction to the plan of record**: the design named
+`subagent-spawn-in-process` as the runner, but a spawned child `composeFrom`s
+its *parent's* composition — it structurally cannot join a different preset. So
+fabricated agents converse as their own sessions, created the gateway's way;
+the spawn machinery remains what it was, delegation *from* an agent.
+
+`workspaceRoot` is caller-supplied, defaults to a fresh `workspace/` inside the
+scaffold, is resolved at **plan** time so it is inside the digest a human
+approves, and appears on the plan card — pointing write-capable tools at a
+caller-supplied tree is the one step on the card flagged destructive.
+
 ## Known Limitations and Deferred Work
 
 - **No intent parsing.** `intent` is recorded on the spec and never read. A
   request without a recipe and without an explicit block list resolves to zero
   rows — there is no model in this loop yet, and "intent → blocks" is the part a
   model would do.
-- **The preset is recorded and not applied.** `spec.preset` names an agent
-  preset; fabrication mounts rows and does not join a session to it, so a
-  fabricated agent is a live subsystem rather than a conversational agent. The
-  design's `agent-presets` + `subagent-spawn-in-process` path is not wired.
-- **No workspace sandbox.** The design confines a fabricated agent to a
-  `workspaceRoot`; nothing here does, so a fabricated `tool-fs` row would see
-  whatever the parent process sees.
 - **No diff.** I4 promises a version diff renders as a config diff; two spec
   versions are stored and nothing compares them.
 - **Plans accumulate in memory** keyed by digest, and are never evicted.
-- **Fabrication is not transactional.** The loader creates the group and its
-  children; a child that fails to import leaves the rest mounted, reported only
-  on the graph.
+- **Fabrication is not transactional past the scaffold.** The scaffold is
+  removed when the mount throws, but a child row that fails to import leaves its
+  siblings mounted, reported only on the graph.
+- **The scaffold is not removed on dismantle.** Deliberate — the preset and
+  workspace are the durable record of what ran — but nothing prunes them ever.
+- **`presetsOf` returns `unknown`.** Typing it would put `@se373/agent-presets`
+  in the builder's dependency graph for one return type; callers cast.
