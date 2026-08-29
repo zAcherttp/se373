@@ -1,0 +1,10 @@
+{
+  "extends": "../../../tsconfig.host.base.json",
+  "compilerOptions": { "rootDir": "src", "outDir": "lib/types" },
+  "include": ["src"],
+  "references": [
+    { "path": "../../../vendor/cordis" },
+    { "path": "../../runtime/runtime-graph" },
+    { "path": "../block-registry" }
+  ]
+}

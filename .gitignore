@@ -10,3 +10,6 @@ dist/
 vendor/*/lib/
 vendor/dsh/*/*/lib/
 *.tsbuildinfo
+
+# Scratch config copies written by examples/builder-demo (fabrication persists rows).
+examples/**/.run-*

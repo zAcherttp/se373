@@ -16,6 +16,11 @@
   "extends": "./tsconfig.host.base.json",
   "files": [],
   "references": [
+    { "path": "./packages/builder/block-registry" },
+    { "path": "./packages/builder/builder" },
+    { "path": "./packages/builder/plan-gate" },
+    { "path": "./packages/builder/recipes" },
+    { "path": "./packages/builder/system-blocks" },
     { "path": "./packages/knowledge/chunker" },
     { "path": "./packages/knowledge/chunker-markdown" },
     { "path": "./packages/knowledge/chunker-recursive" },

@@ -159,9 +159,15 @@ importers:
       '@se373/bash-sandbox':
         specifier: workspace:*
         version: link:../vendor/dsh/shell/bash-sandbox
+      '@se373/block-registry':
+        specifier: workspace:*
+        version: link:../packages/builder/block-registry
       '@se373/board-gateway':
         specifier: workspace:*
         version: link:../packages/runtime/board-gateway
+      '@se373/builder':
+        specifier: workspace:*
+        version: link:../packages/builder/builder
       '@se373/chunker':
         specifier: workspace:*
         version: link:../packages/knowledge/chunker
@@ -420,9 +426,15 @@ importers:
       '@se373/persona':
         specifier: workspace:*
         version: link:../vendor/dsh/preset/persona
+      '@se373/plan-gate':
+        specifier: workspace:*
+        version: link:../packages/builder/plan-gate
       '@se373/plan-mode':
         specifier: workspace:*
         version: link:../vendor/dsh/plan/plan-mode
+      '@se373/recipes':
+        specifier: workspace:*
+        version: link:../packages/builder/recipes
       '@se373/rerank':
         specifier: workspace:*
         version: link:../packages/knowledge/rerank
@@ -504,6 +516,9 @@ importers:
       '@se373/subprocess-local':
         specifier: workspace:*
         version: link:../vendor/dsh/subprocess/subprocess-local
+      '@se373/system-blocks':
+        specifier: workspace:*
+        version: link:../packages/builder/system-blocks
       '@se373/system-prompt':
         specifier: workspace:*
         version: link:../vendor/dsh/core/system-prompt
@@ -579,6 +594,89 @@ importers:
       '@se373/workspace':
         specifier: workspace:*
         version: link:../vendor/dsh/workspace/workspace
+
+  packages/builder/block-registry:
+    dependencies:
+      '@se373/home-paths':
+        specifier: workspace:*
+        version: link:../../../vendor/dsh/util/home-paths
+      '@se373/runtime-graph':
+        specifier: workspace:*
+        version: link:../../runtime/runtime-graph
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../vendor/cordis
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../../vendor/dsh/runtime-diagnostics/invariants
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../vendor/schemastery
+
+  packages/builder/builder:
+    dependencies:
+      '@se373/block-registry':
+        specifier: workspace:*
+        version: link:../block-registry
+      '@se373/digest':
+        specifier: workspace:*
+        version: link:../../knowledge/digest
+      '@se373/plan-gate':
+        specifier: workspace:*
+        version: link:../plan-gate
+      '@se373/runtime-graph':
+        specifier: workspace:*
+        version: link:../../runtime/runtime-graph
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../vendor/cordis
+      '@se373/cordis-plugin-loader':
+        specifier: workspace:^
+        version: link:../../../vendor/loader
+      '@se373/invariants':
+        specifier: workspace:^
+        version: link:../../../vendor/dsh/runtime-diagnostics/invariants
+
+  packages/builder/plan-gate:
+    dependencies:
+      '@se373/digest':
+        specifier: workspace:*
+        version: link:../../knowledge/digest
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../vendor/cordis
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../vendor/schemastery
+
+  packages/builder/recipes:
+    dependencies:
+      '@se373/block-registry':
+        specifier: workspace:*
+        version: link:../block-registry
+      '@se373/runtime-graph':
+        specifier: workspace:*
+        version: link:../../runtime/runtime-graph
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../vendor/cordis
+
+  packages/builder/system-blocks:
+    dependencies:
+      '@se373/block-registry':
+        specifier: workspace:*
+        version: link:../block-registry
+      '@se373/runtime-graph':
+        specifier: workspace:*
+        version: link:../../runtime/runtime-graph
+    devDependencies:
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../vendor/cordis
 
   packages/client/ui-board:
     devDependencies:

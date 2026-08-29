@@ -1,0 +1,51 @@
+# Phase 6c: the builder plane.
+#
+# Seven rows and no agent. What they add up to is a repository of blocks, a
+# cookbook of recipes over it, a gate that nothing destructive gets past, and a
+# builder that turns one into a live Cordis subtree.
+#
+# The knowledge plane is deliberately absent from this file. It is what gets
+# *fabricated* — mounted at runtime from a recipe, into its own realm — which is
+# the phase's whole claim and would be uninteresting if it were already running.
+#
+# Run:  node --import tsx/esm examples/builder-demo/demo.mts
+
+- id: invariants
+  name: '@se373/invariants'
+
+- id: runtime-graph
+  name: '@se373/runtime-graph'
+
+# --- the repository and what fills it ----------------------------------------
+
+- id: block-registry
+  name: '@se373/block-registry'
+
+- id: system-blocks
+  name: '@se373/system-blocks'
+
+- id: recipes
+  name: '@se373/recipes'
+
+# --- the gate ----------------------------------------------------------------
+#
+# `autoApprove` is left off on purpose: the demo approves by hand, because a
+# gate that approves itself proves nothing. It is a config row rather than an
+# environment variable so that turning the gate off is as visible as the gate.
+
+- id: plan-gate
+  name: '@se373/plan-gate'
+
+# --- the builder --------------------------------------------------------------
+
+- id: builder
+  name: '@se373/builder'
+
+- id: runtime-graph-invariant
+  name: '@se373/runtime-graph/invariant'
+
+- id: block-registry-invariant
+  name: '@se373/block-registry/invariant'
+
+- id: builder-invariant
+  name: '@se373/builder/invariant'

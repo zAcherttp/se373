@@ -1,0 +1,22 @@
+{
+  "name": "@se373/recipes",
+  "description": "The cookbook: six click-to-prefill recipes, one per SE373 archetype, as system blocks",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./cookbook": "./src/cookbook.ts",
+    "./package.json": "./package.json"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@se373/block-registry": "workspace:*",
+    "@se373/runtime-graph": "workspace:*"
+  },
+  "peerDependencies": { "@se373/cordis": "workspace:^" },
+  "devDependencies": { "@se373/cordis": "workspace:^" },
+  "se373": { "face": "host" }
+}

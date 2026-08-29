@@ -1,0 +1,31 @@
+{
+  "name": "@se373/block-registry",
+  "description": "ctx.blocks: a repository of named, versioned, provenance-carrying blocks",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./types": "./src/types.ts",
+    "./invariant": "./src/invariant.ts",
+    "./package.json": "./package.json"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@se373/home-paths": "workspace:*",
+    "@se373/runtime-graph": "workspace:*"
+  },
+  "peerDependencies": {
+    "@se373/cordis": "workspace:^",
+    "@se373/invariants": "workspace:^",
+    "@se373/schemastery": "workspace:^"
+  },
+  "devDependencies": {
+    "@se373/cordis": "workspace:^",
+    "@se373/invariants": "workspace:^",
+    "@se373/schemastery": "workspace:^"
+  },
+  "se373": { "face": "host" }
+}

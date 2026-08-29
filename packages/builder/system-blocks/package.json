@@ -1,0 +1,22 @@
+{
+  "name": "@se373/system-blocks",
+  "description": "Block manifests for the packages this harness ships",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./manifests": "./src/manifests.ts",
+    "./package.json": "./package.json"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@se373/block-registry": "workspace:*",
+    "@se373/runtime-graph": "workspace:*"
+  },
+  "peerDependencies": { "@se373/cordis": "workspace:^" },
+  "devDependencies": { "@se373/cordis": "workspace:^" },
+  "se373": { "face": "host" }
+}
