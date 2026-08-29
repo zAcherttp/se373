@@ -72,6 +72,11 @@ architecture doc §13 and §14 carry the consequences.
 - **Sync policy: neither freeze nor track.** Update the clone when something looks worth having, read the breaking changes, re-run the vendoring script for the affected seeds, read the diff.
 - **Divergence policy:** small mechanical edits go in `LOCAL_MODS`; anything additive is our own package plugging into the vendored seam; never fork a vendored package into `packages/`.
 
+- **A mutation that fails to fail proves nothing.** Learned at 6b: four of
+  fifteen mutations were missed on the first pass, and only two were weak
+  *tests* — the other two were mutations of mine that did not reproduce the bug
+  they named. Check that a mutation changes behaviour before concluding the test
+  is at fault. Same mistake as a test passing for the wrong reason, one level up.
 - **Tests earn their place by catching a silent failure.** ~~Not a priority until the web plane~~ — lifted 2026-08-28, after the web plane and the preset plane. The rule that replaced it: a test is worth writing when the thing it checks could be wrong without anything failing loudly. That excludes "this row mounted" and "this tool is registered" — the invariant companions answer those against the shipping tree at every boot, which is strictly better than a fixture. It excludes vendored behaviour, which is checked upstream. It excludes rendered text.
   **Every new test must be shown to fail against the bug it describes.** Two of the first batch passed on broken code until that check was applied; one of them was rewritten from scratch as a result.
 - **We do not port.** The one port we wrote (`invariants`) was retired at the first opportunity for the vendored original — it was faithful and still dropped a load-bearing thenable. `docs/PORTING.md` §4.
@@ -129,10 +134,10 @@ formality.
 
 ## Immediate next steps
 
-1. **Start phase 6b** (the knowledge plane) — the remaining L3 seams
-   (`ctx.corpusSources`, `ctx.chunker`, `ctx.reranker`), the two retrieval
-   waterfalls, ingest events, and the thing 6a deliberately left out: something
-   that actually *ingests*. 6a hands the store string literals.
+1. **Start phase 6c** (the builder plane) — `ctx.blocks` as a repository,
+   `ctx.builder`, and the recipe roster. It is also where §5.5's approval gate
+   finally lands: 6b computes the whole rebuild plan and presents it to nobody,
+   because a plan a human approves is a builder-plane object.
 2. ~~Re-read the testing decision~~ — **done 2026-08-28.** Nine specs, written
    against silent failure modes rather than for coverage, and each one shown to
    fail against the bug it describes.
@@ -157,6 +162,10 @@ formality.
     vendored: text becomes vectors in-process, generations hold them, and a
     fingerprint refuses to compare across models. The first phase with no
     upstream analogue at all.
+14. ~~Start phase 6b~~ — shipped, tagged `phase-6b`. Eleven more packages: the
+    corpus, chunker and rerank seams, the composed pipeline that owns the
+    generation key and §5.5's positional cascade, incremental ingest with an
+    orphan sweep, and an agent that answers from the index through one tool.
 
 ## Risks being tracked
 
@@ -164,13 +173,22 @@ formality.
 - **The build is now load-bearing and has no test.** Four stages plus Vite, and a break in any of them is a browser that does not boot. Nothing checks it but running it.
 - ~~**The web tree diverges from upstream's patch in one place**~~ — **closed 2026-08-28.** The model-facing rows are behind presets now, exactly as upstream's patch has them.
 - ~~**Testing has outlived its deferral twice.**~~ **Addressed 2026-08-28.** Nine specs now, chosen by silent-failure risk rather than coverage. What is still untested is the four-stage build itself: a break in it is a browser that does not boot, and nothing checks it but running it.
-- **The knowledge plane has no ingest and no golden vectors.** 6a's store takes
-  string literals, and conformance checks shape, norm, determinism and
-  role-sensitivity within one process — so a tokenizer or quantization change
-  that shifted every vector *consistently* would pass every check we have. The
-  second registry row (`multilingual-e5-small-int8`) is declared and has never
-  been downloaded, so the `last_hidden_state` mean-pooling path is covered by
-  unit tests over fabricated tensors and nothing else.
+- ~~**The knowledge plane has no ingest and no golden vectors.**~~ **Closed
+  2026-08-29 at phase 6b.** Both were built: `corpus-fs` crawls, and recorded
+  vectors now catch the consistent shift no shape check can see. What remains
+  from that entry: the second registry row (`multilingual-e5-small-int8`) is
+  declared and has never been downloaded, so the `last_hidden_state`
+  mean-pooling path is covered by unit tests over fabricated tensors and nothing
+  else.
+- **§5.5's approval gate is computed and shown to nobody.** `status()` returns
+  the first diverging stage, the rebuild plan and a line per stage; a rebuild
+  that re-embeds a whole corpus starts without anyone confirming it. The gate is
+  6c's, and until then a config typo is a 20-second silent rebuild here and a
+  much longer one on a real corpus.
+- **Cross-lingual retrieval is uneven and the demo shows it failing.** Concrete
+  questions transfer; ad-hoc translations of domain jargon do not. This is the
+  concrete argument for D6's authored Vietnamese question set — a translated
+  English set would measure the translation.
 - Model-authored UI is a demo cliff — keep a deterministic fallback for anything shown live.
 - **Solo changes the scope calculus, not the schedule.** Six *recipes* ship and the block vocabulary must span all six, but only two archetypes get built out — the generality is the claim, the demos are evidence for it. Cut breadth before depth.
 - **D9 is what this design opened, and it is now smaller than it was.** The runtime graph still has no push transport upstream (`pluginInventory.list()` is poll-only), but node transitions are recorded as they happen rather than sampled, so a polling board is a latency compromise and not a lossy one. ~~D10~~ closed 2026-08-28: the third-party MCP path works, no fallback server needed.

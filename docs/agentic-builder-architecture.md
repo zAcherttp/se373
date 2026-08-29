@@ -153,12 +153,12 @@ Stages do not share a type (`Document → Chunk[]` vs `(Query, Hit[]) → Hit[]`
 
 | ctx key | Role | Owner | Providers (planned) | Tier | Index-invalidating |
 |---|---|---|---|---|---|
-| `ctx.corpusSources` | seam | `@zoo/corpus` | `corpus-fs`, `corpus-git`, `corpus-http` | ready / blocked | yes |
-| `ctx.chunker` | seam | `@zoo/chunker` | `chunker-recursive`, `chunker-markdown` | ready | **yes** |
+| `ctx.corpusSources` | seam | `@se373/corpus` | **`corpus-fs`** ✅, `corpus-git`, `corpus-http` | ready | yes |
+| `ctx.chunker` | seam | `@se373/chunker` | **`chunker-recursive`** ✅, **`chunker-markdown`** ✅ | ready | **yes** |
 | `ctx.embedder` | seam | `@se373/embedding` | **`embedder-onnx-local`** ✅, `embedder-api` | ready | **yes** |
 | `ctx.vectorStore` | seam | `@se373/vector-store` | **`vs-sqlite-vec`** ✅, `vs-lancedb`, `vs-qdrant` | ready | n/a |
-| `ctx.reranker` | seam | `@zoo/rerank` | `rerank-none`, `rerank-cross-encoder` | defaulted | no |
-| `ctx.knowledgePipeline` | core | `@zoo/knowledge` | — (composed) | — | — |
+| `ctx.reranker` | seam | `@se373/rerank` | **`rerank-none`** ✅, `rerank-cross-encoder` | defaulted | no |
+| `ctx.knowledgePipeline` | core | `@se373/knowledge` ✅ | — (composed) | — | — |
 
 ~~**`ctx.embedder` is the critical-path package.**~~ **Built 2026-08-29, `phase-6a`.** The paragraph below was right about the gap and wrong about the cost: the ONNX export emits `sentence_embedding`, so pooling and normalization are inside the graph and the risky part — hand-rolled pooling — never had to be written. The original note:
 
@@ -185,7 +185,7 @@ Following the conversation-node contract — one stable business id, replayable,
 | `ingest/progress` | update | `ingestId`, documents/chunks counters |
 | `ingest/end` | update | `ingestId`, totals, terminal status |
 
-Rendered as one Chat node via a `ConversationNodeDefinition` + keyed renderer.
+Rendered as one Chat node via a `ConversationNodeDefinition` + keyed renderer. **Built 2026-08-29 as far as the events; the renderer is not written** — the events carry everything it needs and nothing consumes them but the demo's console.
 
 ### 5.5 Destructive config changes & index generations
 
@@ -243,6 +243,8 @@ A query whose live `genKey` does not match the store's recorded one **fails clos
 #### Approval
 
 A destructive change is gated like any other side-effecting operation: the plan card (§6.5) states which stages rebuild, the estimated duration, and the generation being replaced, before work starts.
+
+**Not built at 6b.** `ctx.knowledgePipeline.status()` returns everything such a card needs — the first diverging stage, the derived `RebuildPlan`, a line per configured stage, and the generation being replaced — and nothing presents it or blocks on it. The gate belongs to the builder plane, which is where a plan is a thing a human approves.
 
 ### 5.6 Consumer boundary
 
@@ -755,8 +757,8 @@ Status is the git tag, not a judgement: a phase is shipped when
 | 4 | Web plane | **your chat box, and the board beside it** | the build pipeline, dsh's shell and chat roster, our board plugin, a push transport for the graph | ✅ `phase-4` (D9 deferred) |
 | 5 | Multi-agent | **subagents run** | `ctx.agentPresets`, `subagent-spawn-in-process` | ✅ `phase-5` |
 | 6a | **Embedding seam** | **vectors exist** | `ctx.embedder` + ONNX local, `sqlite-vec`, width per generation | ✅ `phase-6a` |
-| 6b | Knowledge plane | **knowledge agent answers** | remaining L3 seams, ingest events | ← next |
-| 6c | Builder plane | **recipe → working agent** | `ctx.blocks` as a repository, `ctx.builder`, the cookbook | |
+| 6b | Knowledge plane | **knowledge agent answers** | remaining L3 seams, ingest events | ✅ `phase-6b` |
+| 6c | Builder plane | **recipe → working agent** | `ctx.blocks` as a repository, `ctx.builder`, the cookbook | ← next |
 | 6d | **Authoring** | **agent forks a block and it hot-swaps in** | fork namespace, gated install, conformance suites, staging→HMR | |
 | 7 | Export | **installable plugin + MCP server** | `ctx.promotion`, MCP codegen | |
 | 8 | Eval / A/B | **compare view** | `ctx.retrievalEval`, isolate realms | |

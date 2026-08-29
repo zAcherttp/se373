@@ -581,3 +581,115 @@ for the wrong reason.
 - **No golden vectors.** Conformance checks shape, norm, determinism and
   role-sensitivity, all within one process. A tokenizer or quantization change
   that shifted every vector consistently would pass.
+
+---
+
+## phase-6b — The knowledge plane answers, and refuses when it should not
+
+**2026-08-29** · **Commit** `97e6a17` · **Tag** `phase-6b`
+
+**Roadmap** — Topic 5 (*Retrieval / knowledge*), completed: the full write path,
+the read path, and an agent in front of it. Also topic 2 (*Tool use*), by way of
+`search_knowledge`, and topic 8 (*Observability*) through the durable ingest
+events.
+**Phase** — §13 phase 6b, "Knowledge plane".
+
+**Demonstrable**
+
+```bash
+pnpm models:acquire                                      # 331 MB, once
+node --import tsx/esm examples/knowledge-demo/demo.mts    # the plane
+node --import tsx/esm examples/knowledge-demo/agent.mts   # the agent
+```
+
+The plane demo ingests this repository's own documentation — ~400 chunks in
+~20 s — and then does six more things, each a claim about a different part of
+§5: retrieval across languages; a second ingest that skips every document by
+content hash in 10 ms; a document that shrinks having its orphaned chunks swept;
+a chunker change that re-chunks; an embedder change that reads 603 chunks back
+out of the previous generation and never touches the corpus; and a query against
+a stale index that refuses rather than answering.
+
+The agent demo is the phase's end condition. `agent.yml` is three rows: the
+phase-2/3 agent spine included unchanged, the knowledge plane included
+unchanged, and one tool joining them.
+
+**Packages**
+
+Eleven of ours; nothing new vendored (still 150).
+
+| Package | What it does |
+|---|---|
+| `@se373/digest` | one canonical SHA-256, shared so four stages cannot canonicalize differently |
+| `@se373/corpus` | the `ctx.corpusSources` seam and the content hash incremental ingest turns on |
+| `@se373/corpus-fs` | walks a directory tree; the shipped provider |
+| `@se373/chunker` | the `ctx.chunker` seam, one key scheme, and the recursive splitter both providers share |
+| `@se373/chunker-recursive` | format-agnostic character splitting |
+| `@se373/chunker-markdown` | heading-aware; the heading travels with the chunk |
+| `@se373/rerank` | the `ctx.reranker` seam — the one stage that is not index-invalidating |
+| `@se373/rerank-none` | vector order, top-k; the defaulted tier |
+| `@se373/knowledge` | `ctx.knowledgePipeline`: the generation key, the cascade, incremental ingest, retrieval |
+| `@se373/knowledge-dedup` | the post-retrieve waterfall's one shipped listener |
+| `@se373/tool-knowledge-search` | `search_knowledge`, injecting the pipeline and nothing else (§5.6) |
+
+**§5.5 implemented rather than paraphrased.** The generation key digests all
+four write-path stages; `firstDivergence` walks them in cascade order; the
+rebuild plan is derived from position rather than written out per stage, so the
+table and the code cannot drift. Retrieval fails closed on a mismatch, naming
+both keys and the plan.
+
+**Three bugs found by reading output, not by reasoning about code.**
+
+The Markdown chunker prepended a section's heading and *then* split, so a long
+section could emit a span consisting of the heading alone — maximum title
+signal, zero information — which then attracted every query whose words
+resembled that heading. Both instances in practice were `Known Limitations and
+Deferred Work`, which every README in this repository has.
+
+`tool-graph-inspect`'s invariant asserted as soon as `ctx.tools` was active,
+which is not the same moment as its subject having registered: a loader group
+applies its entries with `Promise.allSettled`. It passed for two phases on
+ordering luck and failed the first time a sibling subtree did enough async work
+to shift the interleaving. It is now keyed to its subject's own lifecycle on the
+runtime graph. A false alarm is worse than no alarm, because it teaches people
+to ignore the mechanism.
+
+Retrieval returned one document said five ways, which is why `knowledge-dedup`
+exists — and why the post-retrieve waterfall now has a real listener rather than
+a declaration.
+
+**The finding worth keeping.** Fifteen mutations, fifteen caught — but the first
+pass caught eleven, and only two of the four misses were weak *tests*. The other
+two were weak **mutations**: they named a bug they did not actually reproduce.
+One changed the input to a split without changing the per-span prepend, so every
+chunk still carried its heading; the other added an unused key to a fixture
+instead of perturbing a compared vector. A mutation that fails to fail proves
+nothing until you have checked it changes behaviour at all — which is the same
+mistake as a test that passes for the wrong reason, one level up.
+
+**Not yet**
+
+- **No approval gate.** §5.5 requires a destructive change to be plan-gated,
+  stating which stages rebuild and how long it will take. `status()` returns
+  everything such a card needs; nothing presents it and nothing blocks on it.
+  That is the builder plane's job.
+- **A store-schema change re-embeds.** The cascade table says it should only
+  rewrite, but `scan` returns chunks without vectors, so there is nothing to
+  copy forward. The plan reports the spec; the executor does more.
+- **Incremental ingest scans the whole index first** and writes into the live
+  generation. A crash mid-ingest leaves it partially updated — defensible, since
+  a content update is not a configuration change and re-running converges, but
+  it is not atomic and nothing reports the gap.
+- **Cross-lingual retrieval is uneven, and the demo shows it failing.**
+  `Cordis là gì?` returns the same top passages as its English equivalent;
+  `Tại sao chỉ số lỗi thời…` does not, because the corpus has no Vietnamese and
+  the question is an ad-hoc translation of domain jargon. That is the concrete
+  reason D6 wants a Vietnamese question set somebody wrote.
+- **Near-duplicates across *different* documents are untouched.** Dedup is
+  exact-match on document id; the identical `Known Limitations` heading in
+  sixteen READMEs is a retrieval attractor that no listener addresses.
+- **No ingest tool.** The model can search but cannot build, refresh, or ask
+  whether an index exists.
+- **`ingest/*` events are not rendered.** §5.4 calls for one Chat node via a
+  `ConversationNodeDefinition`; the events carry everything it needs and nothing
+  consumes them but the demo's own console.
