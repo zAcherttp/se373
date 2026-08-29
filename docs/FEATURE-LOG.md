@@ -479,3 +479,105 @@ can see in its own catalog will try anyway.
   before: its whole configuration is upstream's product writing.
 - **Still two specs.** The standing decision to hold testing until the web plane
   has now outlived its condition twice.
+
+---
+
+## phase-6a — Vectors exist, and they refuse to mix
+
+**2026-08-29** · **Commit** `8f6dbe0` · **Tag** `phase-6a`
+
+**Roadmap** — Topic 5 (*Retrieval / knowledge*), first half: the write path and
+the store. Retrieval quality, chunking and ingest events are 6b. Also topic 8
+(*Observability*), by way of the fingerprint being the thing an index is
+diagnosed with.
+**Phase** — §13 phase 6a, "Embedding seam".
+
+**Demonstrable**
+
+```bash
+pnpm models:acquire                                   # 331 MB, once
+node --import tsx/esm examples/embed-demo/demo.mts
+```
+
+Six documents embed in ~60 ms and are retrieved by meaning — including a
+Vietnamese question against an English corpus — with no API key and no network
+once the weights are on disk. Then a second embedder in its own realm, holding
+*the same weights at the same revision* but storing 256 dimensions instead of
+768, produces a query vector the generation refuses. That refusal is the phase's
+real claim: "must the same model embed and query" is answered structurally, not
+in documentation.
+
+The first phase with no upstream analogue at all. `packages/llm` ships chat
+adapters, and the shared model router does not cover embeddings, so
+vendor-and-document stops carrying the work here.
+
+**Packages**
+
+Five of ours; nothing new vendored (still 150).
+
+| Package | What it does |
+|---|---|
+| `@se373/embedding` | the `ctx.embedder` seam: identity digest, templating, Matryoshka truncation, conformance suite |
+| `@se373/model-registry` | `ctx.modelRegistry`: declared rows pinned to bytes, a content-addressed cache, deliberate acquisition |
+| `@se373/embedder-onnx-local` | the default provider — onnxruntime-node plus `@lenml/tokenizers` |
+| `@se373/vector-store` | the `ctx.vectorStore` seam: generations, and `assertComparable` |
+| `@se373/vs-sqlite-vec` | the default store — one SQLite file per generation, `vec0` over `node:sqlite` |
+| `examples/embed-demo` | the demonstrable |
+
+**Four decisions, each checked rather than argued.**
+
+*The ONNX graph pools for us.* The export emits `sentence_embedding`, so
+mean-pooling, both Matryoshka dense heads and the normalize are inside the
+graph. The largest silent-failure surface the raw-onnxruntime path was supposed
+to cost us does not exist. What stays ours is templating, truncation and the
+fingerprint.
+
+*The ungated mirror, not the Google repo.* `google/embeddinggemma-300m` is
+`gated: manual` and ships no ONNX; `onnx-community/embeddinggemma-300m-ONNX` is
+ungated and ships six variants. A gate would have put a browser consent step
+inside an automated acquisition. `fp16` and `q4f16` are unusable — the model
+card is explicit that EmbeddingGemma activations do not support fp16.
+
+*Dimensionality belongs to a generation.* This revises D4, which pinned 384 to
+keep the store schema stable. Matryoshka makes that wrong: one set of weights
+backs 768, 512, 256 and 128, and a `vec0` table declares its width in DDL, so
+the generation is exactly where a width can live. 384 was also excluding the
+strongest current small multilingual model, which cannot produce it.
+
+*Identity travels with the vectors.* `embed` returns `{fingerprint, dims,
+vectors}`, never a bare `Float32Array[]`. Per-chunk model metadata was
+considered and rejected: it makes a mixed-model generation *representable*, and
+every query against one returns a confident arbitrary ranking with nothing
+raising an error.
+
+**The finding worth keeping.** One of the fourteen mutations was not caught, and
+the reason mattered. Asserting that `drop` removes `-wal` and `-shm` after an
+ordinary drop proves nothing — SQLite deletes its own on a clean close, so the
+assertion passes whether or not the store does anything. The files that actually
+matter are orphans from a process that died mid-write, which a later generation
+reusing the id would adopt as its journal. The test now creates that case. This
+is the second time the mutation requirement has caught a spec that was passing
+for the wrong reason.
+
+**Not yet**
+
+- **Only the write path.** No corpus source, no chunker, no reranker, and
+  neither `knowledge/pre-retrieve` nor `knowledge/post-retrieve`. A generation
+  records its embedder identity but not its chunker or source, so the full
+  write-path fingerprint the design calls for is one stage of four.
+- **Nothing ingests.** The demo hands the store six string literals. There is no
+  crawl, no incremental re-ingest, and the per-chunk content hash that would
+  make one possible is specified in the README and not implemented.
+- **The flip is manual.** `create` → `upsert` → `activate` → `drop` all exist
+  and compose into the generation dance, but nothing drives them; there is no
+  rebuild command and no staleness detection reading the fingerprint back.
+- **The second model is declared, not exercised.** `multilingual-e5-small-int8`
+  ships as a registry row and has never been downloaded, so the
+  `last_hidden_state` mean-pooling path is covered by unit tests over fabricated
+  tensors and by nothing else.
+- **CPU only, and unmeasured beyond demo scale.** No execution-provider choice,
+  no length-sorted batching, and `vec0` runs with its defaults — brute force, no
+  quantization or partitioning.
+- **No golden vectors.** Conformance checks shape, norm, determinism and
+  role-sensitivity, all within one process. A tokenizer or quantization change
+  that shifted every vector consistently would pass.

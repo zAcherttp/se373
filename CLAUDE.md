@@ -65,7 +65,10 @@ architecture doc §13 and §14 carry the consequences.
 - **6d is not the cut candidate.** Authoring is the claim. Staging composition ahead of it is demo choreography, not build order.
 - **Phase 4 takes `bundle/web-app` whole** — 78 packages, 60 → 138 — plus dsh's chat roster and our board as a row in their layout. Replacing the `root` slot is unproven ground upstream; do not. **The browser cannot run from source**: budget the build pipeline as a workstream.
 - **`ctx.runtimeGraph` comes before the web plane** (phase 3.5), with the `graph_inspect` tool as its first consumer rather than a view.
-- **Knowledge plane: `sqlite-vec` over `node:sqlite`, 384 dims, multilingual by default.** Pin the dimensionality, not the model — then the model is a config row and the fingerprint catches the swap.
+- **Knowledge plane: `sqlite-vec` over `node:sqlite`, multilingual by default.** ~~384 dims~~ — **revised 2026-08-29 at phase 6a: width is a property of an index generation, not of the project.** Matryoshka models back several widths from one download, and a `vec0` table declares its width in DDL. Default is EmbeddingGemma-300M q8 at 768, from the ungated `onnx-community` mirror (`google/*` is `gated: manual` and ships no ONNX). The model stays a config row and the fingerprint still catches the swap.
+- **An embedder identity is a property of a generation, never of a stored chunk.** Per-chunk model metadata makes a mixed-model index *representable*; every query against one returns a confident arbitrary ranking with nothing raising an error. What chunks carry is a content key, for incremental re-ingest — a different question.
+- **Vectors never travel without their provenance.** `embed` returns `{fingerprint, dims, vectors}`, so `upsert` and `query` can refuse a mismatch and no caller can forget to check. An optional correctness check in a retrieval system is one that is absent on the day it matters.
+- **Weights are declared, then acquired — never fetched on use.** A registry row pins commit revision, sha256 and byte length per file; having the bytes is a separate act. Missing weights mount `blocked` (I2's third tier) and name the command that fixes it.
 - **Sync policy: neither freeze nor track.** Update the clone when something looks worth having, read the breaking changes, re-run the vendoring script for the affected seeds, read the diff.
 - **Divergence policy:** small mechanical edits go in `LOCAL_MODS`; anything additive is our own package plugging into the vendored seam; never fork a vendored package into `packages/`.
 
@@ -126,10 +129,10 @@ formality.
 
 ## Immediate next steps
 
-1. **Start phase 6a** (the embedding seam) — `ctx.embedder` over a local ONNX
-   model and `sqlite-vec` at 384 dims. It is the first phase where the thing
-   being built has no upstream analogue at all, so the vendor-and-document rule
-   stops carrying the work.
+1. **Start phase 6b** (the knowledge plane) — the remaining L3 seams
+   (`ctx.corpusSources`, `ctx.chunker`, `ctx.reranker`), the two retrieval
+   waterfalls, ingest events, and the thing 6a deliberately left out: something
+   that actually *ingests*. 6a hands the store string literals.
 2. ~~Re-read the testing decision~~ — **done 2026-08-28.** Nine specs, written
    against silent failure modes rather than for coverage, and each one shown to
    fail against the bug it describes.
@@ -150,6 +153,10 @@ formality.
     deferred rather than closed.
 12. ~~Start phase 5~~ — shipped, tagged `phase-5`. 150 vendored; the agent plane
     moved behind a shipped preset roster, and a subagent runs.
+13. ~~Start phase 6a~~ — shipped, tagged `phase-6a`. Five packages of ours, none
+    vendored: text becomes vectors in-process, generations hold them, and a
+    fingerprint refuses to compare across models. The first phase with no
+    upstream analogue at all.
 
 ## Risks being tracked
 
@@ -157,6 +164,13 @@ formality.
 - **The build is now load-bearing and has no test.** Four stages plus Vite, and a break in any of them is a browser that does not boot. Nothing checks it but running it.
 - ~~**The web tree diverges from upstream's patch in one place**~~ — **closed 2026-08-28.** The model-facing rows are behind presets now, exactly as upstream's patch has them.
 - ~~**Testing has outlived its deferral twice.**~~ **Addressed 2026-08-28.** Nine specs now, chosen by silent-failure risk rather than coverage. What is still untested is the four-stage build itself: a break in it is a browser that does not boot, and nothing checks it but running it.
+- **The knowledge plane has no ingest and no golden vectors.** 6a's store takes
+  string literals, and conformance checks shape, norm, determinism and
+  role-sensitivity within one process — so a tokenizer or quantization change
+  that shifted every vector *consistently* would pass every check we have. The
+  second registry row (`multilingual-e5-small-int8`) is declared and has never
+  been downloaded, so the `last_hidden_state` mean-pooling path is covered by
+  unit tests over fabricated tensors and nothing else.
 - Model-authored UI is a demo cliff — keep a deterministic fallback for anything shown live.
 - **Solo changes the scope calculus, not the schedule.** Six *recipes* ship and the block vocabulary must span all six, but only two archetypes get built out — the generality is the claim, the demos are evidence for it. Cut breadth before depth.
 - **D9 is what this design opened, and it is now smaller than it was.** The runtime graph still has no push transport upstream (`pluginInventory.list()` is poll-only), but node transitions are recorded as they happen rather than sampled, so a polling board is a latency compromise and not a lossy one. ~~D10~~ closed 2026-08-28: the third-party MCP path works, no fallback server needed.

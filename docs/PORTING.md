@@ -467,6 +467,29 @@ We publish nothing, so it is omitted rather than vendored.
 
 ---
 
+
+## 6. Model weights
+
+Weights are **not vendored**. They are declared as `@se373/model-registry` rows
+pinned to a commit revision and a SHA-256 per file, and fetched by
+`pnpm models:acquire` into `$SE373_MODELS_ROOT` (default `$SE373_HOME/models`).
+Nothing under version control here carries model bytes, and the repository
+therefore distributes no third-party weights.
+
+The licences still travel, because the rows do.
+
+| Row | Repository | Licence | Note |
+|---|---|---|---|
+| `embeddinggemma-300m-q8` | `onnx-community/embeddinggemma-300m-ONNX` | **Gemma Terms of Use** | the most restrictive licence anything in this tree points at. Use-restricted rather than open in the OSI sense; the mirror is ungated, unlike `google/embeddinggemma-300m` (`gated: manual`) |
+| `multilingual-e5-small-int8` | `intfloat/multilingual-e5-small` | MIT | declared; not exercised |
+
+Two consequences worth stating. A user who acquires the default row accepts
+Google's Gemma terms, which is why `pnpm models` prints the licence beside every
+row and `resolve`'s remedy string names it before a download starts. And swapping
+the default to the MIT row is a config edit — `model: multilingual-e5-small-int8`
+on the `embedder` row — not a code change, which is the same I3 property the rest
+of the tree has.
+
 ## Known Limitations and Deferred Work
 
 - **146 of the 187 in-scope packages are vendored** (phases 2, 3, 3.5 and 4:

@@ -155,12 +155,14 @@ Stages do not share a type (`Document → Chunk[]` vs `(Query, Hit[]) → Hit[]`
 |---|---|---|---|---|---|
 | `ctx.corpusSources` | seam | `@zoo/corpus` | `corpus-fs`, `corpus-git`, `corpus-http` | ready / blocked | yes |
 | `ctx.chunker` | seam | `@zoo/chunker` | `chunker-recursive`, `chunker-markdown` | ready | **yes** |
-| `ctx.embedder` | seam | `@zoo/embedding` | `embedder-onnx-local`, `embedder-api` | defaulted | **yes** |
-| `ctx.vectorStore` | seam | `@zoo/vector-store` | `vs-sqlite-vec`, `vs-lancedb`, `vs-qdrant` | defaulted | n/a |
+| `ctx.embedder` | seam | `@se373/embedding` | **`embedder-onnx-local`** ✅, `embedder-api` | ready | **yes** |
+| `ctx.vectorStore` | seam | `@se373/vector-store` | **`vs-sqlite-vec`** ✅, `vs-lancedb`, `vs-qdrant` | ready | n/a |
 | `ctx.reranker` | seam | `@zoo/rerank` | `rerank-none`, `rerank-cross-encoder` | defaulted | no |
 | `ctx.knowledgePipeline` | core | `@zoo/knowledge` | — (composed) | — | — |
 
-**`ctx.embedder` is the critical-path package.** Upstream has no embeddings seam of any kind — `packages/llm` ships chat adapters only (`llm-deepseek`, `llm-pi-ai`, `llm-retry`, `token-meter`). The shared model router does **not** cover embeddings. Build it in phase 6a, before anything that depends on retrieval.
+~~**`ctx.embedder` is the critical-path package.**~~ **Built 2026-08-29, `phase-6a`.** The paragraph below was right about the gap and wrong about the cost: the ONNX export emits `sentence_embedding`, so pooling and normalization are inside the graph and the risky part — hand-rolled pooling — never had to be written. The original note:
+
+> **`ctx.embedder` is the critical-path package.** Upstream has no embeddings seam of any kind — `packages/llm` ships chat adapters only (`llm-deepseek`, `llm-pi-ai`, `llm-retry`, `token-meter`). The shared model router does **not** cover embeddings. Build it in phase 6a, before anything that depends on retrieval.
 
 Default `embedder-onnx-local`: in-process ONNX, no API key, no router. Preserves I2.
 
@@ -752,8 +754,8 @@ Status is the git tag, not a judgement: a phase is shipped when
 | **3.5** | **Runtime graph** | **the agent can inspect its own runtime** | `ctx.runtimeGraph`, the `graph_inspect` tool, the JSONL app-log sink, `mcp-client` as a disabled row | ✅ `phase-3.5` |
 | 4 | Web plane | **your chat box, and the board beside it** | the build pipeline, dsh's shell and chat roster, our board plugin, a push transport for the graph | ✅ `phase-4` (D9 deferred) |
 | 5 | Multi-agent | **subagents run** | `ctx.agentPresets`, `subagent-spawn-in-process` | ✅ `phase-5` |
-| 6a | **Embedding seam** | vectors exist | `ctx.embedder` + ONNX local, `sqlite-vec` at 384 dims | ← next |
-| 6b | Knowledge plane | **knowledge agent answers** | remaining L3 seams, ingest events | |
+| 6a | **Embedding seam** | **vectors exist** | `ctx.embedder` + ONNX local, `sqlite-vec`, width per generation | ✅ `phase-6a` |
+| 6b | Knowledge plane | **knowledge agent answers** | remaining L3 seams, ingest events | ← next |
 | 6c | Builder plane | **recipe → working agent** | `ctx.blocks` as a repository, `ctx.builder`, the cookbook | |
 | 6d | **Authoring** | **agent forks a block and it hot-swaps in** | fork namespace, gated install, conformance suites, staging→HMR | |
 | 7 | Export | **installable plugin + MCP server** | `ctx.promotion`, MCP codegen | |
@@ -779,7 +781,7 @@ The ~447-error vendor build turned out to be a symptom of the same thing and wen
 | D1 | Project + package name (`@zoo/*` is a placeholder) | team | before phase 1 |
 | ~~D2~~ | ~~Ruling on permitted MIT reuse~~ — **closed 2026-08-26.** MIT grants use and copying; notices travel in `docs/PORTING.md`. | — | closed |
 | ~~D3~~ | ~~Vector store default~~ — **closed 2026-08-27: `sqlite-vec`**, through `node:sqlite`'s `DatabaseSync` + `allowExtension`. No native build; one generation is one file. | — | closed |
-| ~~D4~~ | ~~ONNX embedding model + dimensionality~~ — **closed 2026-08-27: pin 384 dims, default multilingual.** The model becomes a config row; the index fingerprint catches a swap. | — | closed |
+| ~~D4~~ | ~~ONNX embedding model + dimensionality~~ — **closed 2026-08-27, revised 2026-08-29.** The half that held: the model is a config row and the fingerprint catches a swap. The half that did not: **384 dims are no longer pinned project-wide — width is a property of an index generation.** Matryoshka models make one set of weights back 768/512/256/128, and a `vec0` table declares its width in DDL, so the generation is where a width can live. Pinning 384 also excluded EmbeddingGemma-300M, which cannot produce it. Default is now **EmbeddingGemma-300M q8 at 768**, via the ungated `onnx-community` mirror. | — | closed |
 | ~~D5~~ | ~~Which archetypes ship~~ — **closed 2026-08-27.** Six *recipes* ship; the vocabulary must span all six. Code Review is the fabricated-on-stage one, Internal Knowledge carries L3's coverage. | — | closed |
 | ~~D6~~ | ~~Golden question set~~ — **closed 2026-08-27:** our own docs, with a Vietnamese subset so the multilingual embedder is actually exercised. Authoring it belongs to phase 8. | — | closed |
 | ~~D7~~ | ~~Fork namespace scope~~ — **closed 2026-08-27: per-workspace.** Evolution is multi-session; per-session forks cannot be compared after a restart. | — | closed |
