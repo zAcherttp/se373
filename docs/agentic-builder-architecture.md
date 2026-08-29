@@ -256,11 +256,12 @@ A destructive change is gated like any other side-effecting operation: the plan 
 
 | ctx key | Role | Owner | Responsibility |
 |---|---|---|---|
-| `ctx.blocks` | core | `@zoo/block-registry` | Registry of named blocks: manifest, config schema, tier, deps |
-| `ctx.pipelines` | core | `@zoo/pipeline-registry` | Registry of **named, versioned** row-sets (specs, not runtimes) |
-| `ctx.builder` | core | `@zoo/builder` | Intent → resolved agent spec (preset + blocks + prompt + config) |
-| `ctx.retrievalEval` | seam | `@zoo/eval` | Scores a pipeline version against a pinned question set |
-| `ctx.promotion` | core | `@zoo/promotion` | Resolved spec → durable plugin package on disk |
+| `ctx.blocks` | core | `@se373/block-registry` ✅ | Repository of named, versioned blocks: manifest, tier, deps, provenance |
+| ~~`ctx.pipelines`~~ | — | folded into `ctx.blocks` | **Merged 2026-08-29.** A spec is a `kind: 'pipeline'` block; one registry keyed by `kind` is what makes comparison machinery get written once |
+| `ctx.builder` | core | `@se373/builder` ✅ | Recipe or block list → resolved spec → plan-gated live subtree |
+| `ctx.retrievalEval` | seam | `@se373/eval` | Scores a pipeline version against a pinned question set |
+| `ctx.promotion` | core | `@se373/promotion` | Resolved spec → durable plugin package on disk |
+| `ctx.planGate` | core | `@se373/plan-gate` ✅ | Digest-bound, single-use approval — I8 and §5.5's gate, built once |
 
 ### 6.1 The block manifest
 
@@ -758,8 +759,8 @@ Status is the git tag, not a judgement: a phase is shipped when
 | 5 | Multi-agent | **subagents run** | `ctx.agentPresets`, `subagent-spawn-in-process` | ✅ `phase-5` |
 | 6a | **Embedding seam** | **vectors exist** | `ctx.embedder` + ONNX local, `sqlite-vec`, width per generation | ✅ `phase-6a` |
 | 6b | Knowledge plane | **knowledge agent answers** | remaining L3 seams, ingest events | ✅ `phase-6b` |
-| 6c | Builder plane | **recipe → working agent** | `ctx.blocks` as a repository, `ctx.builder`, the cookbook | ← next |
-| 6d | **Authoring** | **agent forks a block and it hot-swaps in** | fork namespace, gated install, conformance suites, staging→HMR | |
+| 6c | Builder plane | **recipe → working agent** | `ctx.blocks` as a repository, `ctx.builder`, the cookbook | ✅ `phase-6c` |
+| 6d | **Authoring** | **agent forks a block and it hot-swaps in** | fork namespace, gated install, conformance suites, staging→HMR | ← next |
 | 7 | Export | **installable plugin + MCP server** | `ctx.promotion`, MCP codegen | |
 | 8 | Eval / A/B | **compare view** | `ctx.retrievalEval`, isolate realms | |
 

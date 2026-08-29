@@ -54,6 +54,15 @@ Every phase ends with something that **runs**. Slice vertically, never ship a la
 architecture doc §13 and §14 carry the consequences.
 
 - **The deliverable is chat → plan → fabricate**, recorded first with a live fabrication as the encore. Pace is ours; there is no external deadline, and phases are the reproducible checkpoints.
+- **A spec is a block, and `ctx.pipelines` is not a second registry.** Settled
+  2026-08-29 at 6c: a resolved agent spec is a `kind: 'pipeline'` block in
+  `ctx.blocks`. One registry keyed by `kind` is what makes "compare two
+  pipelines" and "compare two agents" differ only in which blocks the rows name.
+- **A block declares `seam` and `provides` separately.** A seam is a contract
+  with alternatives — what a builder isolates so two fabrications cannot collide
+  in the root realm. `provides` is what appears on `ctx`, including core services
+  that have no alternatives. Conflating them makes the builder warn about
+  injections that are in fact satisfied.
 - **`ctx.blocks` is a repository, not a catalog** — write path, versions, parentage, from day one. `origin: system | agent | user` is a *field* that gates policy (an agent-authored block mounts only after conformance), and the inspector's badge is a projection of it.
 - **One registry keyed by `kind`**: `agent | ui | pipeline | recipe`. A fabricated UI is a row list over UI blocks, never authored JSX — so "compare two pipelines" and "compare two agents" differ only in which blocks the rows name.
 - **A recipe is click-to-prefill**: prompt, model, thinking effort, and whatever else is configurable, shipped by us. Six ship as `origin: system` blocks, so forking one is the same gesture as forking anything else.
@@ -134,10 +143,10 @@ formality.
 
 ## Immediate next steps
 
-1. **Start phase 6c** (the builder plane) — `ctx.blocks` as a repository,
-   `ctx.builder`, and the recipe roster. It is also where §5.5's approval gate
-   finally lands: 6b computes the whole rebuild plan and presents it to nobody,
-   because a plan a human approves is a builder-plane object.
+1. **Start phase 6d** (authoring) — the fork namespace, plan-gated dependency
+   installs, conformance suites, and staging→HMR. The repository already refuses
+   to mount an `origin: 'agent'` block; 6d is what lets one earn it. This is the
+   claim, not the flourish — do not let it be the thing that gets cut.
 2. ~~Re-read the testing decision~~ — **done 2026-08-28.** Nine specs, written
    against silent failure modes rather than for coverage, and each one shown to
    fail against the bug it describes.
@@ -166,6 +175,10 @@ formality.
     corpus, chunker and rerank seams, the composed pipeline that owns the
     generation key and §5.5's positional cascade, incremental ingest with an
     orphan sweep, and an agent that answers from the index through one tool.
+15. ~~Start phase 6c~~ — shipped, tagged `phase-6c`. Five more: a block
+    repository with provenance and versions, the six-recipe cookbook, a
+    digest-bound plan gate, and a builder that turns a recipe into a live Cordis
+    subtree which then ingests and answers.
 
 ## Risks being tracked
 
@@ -180,11 +193,11 @@ formality.
   declared and has never been downloaded, so the `last_hidden_state`
   mean-pooling path is covered by unit tests over fabricated tensors and nothing
   else.
-- **§5.5's approval gate is computed and shown to nobody.** `status()` returns
-  the first diverging stage, the rebuild plan and a line per stage; a rebuild
-  that re-embeds a whole corpus starts without anyone confirming it. The gate is
-  6c's, and until then a config typo is a 20-second silent rebuild here and a
-  much longer one on a real corpus.
+- **§5.5's approval gate exists and the knowledge pipeline does not call it.**
+  `ctx.planGate` shipped at 6c and `status()` already returns everything a plan
+  card needs; wiring `ingest()` to propose before a destructive rebuild is a
+  small change gated on one decision — what an unattended ingest should do when
+  no gate is mounted.
 - **Cross-lingual retrieval is uneven and the demo shows it failing.** Concrete
   questions transfer; ad-hoc translations of domain jargon do not. This is the
   concrete argument for D6's authored Vietnamese question set — a translated

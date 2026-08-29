@@ -693,3 +693,91 @@ mistake as a test that passes for the wrong reason, one level up.
 - **`ingest/*` events are not rendered.** §5.4 calls for one Chat node via a
   `ConversationNodeDefinition`; the events carry everything it needs and nothing
   consumes them but the demo's own console.
+
+---
+
+## phase-6c — A recipe becomes a working agent
+
+**2026-08-29** · **Commit** `6af697f` · **Tag** `phase-6c`
+
+**Roadmap** — This is the project's own claim rather than one of the eight
+topics: the meta-agent that *emits* archetypes rather than being one. It also
+serves topic 8 (*Verification*), because the plan gate and the mount policy are
+where I7 and I8 stop being prose.
+**Phase** — §13 phase 6c, "Builder plane".
+
+**Demonstrable**
+
+```bash
+pnpm models:acquire                                    # 331 MB, once
+node --import tsx/esm examples/builder-demo/demo.mts
+```
+
+The demo's config contains **no knowledge plane**. The plane is what gets
+fabricated — resolved from a recipe, approved, and mounted at runtime into its
+own realm. It then ingests 270 chunks and answers, and dismantling it takes the
+tree from 21 nodes to 11 with one disposer.
+
+**Packages**
+
+Five of ours; nothing new vendored (still 150).
+
+| Package | What it does |
+|---|---|
+| `@se373/plan-gate` | `ctx.planGate`: a digest-bound, single-use approval |
+| `@se373/block-registry` | `ctx.blocks`: a repository — write path, versions, parentage, origin |
+| `@se373/system-blocks` | manifests for the packages we ship |
+| `@se373/recipes` | the cookbook: six recipes, one per SE373 archetype |
+| `@se373/builder` | `ctx.builder`: resolve → approve → fabricate |
+
+**Resolve, approve and fabricate are three acts, deliberately not one.**
+Planning produces an `AgentSpec` — a named, versioned value registered in
+`ctx.blocks` like anything else (I4) — with nothing running and nothing written
+outside the repository. Only then is it digested and proposed. Only after
+approval does it become rows.
+
+**The gate binds an approval to a digest.** Without that, "approve" means "yes,
+do something like this", and the distance between the plan a human read and the
+work that ran is unbounded: the approval is genuinely there and only the subject
+moved. A consumed plan is terminal, so one approval is never a standing
+permission.
+
+**Isolates are derived from seams at build time**, which is §6.3's root-realm
+collision guard applied where it can be checked rather than discovered on stage.
+Seams are isolated; core services that declare `provides` are not, so leaf
+resources deliberately shared stay shared.
+
+**Two things the demo surfaced.** The runtime graph showed
+`tool-knowledge-search` mounted `pending` with unsatisfied injections — legible
+afterwards and invisible in a plan — so the plan now warns about unsatisfiable
+injections *before* fabricating. That warning was then wrong about
+`modelRegistry`, because a manifest could only say which *seam* it filled; a
+block now declares `provides` separately, since a seam is what gets isolated and
+`provides` is what a sibling row can inject.
+
+**The mutation pass caught 15 of 15 on the first attempt** — the first time in
+three phases. Worth recording only because the previous two suggest it is not
+the normal outcome, and the reason it worked here is that the specs were written
+against behaviours the demo had already been observed getting wrong.
+
+**Not yet**
+
+- **No intent parsing.** `intent` is recorded on the spec and never read; a
+  request with no recipe and no explicit block list resolves to zero rows.
+  "Intent → blocks" is the part a model would do, and there is no model in this
+  loop.
+- **The preset is recorded and not applied.** A fabricated agent is a live
+  subsystem, not a conversational agent: fabrication mounts rows and does not
+  start a session under `spec.preset`, so `agent-presets` +
+  `subagent-spawn-in-process` remain unwired.
+- **No workspace sandbox.** The design confines a fabricated agent to a
+  `workspaceRoot`; nothing here does.
+- **No diff.** Two spec versions are stored and nothing compares them, so I4's
+  "renders as a config diff" is a promise the data supports and no code keeps.
+- **`mountable` can never return allowed for an agent-authored block.** It
+  reports what would be required; running the suite is 6d.
+- **Manifests live in one file, not with their packages**, so they can drift
+  from what they describe and only this package's own tests would notice.
+- **§5.5's rebuild is still not gated.** The gate now exists and the knowledge
+  pipeline does not call it — closing that is a two-line change and a decision
+  about what an unattended ingest should do.
