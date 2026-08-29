@@ -14,6 +14,7 @@
     "@se373/api-gateway": "workspace:*",
     "@se373/api-remotes": "workspace:*",
     "@se373/attachment-local": "workspace:*",
+    "@se373/authoring": "workspace:*",
     "@se373/bash-sandbox": "workspace:*",
     "@se373/block-registry": "workspace:*",
     "@se373/board-gateway": "workspace:*",

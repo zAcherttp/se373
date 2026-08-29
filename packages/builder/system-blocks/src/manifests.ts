@@ -20,18 +20,20 @@
 
 import type { BlockInput } from '@se373/block-registry'
 
-/** Build one system block. */
+/** Build one system block. `conformance` names the suite a fork of it must pass. */
 function block(
   id: string,
   plugin: string,
   summary: string,
-  extra: Partial<BlockInput['manifest']> = {},
+  extra: Partial<BlockInput['manifest']> & { conformance?: string } = {},
 ): BlockInput {
+  const { conformance, ...manifest } = extra
   return {
     id: `block.${id}`,
     kind: 'agent',
     origin: 'system',
-    manifest: { summary, plugin, tier: 'ready', ...extra },
+    ...conformance === undefined ? {} : { conformance },
+    manifest: { summary, plugin, tier: 'ready', ...manifest },
   }
 }
 
@@ -95,16 +97,19 @@ export const SYSTEM_BLOCKS: readonly BlockInput[] = [
     defaults: { roots: ['docs'], extensions: ['.md'] },
   }),
   block('chunker-markdown', '@se373/chunker-markdown', 'Split Markdown at its headings', {
+    conformance: 'ctx.chunker',
     role: 'provider',
     seam: 'ctx.chunker',
     indexInvalidating: true,
   }),
   block('chunker-recursive', '@se373/chunker-recursive', 'Split any text by recursive character splitting', {
+    conformance: 'ctx.chunker',
     role: 'provider',
     seam: 'ctx.chunker',
     indexInvalidating: true,
   }),
   block('embedder-onnx-local', '@se373/embedder-onnx-local', 'Embed text locally with an ONNX encoder', {
+    conformance: 'ctx.embedder',
     role: 'provider',
     seam: 'ctx.embedder',
     tier: 'defaulted',
@@ -112,6 +117,7 @@ export const SYSTEM_BLOCKS: readonly BlockInput[] = [
     inject: ['modelRegistry'],
   }),
   block('vs-sqlite-vec', '@se373/vs-sqlite-vec', 'Store vectors in one SQLite file per generation', {
+    conformance: 'ctx.vectorStore',
     role: 'provider',
     seam: 'ctx.vectorStore',
     tier: 'defaulted',
@@ -120,6 +126,7 @@ export const SYSTEM_BLOCKS: readonly BlockInput[] = [
 
   // --- the read path ----------------------------------------------------------
   block('rerank-none', '@se373/rerank-none', 'Keep vector order and reduce to top-k', {
+    conformance: 'ctx.reranker',
     role: 'provider',
     seam: 'ctx.reranker',
   }),

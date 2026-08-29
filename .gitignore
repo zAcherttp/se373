@@ -13,3 +13,6 @@ vendor/dsh/*/*/lib/
 
 # Scratch config copies written by examples/builder-demo (fabrication persists rows).
 examples/**/.run-*
+
+# Model-authored forks (6d). Their registry record is durable; the code is not ours.
+forks/

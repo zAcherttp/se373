@@ -25,6 +25,7 @@
 import { Context, Service } from '@se373/cordis';
 import type { Block } from '@se373/block-registry';
 import type { BuildPlan, BuildRequest, FabricatedAgent } from './types.ts';
+export { renderAgentComposition, renderPresetMetadata, scaffoldTree } from './preset.ts';
 export * from './types.ts';
 declare module '@se373/cordis' {
     interface Context {
@@ -100,6 +101,21 @@ export declare class AgentBuilder extends Service {
      * @throws when the plan is unknown, or the gate refuses.
      */
     fabricate(digest: string): Promise<FabricatedAgent>;
+    /** Where fabricated agents' scaffolds live. */
+    static workspacesRoot(): string;
+    /**
+     * The fabricated subtree's own preset roster.
+     *
+     * This is the object a session-creating caller mounts through:
+     * `agents.create({ setup: agentCtx => presetsOf(id).mount(agentCtx, presetId) })`.
+     * Read from the roster row's own fiber context because the service is
+     * isolated into the subtree's realm — that isolation is what keeps the
+     * fabricated persona out of the main picker, and it is also why the root
+     * context cannot see it.
+     * @param entryId - the id returned by {@link fabricate}.
+     * @returns the subtree's `agentPresets` service.
+     */
+    presetsOf(entryId: string): unknown;
     /** Every fabricated agent still mounted, newest first. */
     list(): FabricatedAgent[];
     /**

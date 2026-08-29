@@ -156,6 +156,9 @@ importers:
       '@se373/attachment-local':
         specifier: workspace:*
         version: link:../vendor/dsh/attachment/attachment-local
+      '@se373/authoring':
+        specifier: workspace:*
+        version: link:../packages/builder/authoring
       '@se373/bash-sandbox':
         specifier: workspace:*
         version: link:../vendor/dsh/shell/bash-sandbox
@@ -598,6 +601,55 @@ importers:
         specifier: workspace:*
         version: link:../vendor/dsh/workspace/workspace
 
+  packages/builder/authoring:
+    dependencies:
+      '@se373/block-registry':
+        specifier: workspace:*
+        version: link:../block-registry
+      '@se373/chunker':
+        specifier: workspace:*
+        version: link:../../knowledge/chunker
+      '@se373/digest':
+        specifier: workspace:*
+        version: link:../../knowledge/digest
+      '@se373/embedding':
+        specifier: workspace:*
+        version: link:../../knowledge/embedding
+      '@se373/plan-gate':
+        specifier: workspace:*
+        version: link:../plan-gate
+      '@se373/rerank':
+        specifier: workspace:*
+        version: link:../../knowledge/rerank
+      '@se373/runtime-graph':
+        specifier: workspace:*
+        version: link:../../runtime/runtime-graph
+      '@se373/scaffold':
+        specifier: workspace:*
+        version: link:../scaffold
+      '@se373/vector-store':
+        specifier: workspace:*
+        version: link:../../knowledge/vector-store
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
+    devDependencies:
+      '@se373/chunker-markdown':
+        specifier: workspace:*
+        version: link:../../knowledge/chunker-markdown
+      '@se373/cordis':
+        specifier: workspace:^
+        version: link:../../../vendor/cordis
+      '@se373/cordis-plugin-loader':
+        specifier: workspace:^
+        version: link:../../../vendor/loader
+      '@se373/corpus':
+        specifier: workspace:*
+        version: link:../../knowledge/corpus
+      '@se373/schemastery':
+        specifier: workspace:^
+        version: link:../../../vendor/schemastery
+
   packages/builder/block-registry:
     dependencies:
       '@se373/home-paths':
@@ -748,6 +800,9 @@ importers:
       '@se373/corpus':
         specifier: workspace:*
         version: link:../corpus
+      '@se373/digest':
+        specifier: workspace:*
+        version: link:../digest
     devDependencies:
       '@se373/cordis':
         specifier: workspace:^
@@ -877,12 +932,21 @@ importers:
         specifier: workspace:*
         version: link:../vector-store
     devDependencies:
+      '@se373/chunker-markdown':
+        specifier: workspace:*
+        version: link:../chunker-markdown
+      '@se373/chunker-recursive':
+        specifier: workspace:*
+        version: link:../chunker-recursive
       '@se373/cordis':
         specifier: workspace:^
         version: link:../../../vendor/cordis
       '@se373/invariants':
         specifier: workspace:^
         version: link:../../../vendor/dsh/runtime-diagnostics/invariants
+      '@se373/rerank-none':
+        specifier: workspace:*
+        version: link:../rerank-none
       '@se373/schemastery':
         specifier: workspace:^
         version: link:../../../vendor/schemastery

@@ -10,7 +10,8 @@
     ".": "./src/index.ts",
     "./types": "./src/types.ts",
     "./guard": "./src/guard.ts",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./conformance": "./src/conformance.ts"
   },
   "license": "MIT",
   "dependencies": {

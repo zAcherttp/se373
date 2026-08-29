@@ -10,11 +10,21 @@
     ".": "./src/index.ts",
     "./types": "./src/types.ts",
     "./split": "./src/split.ts",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./conformance": "./src/conformance.ts"
   },
   "license": "MIT",
-  "dependencies": { "@se373/corpus": "workspace:*" },
-  "peerDependencies": { "@se373/cordis": "workspace:^" },
-  "devDependencies": { "@se373/cordis": "workspace:^" },
-  "se373": { "face": "host" }
+  "dependencies": {
+    "@se373/corpus": "workspace:*",
+    "@se373/digest": "workspace:*"
+  },
+  "peerDependencies": {
+    "@se373/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@se373/cordis": "workspace:^"
+  },
+  "se373": {
+    "face": "host"
+  }
 }

@@ -188,18 +188,11 @@ formality.
 
 ## Immediate next steps
 
-1. **Finish phase 6d.** Steps 1–2 are done (`examples/fabricate-demo/`): the
-   scaffold, and conversational fabrication — two agents at once, each with its
-   own persona and catalog, the Code Review fabrication read-only against the
-   repo. One mechanism correction against the grilled plan, found by reading
-   upstream rather than assumed: a spawned child `composeFrom`s its *parent's*
-   composition and cannot join a different preset, so fabricated agents converse
-   as their own sessions created the gateway's way; `subagent-spawn-in-process`
-   remains delegation *from* an agent. Remaining: (3) authoring — agent block →
-   syntax → typecheck → conformance → mount, chunker fork as the demonstrable,
-   plan-gated server-free dependency install; (4) the staging gate → HMR,
-   recorded only. The repository already refuses to mount an `origin: 'agent'`
-   block; 6d is what lets one earn it.
+1. **Start phase 7** (export) — `ctx.promotion` and the MCP codegen. The
+   architecture's own note stands: the artifact format and install surface are
+   upstream's; only the generator is ours, and the MCP stdio path was proven at
+   3.5 (D10). Also due here: the sweep-1 `scheduled` items that named 6d are
+   re-swept in its entry.
 2. ~~Re-read the testing decision~~ — **done 2026-08-28.** Nine specs, written
    against silent failure modes rather than for coverage, and each one shown to
    fail against the bug it describes.
@@ -232,6 +225,12 @@ formality.
     repository with provenance and versions, the six-recipe cookbook, a
     digest-bound plan gate, and a builder that turns a recipe into a live Cordis
     subtree which then ingests and answers.
+16. ~~Start phase 6d~~ — shipped, tagged `phase-6d`. Fabricated agents are
+    conversational with their own scoped personas and catalogs; four conformance
+    suites ship beside their seams; and an agent-authored chunker fork earns a
+    mount through gate → write → syntax → typecheck → conformance → certify,
+    then hot-swaps into the running agent by a config-row rename. The staging
+    gate re-judges edited forks and decertifies failures.
 
 ## Risks being tracked
 

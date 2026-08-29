@@ -138,8 +138,18 @@ export class MarkdownChunker extends Chunker {
         ? section
         : {
             heading: pending.heading ?? section.heading,
-            text: [pending.heading === null ? '' : `${pending.heading}\n`, pending.text, '\n\n', section.text]
-              .join('').trim(),
+            // BOTH headings survive into the text. The merged-into section's
+            // heading loses the title slot to the pending one, and its words
+            // must not vanish with it -- the conformance suite caught exactly
+            // that: a document whose short lead section absorbed "## First
+            // heading" indexed nothing containing the word "First".
+            text: [
+              pending.heading === null ? '' : `${pending.heading}\n`,
+              pending.text,
+              '\n\n',
+              pending.heading !== null && section.heading !== null ? `${section.heading}\n` : '',
+              section.text,
+            ].join('').trim(),
           }
       // A short section on its own retrieves nothing useful, so it is carried
       // forward rather than indexed alone. The last one is kept regardless --

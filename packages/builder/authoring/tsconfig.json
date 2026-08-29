@@ -1,0 +1,19 @@
+{
+  "extends": "../../../tsconfig.host.base.json",
+  "compilerOptions": { "rootDir": "src", "outDir": "lib/types" },
+  "include": ["src"],
+  "references": [
+    { "path": "../../../vendor/cordis" },
+    { "path": "../../../vendor/loader" },
+    { "path": "../../../vendor/schemastery" },
+    { "path": "../../knowledge/chunker" },
+    { "path": "../../knowledge/digest" },
+    { "path": "../../knowledge/embedding" },
+    { "path": "../../knowledge/rerank" },
+    { "path": "../../knowledge/vector-store" },
+    { "path": "../../runtime/runtime-graph" },
+    { "path": "../block-registry" },
+    { "path": "../plan-gate" },
+    { "path": "../scaffold" }
+  ]
+}

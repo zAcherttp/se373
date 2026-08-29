@@ -760,8 +760,8 @@ Status is the git tag, not a judgement: a phase is shipped when
 | 6a | **Embedding seam** | **vectors exist** | `ctx.embedder` + ONNX local, `sqlite-vec`, width per generation | ✅ `phase-6a` |
 | 6b | Knowledge plane | **knowledge agent answers** | remaining L3 seams, ingest events | ✅ `phase-6b` |
 | 6c | Builder plane | **recipe → working agent** | `ctx.blocks` as a repository, `ctx.builder`, the cookbook | ✅ `phase-6c` |
-| 6d | **Authoring** | **agent forks a block and it hot-swaps in** | fork namespace, gated install, conformance suites, staging→HMR | ← next |
-| 7 | Export | **installable plugin + MCP server** | `ctx.promotion`, MCP codegen | |
+| 6d | **Authoring** | **agent forks a block and it hot-swaps in** | fork namespace, gated install, conformance suites, staging gate | ✅ `phase-6d` |
+| 7 | Export | **installable plugin + MCP server** | `ctx.promotion`, MCP codegen | ← next |
 | 8 | Eval / A/B | **compare view** | `ctx.retrievalEval`, isolate realms | |
 
 ~~**Risk spike: phase 4.**~~ **Retired 2026-08-28.** The estimate was right about the shape and wrong about where the difficulty sat. 86 packages rather than 78, and the build was indeed a workstream — four stages plus Vite — but nothing in it was novel: the hard parts were all *configuration* the upstream tree already solved, and the fix each time was to vendor upstream's answer rather than derive our own. Two examples, both recorded in `docs/PORTING.md` §3: package tsconfigs are now copied instead of generated, because upstream's host/client split is curated to keep `tsc -b` acyclic and deriving it produced a real cycle; and the vendored layer gained a source-resolution facade, because without one a class reached through two paths is not assignable to itself.

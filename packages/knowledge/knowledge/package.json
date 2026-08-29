@@ -30,8 +30,11 @@
     "@se373/schemastery": "workspace:^"
   },
   "devDependencies": {
+    "@se373/chunker-markdown": "workspace:*",
+    "@se373/chunker-recursive": "workspace:*",
     "@se373/cordis": "workspace:^",
     "@se373/invariants": "workspace:^",
+    "@se373/rerank-none": "workspace:*",
     "@se373/schemastery": "workspace:^",
     "@se373/vs-sqlite-vec": "workspace:*"
   },

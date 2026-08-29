@@ -854,3 +854,95 @@ these labels gets promoted to a tracked risk; that rule now lives in CLAUDE.md.
 | phase-6c: `mountable` can never allow an agent block | 6d step 3 — conformance suites are what let one earn it |
 | phase-6c: manifests in one file | 6d step 3 — they move to their packages when authoring makes them load-bearing |
 | phase-6c: no intent parsing | the chat→plan→fabricate deliverable — it is the model-in-the-loop step, after 6d |
+
+---
+
+## phase-6d — Authored code earns its mount, and agents are agents
+
+**2026-08-29** · **Commit** *(this one)* · **Tag** `phase-6d`
+
+**Roadmap** — The project's own claim, completed: the meta-agent fabricates
+conversational agents and its model may author code that joins them. This is
+the **Verification** pillar's strongest form — the system verifies code it
+wrote itself, against contracts it cannot edit — cited once here and once at
+phase 8, exactly as §6.3 planned.
+**Phase** — §13 phase 6d, "Authoring".
+
+**Demonstrable**
+
+```bash
+pnpm models:acquire                                        # 331 MB, once
+node --import tsx/esm examples/fabricate-demo/demo.mts      # step 2
+node --import tsx/esm examples/authoring-demo/demo.mts      # step 3 — the end condition
+```
+
+The fabricate demo: two agents fabricated into one process, each with its own
+persona and its own tool catalog (read off the requests the mock LLM records),
+the reviewer read-only against this repository, the main roster still listing
+exactly `inspect, standard`.
+
+The authoring demo is the end condition. An agent-authored chunker fork —
+strip YAML front matter, then chunk as the parent does — passes gate → write →
+syntax → typecheck → conformance, is certified, and **hot-swaps into the
+running fabricated agent** by renaming one config row. The pipeline reports
+itself stale because the chunker's digest moved (computed, never declared), the
+gated rebuild runs, and the same question that retrieved front-mattered text
+now retrieves clean passages. A deliberately broken fork is refused first, with
+the rule it broke, as an ordinary result — repair is a loop iteration.
+
+**Packages**
+
+Two new (`@se373/scaffold`, `@se373/authoring`), four suites added beside their
+seams, and the builder/registry grown; still 150 vendored.
+
+| Piece | What it does |
+|---|---|
+| `@se373/scaffold` | namespaced writes: single-segment names, never overwrites, traversal-checked, all-or-nothing |
+| spec split + generated presets | agent rows become a written preset with the recipe's persona, scoped to the agent via its own isolated roster |
+| `@se373/chunker/conformance`, `@se373/vector-store/conformance`, `@se373/rerank/conformance` | the suites (embedding's shipped at 6a); each verified against the shipped providers AND against a deliberately broken implementation per rule |
+| `certify` / `decertify` | per-version: a later register is new bytes and starts refused |
+| `@se373/authoring` | the pipeline, with failures as results and the fork namespace anchored for resolution |
+| `@se373/authoring/staging` | edit a certified fork → recheck → refresh rows on pass, decertify on fail |
+
+**What building it caught, in the order it bit.**
+
+*A spawned child cannot join a different preset* — `composeFrom` binds the
+parent's composition. Fabricated agents therefore converse as their own
+sessions, created the gateway's way; the grilled plan named the spawn path and
+upstream's code says otherwise.
+
+*Three rosters collided on the host-realm settings namespace*; `settings`
+joined the isolate set.
+
+*The chunker conformance suite found a live merge bug on its first run*: a
+short section absorbed forward dropped the absorbed section's heading line —
+"First heading" indexed nothing containing "First". Fixed in
+`chunker-markdown`; the suite also had one over-strict rule (a 2500-character
+token cannot survive windowing as one token) fixed in the other direction.
+
+*Node's module cache nearly certified stale bytes*: re-authoring at the same
+path handed the suite the previous attempt's class. The conformance import and
+the staging refresh are both keyed by content digest now, and the repair-loop
+spec pins it.
+
+**Not yet**
+
+- **The staging gate is code-and-spec verified, not demo-verified.** Per the
+  grill's decision, the tag's demonstrable does not depend on it; the recorded
+  segment is where an on-camera edit-recheck-refresh belongs. `recheck` and
+  `decertify` are exercised by specs; the fs-watch path is exercised by nothing
+  but reading it.
+- **The evolution ladder's top rung stops at the chunker.** D8's gated install
+  is built and spec'd with the namespace's own lockfile, but no fork installing
+  a real third-party dependency has been demoed, and the Milvus case remains
+  the strongest *possible* demonstration.
+- **Authored forks are single-seam providers.** Authoring a genuinely new seam
+  (§6.5's three-roles rule) has no implementation and correctly remains a
+  human-merge proposal in the design.
+- **`recheck` digests `index.ts` only**; a multi-file fork whose helper changed
+  refreshes under an unmoved sha.
+- **Conformance instantiates with the parent's defaults** — a fork whose
+  contract only breaks under other config passes.
+- **`intent → blocks` is still nobody's code.** The chat→plan→fabricate
+  deliverable is now the only thing standing between the builder and its
+  recorded demo.

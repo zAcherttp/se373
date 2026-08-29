@@ -40,8 +40,34 @@ export interface AgentSpec {
     readonly preset: string;
     /** The prompt the recipe prefilled, or the caller's intent. */
     readonly prompt: string;
-    /** The rows, in mount order. */
+    /** Subsystem rows — the plane the agent runs on — in mount order. */
     readonly rows: readonly SpecRow[];
+    /**
+     * Agent-plane rows — the model-facing composition.
+     *
+     * These do not mount in the subtree. They are written into the fabricated
+     * preset's `agent.cordis.yml` and mounted by the subtree's own roster when a
+     * session joins, which is what scopes a tool to this agent's sessions and
+     * keeps its persona out of the main picker.
+     */
+    readonly agentRows: readonly SpecRow[];
+    /** The fabricated agent's own voice; becomes the preset's persona row. */
+    readonly persona: string;
+    /**
+     * The directory the agent's filesystem tools act on.
+     *
+     * Caller-supplied, defaulting to a fresh directory inside the agent's own
+     * scaffold. Deterministic at plan time so it is inside the digest — pointing
+     * an agent at a real tree is exactly the kind of thing an approval binds.
+     */
+    readonly workspaceRoot: string;
+    /**
+     * Filesystem posture, or `null` when the spec composes no filesystem tools.
+     *
+     * `read-only` is the `inspect` shape: fs and sandboxPolicy shadowed in the
+     * preset's own realm over a read-only policy.
+     */
+    readonly filesystem: 'read-only' | 'workspace-write' | null;
     /**
      * Seam keys this spec publishes, and therefore isolates.
      *
@@ -78,6 +104,10 @@ export interface BuildPlan {
 export interface FabricatedAgent {
     /** The loader entry id of the subtree's group row. */
     readonly entryId: string;
+    /** The preset id a session joins — the spec's name, in the subtree's own roster. */
+    readonly presetId: string;
+    /** The agent's scaffold directory: preset files and workspace. */
+    readonly scaffoldDir: string;
     /** The spec it was built from. */
     readonly spec: AgentSpec;
     /** `id@version` of the registered spec block. */
@@ -89,6 +119,14 @@ export interface FabricatedAgent {
 }
 /** What to build. */
 export interface BuildRequest {
+    /**
+     * Where the agent's filesystem tools act.
+     *
+     * Absent means a fresh `workspace/` inside the agent's own scaffold — empty
+     * on arrival, harmless by construction. Supplying one is the deliberate act
+     * of pointing an agent at a real tree, and it appears on the plan card.
+     */
+    readonly workspaceRoot?: string;
     /** A recipe id from the cookbook. */
     readonly recipe?: string;
     /** Free-form intent, recorded on the spec. Defaults to the recipe's prompt. */

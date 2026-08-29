@@ -72,9 +72,11 @@ something the config already decides.
   wrong at any other.
 - **No deletion.** Nothing removes a block or a version, so a repository only
   grows — including every spec ever planned and never fabricated.
-- **`mountable` never returns allowed for an agent block.** It reports what
-  would be required; running the suite is phase 6d, and until then the verdict
-  is a refusal with a reason rather than a gate that can open.
+- ~~`mountable` never returns allowed for an agent block~~ — **closed at 6d**:
+  `certify(id)` records that the newest version passed its suite (per version —
+  a later register is new bytes and starts refused again), `decertify(id)`
+  withdraws the vouch when staged bytes fail, and certifications persist with
+  the blocks.
 - **Manifests are not validated.** `register` takes whatever it is given, so a
   manifest naming a plugin that does not exist is stored happily and fails at
   fabrication.

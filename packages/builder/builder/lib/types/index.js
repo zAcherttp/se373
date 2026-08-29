@@ -25,7 +25,12 @@
 import { Service } from '@se373/cordis';
 import { canonicalDigest } from '@se373/digest';
 import { contributeNode } from '@se373/runtime-graph';
+import { dshHomePath } from '@se373/home-paths';
+import { join } from 'node:path';
+import { removeScaffold, writeScaffold } from '@se373/scaffold';
 import { blockRef } from '@se373/block-registry';
+import { presetRosterRow, scaffoldTree } from "./preset.js";
+export { renderAgentComposition, renderPresetMetadata, scaffoldTree } from "./preset.js";
 export * from "./types.js";
 /** The group module a fabricated subtree mounts as. */
 const GROUP_PLUGIN = '@se373/cordis-plugin-group';
@@ -92,6 +97,7 @@ export class AgentBuilder extends Service {
         const name = request.name ?? recipe?.id.replace(/^recipe\./, '') ?? 'agent';
         const warnings = [];
         const rows = [];
+        const agentRows = [];
         const isolates = new Set();
         for (const id of wanted) {
             const block = this.ctx.blocks.get(id);
@@ -118,13 +124,21 @@ export class AgentBuilder extends Service {
                     message: `needs ${block.manifest.requires?.join(', ') || 'configuration'}; mounted disabled`,
                 });
             }
-            rows.push({
+            const row = {
                 id,
                 name: block.manifest.plugin,
                 ...block.manifest.defaults === undefined ? {} : { config: block.manifest.defaults },
                 ...blocked ? { disabled: true } : {},
                 block: blockRef(block),
-            });
+            };
+            // Agent-plane rows go to the fabricated preset, where a per-agent scope
+            // gives them `tools` and `systemPrompt`; subsystem rows go to the
+            // subtree. A tool mounted in the subtree sits `pending` forever, which is
+            // the warning 6c's plans kept printing.
+            if (block.manifest.mount === 'agent')
+                agentRows.push(row);
+            else
+                rows.push(row);
             if (block.manifest.seam !== undefined)
                 isolates.add(seamKey(block.manifest.seam));
         }
@@ -149,13 +163,32 @@ export class AgentBuilder extends Service {
             }
         }
         const previous = this.ctx.blocks.versions(`spec.${name}`).at(-1);
+        const version = (previous?.version ?? 0) + 1;
+        const composesFs = agentRows.some(row => row.name === '@se373/tool-fs');
+        // The subtree's own roster is what mounts the preset, so the roster service
+        // must be isolated -- and the seam it fills is decided here, with the rest.
+        isolates.add('agentPresets');
+        // `settings` too: the roster registers a settings namespace on mount, the
+        // settings service is host-realm, and three rosters registering one
+        // namespace is a collision the first fabrication demo actually hit. In the
+        // subtree's realm the name resolves to nothing, the roster's optional
+        // settings hook never runs, and its default comes from config -- which is
+        // the only default a fabricated roster should have anyway.
+        isolates.add('settings');
         const spec = {
             name,
-            version: (previous?.version ?? 0) + 1,
+            version,
             recipe: recipe?.id ?? null,
             preset: prefill.preset ?? 'standard',
             prompt: request.intent ?? prefill.prompt ?? '',
+            persona: prefill.persona
+                ?? 'You are a fabricated agent powered by the {{model}} model. Say plainly what tools you have and use them.',
+            // Deterministic at plan time, so the workspace an agent will act on is
+            // inside the digest a human approves.
+            workspaceRoot: request.workspaceRoot ?? join(AgentBuilder.workspacesRoot(), `${name}-v${version}`, 'workspace'),
+            filesystem: composesFs ? (prefill.filesystem ?? 'workspace-write') : null,
             rows,
+            agentRows,
             isolates: [...isolates].sort(),
         };
         const registered = this.ctx.blocks.register({
@@ -188,6 +221,17 @@ export class AgentBuilder extends Service {
     /** The plan card's steps, in the order they will happen. */
     steps(spec, warnings) {
         const steps = [{
+                summary: `write the agent's preset (persona + ${spec.agentRows.length} tool rows) and workspace under `
+                    + `${AgentBuilder.workspacesRoot()}/${spec.name}-v${spec.version}`,
+                destructive: false,
+            }, {
+                summary: spec.filesystem === null
+                    ? 'no filesystem tools composed'
+                    : `filesystem tools act on ${spec.workspaceRoot}, ${spec.filesystem}`,
+                // Pointing write-capable tools at a caller-supplied tree is the one step
+                // on this card a human genuinely needs to read.
+                destructive: spec.filesystem === 'workspace-write',
+            }, {
                 summary: `mount ${spec.rows.length} rows in a new realm "${spec.name}"`,
                 // Mounting a subtree destroys nothing: it unwinds with one disposer (I6),
                 // which is exactly why a live attempt is safe.
@@ -217,22 +261,40 @@ export class AgentBuilder extends Service {
         if (plan.planId !== null)
             this.gate?.consume(plan.planId, digest);
         const { spec } = plan;
-        const entryId = await this.ctx.loader.create({
-            name: GROUP_PLUGIN,
-            group: true,
-            // Isolating exactly the seams the spec provides is §6.3's collision guard.
-            // Without it the second fabrication publishes into the root realm and one
-            // instance silently answers for everybody.
-            isolate: Object.fromEntries(spec.isolates.map(key => [key, `${spec.name}-v${spec.version}`])),
-            config: spec.rows.map(row => ({
-                id: row.id,
-                name: row.name,
-                ...row.config === undefined ? {} : { config: row.config },
-                ...row.disabled === true ? { disabled: true } : {},
-            })),
-        });
+        // The preset and workspace are written before anything mounts, so a mount
+        // failure leaves files a human can read rather than a roster pointing at
+        // nothing. The scaffold refuses to overwrite: fabricating the same name and
+        // version twice is a caller error, not a replacement.
+        const scaffoldDir = writeScaffold(AgentBuilder.workspacesRoot(), `${spec.name}-v${spec.version}`, scaffoldTree(spec));
+        let entryId;
+        try {
+            entryId = await this.ctx.loader.create({
+                name: GROUP_PLUGIN,
+                group: true,
+                // Isolating exactly the seams the spec provides is §6.3's collision guard.
+                // Without it the second fabrication publishes into the root realm and one
+                // instance silently answers for everybody.
+                isolate: Object.fromEntries(spec.isolates.map(key => [key, `${spec.name}-v${spec.version}`])),
+                // Loader entry ids are tree-global and group children keep flat ids,
+                // so two fabrications with a shared block would collide on the row id.
+                // The realm label prefixes every mounted id; SpecRow.id stays the clean
+                // block id for display and diffing.
+                config: [...spec.rows, presetRosterRow(spec, join(scaffoldDir, 'preset'))].map(row => ({
+                    id: `${spec.name}-v${spec.version}.${row.id}`,
+                    name: row.name,
+                    ...row.config === undefined ? {} : { config: row.config },
+                    ...row.disabled === true ? { disabled: true } : {},
+                })),
+            });
+        }
+        catch (error) {
+            removeScaffold(AgentBuilder.workspacesRoot(), `${spec.name}-v${spec.version}`);
+            throw error;
+        }
         const agent = {
             entryId,
+            presetId: spec.name,
+            scaffoldDir,
             spec,
             specRef: plan.specRef,
             planId: plan.planId,
@@ -241,6 +303,36 @@ export class AgentBuilder extends Service {
         this.agents.set(entryId, agent);
         this.ctx.emit('builder/fabricated', agent);
         return agent;
+    }
+    /** Where fabricated agents' scaffolds live. */
+    static workspacesRoot() {
+        return dshHomePath('workspaces');
+    }
+    /**
+     * The fabricated subtree's own preset roster.
+     *
+     * This is the object a session-creating caller mounts through:
+     * `agents.create({ setup: agentCtx => presetsOf(id).mount(agentCtx, presetId) })`.
+     * Read from the roster row's own fiber context because the service is
+     * isolated into the subtree's realm — that isolation is what keeps the
+     * fabricated persona out of the main picker, and it is also why the root
+     * context cannot see it.
+     * @param entryId - the id returned by {@link fabricate}.
+     * @returns the subtree's `agentPresets` service.
+     */
+    presetsOf(entryId) {
+        const agent = this.agents.get(entryId);
+        if (agent === undefined)
+            throw new Error(`no fabricated agent ${entryId}`);
+        const rowId = `${agent.spec.name}-v${agent.spec.version}.agent-presets`;
+        for (const entry of this.ctx.loader.entries()) {
+            if (entry.id !== rowId)
+                continue;
+            const roster = entry.fiber?.ctx.get('agentPresets');
+            if (roster !== undefined)
+                return roster;
+        }
+        throw new Error(`fabricated agent ${entryId} has no mounted preset roster (row ${rowId})`);
     }
     /** Every fabricated agent still mounted, newest first. */
     list() {

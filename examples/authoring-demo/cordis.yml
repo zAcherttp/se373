@@ -1,0 +1,50 @@
+# Phase 6d, step 3: an agent-authored block earns its way into a live tree.
+#
+# The fabricate demo's tree plus one row: the authoring pipeline. Everything
+# model-facing still arrives through fabrication; what this tree adds is the
+# path by which model-WRITTEN code becomes mountable at all.
+#
+# Run:  node --import tsx/esm examples/authoring-demo/demo.mts
+
+- id: spine
+  name: '@se373/cordis-plugin-include'
+  config:
+    path: ../fabricate-demo/spine.yml
+
+- id: block-registry
+  name: '@se373/block-registry'
+
+- id: system-blocks
+  name: '@se373/system-blocks'
+
+- id: recipes
+  name: '@se373/recipes'
+
+- id: plan-gate
+  name: '@se373/plan-gate'
+
+- id: builder
+  name: '@se373/builder'
+
+# Forks live under the repository's own forks/ directory (gitignored), because
+# an authored fork imports its seam packages and Node resolves those by walking
+# up from the fork file -- a fork in $SE373_HOME would resolve nothing.
+- id: authoring
+  name: '@se373/authoring'
+  config:
+    root: !!js new URL('../../forks', baseUrl).pathname
+
+- id: agent-presets
+  name: '@se373/agent-presets'
+  config:
+    default: standard
+    includeUserRoot: false
+    roots:
+      - path: !!js new URL('../../config/agent-presets', baseUrl).pathname
+        trust: system
+
+- id: block-registry-invariant
+  name: '@se373/block-registry/invariant'
+
+- id: builder-invariant
+  name: '@se373/builder/invariant'

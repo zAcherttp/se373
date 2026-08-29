@@ -4,6 +4,7 @@
   "include": ["src"],
   "references": [
     { "path": "../../../vendor/cordis" },
-    { "path": "../corpus" }
+    { "path": "../corpus" },
+    { "path": "../digest" }
   ]
 }

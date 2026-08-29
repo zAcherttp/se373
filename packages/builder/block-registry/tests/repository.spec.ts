@@ -166,6 +166,49 @@ describe('persistence', () => {
   })
 })
 
+describe('certification', () => {
+  it('turns the agent-origin refusal into a mount, for the certified version only', () => {
+    // I7's full arc: refused before the suite, allowed after -- and a NEW
+    // version is new bytes the suite has not seen, so it starts refused again.
+    // Without the per-version binding, certifying once would vouch for every
+    // future edit.
+    const repo = repository()
+    repo.register(block('bot', { origin: 'agent', conformance: 'ctx.chunker' }))
+    expect(repo.mountable('bot').allowed).toBe(false)
+    repo.certify('bot')
+    expect(repo.mountable('bot').allowed).toBe(true)
+    repo.register(block('bot', { origin: 'agent', conformance: 'ctx.chunker' }))
+    expect(repo.mountable('bot').allowed).toBe(false)
+  })
+
+  it('certifies the version that is newest AT the certify call', () => {
+    // Certification pins bytes, so it must bind to the version current when
+    // the suite ran -- not to version 1 forever. A certify that hardcoded @1
+    // passes the arc above (which certifies at v1) and silently vouches for
+    // nothing once a fork has history.
+    const repo = repository()
+    repo.register(block('bot', { origin: 'agent', conformance: 'ctx.chunker' }))
+    repo.register(block('bot', { origin: 'agent', conformance: 'ctx.chunker' }))
+    repo.certify('bot')
+    expect(repo.mountable('bot').allowed).toBe(true)
+  })
+
+  it('refuses to certify a block that names no suite', () => {
+    const repo = repository()
+    repo.register(block('bot', { origin: 'agent' }))
+    expect(() => repo.certify('bot')).toThrow(/nothing a certification could mean/)
+  })
+
+  it('persists certifications with the blocks', () => {
+    const file = join(root, 'certified.json')
+    const first = new BlockRepository(new Context() as never, { file })
+    first.register(block('bot', { origin: 'agent', conformance: 'ctx.chunker' }))
+    first.certify('bot')
+    const second = new BlockRepository(new Context() as never, { file })
+    expect(second.mountable('bot').allowed).toBe(true)
+  })
+})
+
 describe('references', () => {
   it('round-trips id@version, including ids containing dots', () => {
     expect(parseBlockRef(blockRef({ id: 'recipe.internal-knowledge', version: 3 })))

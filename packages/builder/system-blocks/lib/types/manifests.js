@@ -17,13 +17,15 @@
  *
  * @module @se373/system-blocks/manifests
  */
-/** Build one system block. */
+/** Build one system block. `conformance` names the suite a fork of it must pass. */
 function block(id, plugin, summary, extra = {}) {
+    const { conformance, ...manifest } = extra;
     return {
         id: `block.${id}`,
         kind: 'agent',
         origin: 'system',
-        manifest: { summary, plugin, tier: 'ready', ...extra },
+        ...conformance === undefined ? {} : { conformance },
+        manifest: { summary, plugin, tier: 'ready', ...manifest },
     };
 }
 /** Every block the shipped packages offer a builder. */
@@ -31,26 +33,39 @@ export const SYSTEM_BLOCKS = [
     // --- tools ------------------------------------------------------------------
     block('tool-fs', '@se373/tool-fs', 'Read, write and edit files in the workspace', {
         role: 'tool',
+        mount: 'agent',
         inject: ['tools', 'fs'],
     }),
     block('tool-fs-search', '@se373/tool-fs-search', 'Grep and glob across the workspace', {
         role: 'tool',
+        mount: 'agent',
         inject: ['tools'],
+        // Required by the tool's own schema -- it has no default upstream, and the
+        // shipped inspect preset sets exactly this. A manifest default is what
+        // makes composing the block not require knowing that.
+        defaults: { sampleOverCapGlobResults: false },
     }),
     block('tool-bash', '@se373/tool-bash', 'Run shell commands in the workspace', {
         role: 'tool',
+        mount: 'agent',
         inject: ['tools', 'bash'],
     }),
     block('tool-subagent', '@se373/tool-subagent', 'Delegate a task to a subagent', {
         role: 'tool',
+        mount: 'agent',
         inject: ['tools', 'subagents'],
     }),
     block('tool-graph-inspect', '@se373/tool-graph-inspect', 'Inspect the plugin runtime from inside it', {
         role: 'tool',
+        mount: 'agent',
         inject: ['tools', 'runtimeGraph', 'systemPrompt'],
     }),
     block('tool-knowledge-search', '@se373/tool-knowledge-search', 'Search the indexed knowledge base by meaning', {
         role: 'tool',
+        // Agent-plane: it registers into the per-agent tool catalog, while its
+        // `knowledgePipeline` injection resolves through the roster's realm to the
+        // fabricated subtree. That split is the whole point of `mount`.
+        mount: 'agent',
         inject: ['tools', 'knowledgePipeline', 'systemPrompt'],
     }),
     // --- the knowledge write path, in cascade order -----------------------------
@@ -72,16 +87,19 @@ export const SYSTEM_BLOCKS = [
         defaults: { roots: ['docs'], extensions: ['.md'] },
     }),
     block('chunker-markdown', '@se373/chunker-markdown', 'Split Markdown at its headings', {
+        conformance: 'ctx.chunker',
         role: 'provider',
         seam: 'ctx.chunker',
         indexInvalidating: true,
     }),
     block('chunker-recursive', '@se373/chunker-recursive', 'Split any text by recursive character splitting', {
+        conformance: 'ctx.chunker',
         role: 'provider',
         seam: 'ctx.chunker',
         indexInvalidating: true,
     }),
     block('embedder-onnx-local', '@se373/embedder-onnx-local', 'Embed text locally with an ONNX encoder', {
+        conformance: 'ctx.embedder',
         role: 'provider',
         seam: 'ctx.embedder',
         tier: 'defaulted',
@@ -89,6 +107,7 @@ export const SYSTEM_BLOCKS = [
         inject: ['modelRegistry'],
     }),
     block('vs-sqlite-vec', '@se373/vs-sqlite-vec', 'Store vectors in one SQLite file per generation', {
+        conformance: 'ctx.vectorStore',
         role: 'provider',
         seam: 'ctx.vectorStore',
         tier: 'defaulted',
@@ -96,6 +115,7 @@ export const SYSTEM_BLOCKS = [
     }),
     // --- the read path ----------------------------------------------------------
     block('rerank-none', '@se373/rerank-none', 'Keep vector order and reduce to top-k', {
+        conformance: 'ctx.reranker',
         role: 'provider',
         seam: 'ctx.reranker',
     }),

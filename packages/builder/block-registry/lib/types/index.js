@@ -38,6 +38,8 @@ export class BlockRepository extends Service {
     });
     /** id → every version, oldest first. */
     history = new Map();
+    /** `id@version` of blocks whose conformance suite has passed. Persisted. */
+    certified = new Set();
     file;
     constructor(ctx, config = {}) {
         super(ctx, 'blocks');
@@ -51,7 +53,10 @@ export class BlockRepository extends Service {
             return;
         try {
             const stored = JSON.parse(readFileSync(this.file, 'utf8'));
-            for (const block of stored) {
+            const blocks = Array.isArray(stored) ? stored : stored.blocks;
+            for (const ref of Array.isArray(stored) ? [] : stored.certified ?? [])
+                this.certified.add(ref);
+            for (const block of blocks) {
                 const versions = this.history.get(block.id) ?? [];
                 versions.push(block);
                 this.history.set(block.id, versions);
@@ -67,10 +72,10 @@ export class BlockRepository extends Service {
     /** Persist everything that did not come from a row. */
     save() {
         const durable = [...this.history.values()].flat().filter(block => block.origin !== 'system');
-        if (durable.length === 0 && !existsSync(this.file))
+        if (durable.length === 0 && this.certified.size === 0 && !existsSync(this.file))
             return;
         mkdirSync(dirname(this.file), { recursive: true });
-        writeFileSync(this.file, `${JSON.stringify(durable, null, 2)}\n`);
+        writeFileSync(this.file, `${JSON.stringify({ blocks: durable, certified: [...this.certified].sort() }, null, 2)}\n`);
     }
     /**
      * Write a block version.
@@ -200,10 +205,55 @@ export class BlockRepository extends Service {
                 reason: `${id} is agent-authored and names no conformance suite; nothing could vouch for it`,
             };
         }
+        if (this.certified.has(blockRef(block))) {
+            return {
+                allowed: true,
+                reason: `${id} is agent-authored and passed the ${block.conformance} suite (I7)`,
+            };
+        }
         return {
             allowed: false,
             reason: `${id} is agent-authored and must pass the ${block.conformance} suite before mounting`,
         };
+    }
+    /**
+     * Record that a block's newest version passed its conformance suite.
+     *
+     * Certification is **per version**, because it vouches for bytes: a later
+     * `register` of the same id is new code the suite has not seen, and it starts
+     * uncertified. Only the authoring pipeline calls this, after the suite it
+     * names actually ran — certifying is the one write that turns `origin:
+     * 'agent'` from a refusal into a mount, so it must never be reachable as a
+     * side effect of anything else.
+     * @param id - the block id; its newest version is what gets certified.
+     * @returns the certified block.
+     * @throws when the block is unknown or names no conformance suite.
+     */
+    certify(id) {
+        const block = this.get(id);
+        if (block === undefined)
+            throw new Error(`no block ${JSON.stringify(id)} to certify`);
+        if (block.conformance === undefined) {
+            throw new Error(`${id} names no conformance suite; there is nothing a certification could mean`);
+        }
+        this.certified.add(blockRef(block));
+        this.save();
+        return block;
+    }
+    /**
+     * Withdraw a certification.
+     *
+     * The staging gate calls this when a certified fork's bytes change and the
+     * new bytes fail their suite: the registry must stop vouching for a version
+     * whose on-disk source no longer matches what passed. The block and its
+     * versions survive — decertifying is not deletion — but `mountable` refuses
+     * again until something re-passes.
+     * @param id - the block id; every version's certification is withdrawn.
+     */
+    decertify(id) {
+        for (const block of this.versions(id))
+            this.certified.delete(blockRef(block));
+        this.save();
     }
     /** Where non-system blocks are persisted. */
     get path() {

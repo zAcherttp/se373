@@ -63,6 +63,8 @@ export declare class BlockRepository extends Service {
     static readonly Config: Schema<Config>;
     /** id → every version, oldest first. */
     private readonly history;
+    /** `id@version` of blocks whose conformance suite has passed. Persisted. */
+    private readonly certified;
     private readonly file;
     constructor(ctx: Context, config?: Config);
     /** Read persisted non-system blocks, tolerating absence and corruption. */
@@ -133,6 +135,31 @@ export declare class BlockRepository extends Service {
      * @returns the verdict and the rule behind it.
      */
     mountable(id: string): MountVerdict;
+    /**
+     * Record that a block's newest version passed its conformance suite.
+     *
+     * Certification is **per version**, because it vouches for bytes: a later
+     * `register` of the same id is new code the suite has not seen, and it starts
+     * uncertified. Only the authoring pipeline calls this, after the suite it
+     * names actually ran — certifying is the one write that turns `origin:
+     * 'agent'` from a refusal into a mount, so it must never be reachable as a
+     * side effect of anything else.
+     * @param id - the block id; its newest version is what gets certified.
+     * @returns the certified block.
+     * @throws when the block is unknown or names no conformance suite.
+     */
+    certify(id: string): Block;
+    /**
+     * Withdraw a certification.
+     *
+     * The staging gate calls this when a certified fork's bytes change and the
+     * new bytes fail their suite: the registry must stop vouching for a version
+     * whose on-disk source no longer matches what passed. The block and its
+     * versions survive — decertifying is not deletion — but `mountable` refuses
+     * again until something re-passes.
+     * @param id - the block id; every version's certification is withdrawn.
+     */
+    decertify(id: string): void;
     /** Where non-system blocks are persisted. */
     get path(): string;
 }

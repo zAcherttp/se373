@@ -27,6 +27,22 @@ export interface RecipePrefill {
     readonly archetype: string;
     /** What gets loaded into the chat box. */
     readonly prompt: string;
+    /**
+     * The fabricated agent's own voice.
+     *
+     * Written into the fabricated preset's persona row, and scoped to that agent
+     * alone — the main builder's persona settings never see it. `{{model}}` and
+     * `{{cwd}}` interpolate the way upstream's persona rows do.
+     */
+    readonly persona: string;
+    /**
+     * Filesystem posture, when the agent composes filesystem tools.
+     *
+     * `read-only` shadows `fs` and `sandboxPolicy` in the preset's own realm over
+     * a read-only policy, the shape the shipped `inspect` preset proved. Absent
+     * means `workspace-write` over the fabricated agent's own workspace.
+     */
+    readonly filesystem?: 'read-only';
     /** Thinking effort to preselect. */
     readonly effort: 'low' | 'medium' | 'high';
     /** The agent preset a build starts from. */
